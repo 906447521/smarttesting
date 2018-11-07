@@ -15,7 +15,7 @@
 
 
 <head>
-    <title>zdTest</title>
+    <title>SmartTesting</title>
     <style>
         .sidenav {
             /*background: #F6F6F6;*/
@@ -240,7 +240,7 @@
     width: 100%;">
 
             <a id="logo-container" href="/" class="brand-logo" style="color:#fff;padding-left:20px;font-weight:bold">
-                <img src="//$!{ServerPath}/s/log.svg" style="height:26px;width:26px;vertical-align:middle;margin-right:10px"/>zdTest
+                <img src="//$!{ServerPath}/s/log.svg" style="height:26px;width:26px;vertical-align:middle;margin-right:10px"/>SmartTesting
             </a>
 
     <ul class="site-layout-example-top-ul" style="float: right;color: #fff;padding:0;margin: 0;line-height: 60px; margin-right:20px;">
