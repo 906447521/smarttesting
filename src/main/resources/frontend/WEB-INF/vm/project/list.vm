@@ -1,0 +1,261 @@
+<main>
+
+    <div class="section tab">
+        <div class="row tab">
+            <div class="">
+                <div class="nav-content">
+                    <ul class="tabs">
+                        <li class="tab"><a class="active" href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/list.html'">所有项目</a></li>
+                        <li class="tab"><a class="" href="javascript:;" onclick="window.location.href='//$!{ServerPath}/plugin/list.html'">所有插件</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section op" id="index-banner">
+        <div class="container">
+            <div class="row op">
+                <a class=" ripple " href="javascript:Project.openAdd2()" id="op-add">
+                    <i class="icon iconfont icon-folder"></i>
+                    <i class="icon iconfont icon-add" style="position:absolute;left:15px;top:4px;font-size:16px"></i>
+                </a>
+                <a class="ripple" href="javascript:;" id="op-edit" style="color:#ccc">
+                    <i class="icon iconfont icon-edit"></i>
+                </a>
+                <a class="ripple" href="javascript:;" id="op-delete" style="color:#ccc">
+                    <i class="icon iconfont icon-delete"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container" style="padding: 30px;">
+        <div class="row">
+            <div class="col s12 offset-m1 xl12  center-on-small-only">
+                <div id="materialdesign" class="section scrollspy">
+                    <div id="project-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<div id="modal1" class="modal ">
+    <div id="project"></div>
+</div>
+
+
+<script id="tmpl-project" type="text/html">
+    <div class="modal-content">
+        <form id="add-project-form">
+            <div class="row">
+                <div class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" id="projectname" class="autocomplete" value="{{name}}">
+                            <label for="projectname" class="active">项目名称</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">确认</a>
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
+    </div>
+</script>
+
+<script id="tmpl-project-list" type="text/html">
+    <table class="table-fixed">
+        <thead>
+        <tr>
+            <td width="5%">
+                <label>
+                    <input type="checkbox" class="filled-in" check-for="check-item" onclick="X.checkAll(this)"/>
+                    <span></span>
+                </label>
+            </td>
+            <th width="5%"></th>
+            <th width="5%">ID</th>
+            <th width="25%">名称</th>
+            <th width="10%">用例数</th>
+            <th>创建人</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {{if (data&&data.length>0)}}
+        {{each data as elem i}}
+        <tr>
+            <td>
+                <label>
+                    <input type="checkbox" class="filled-in check-item" checkvalue="{{elem.id}}"/>
+                    <span></span>
+                </label>
+            </td>
+            <td><i class="icon iconfont icon-folder icon-light-blue"></i></td>
+            <td>{{elem.id}}</td>
+            <td><a href="//$!{ServerPath}/project/detail_task.html?id={{elem.id}}">{{elem.name}}</a></td>
+            <td>{{elem.creator}}</td>
+            <td>{{elem.caseCount}}</td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td colspan="4"> 没有数据。</td>
+        </tr>
+        {{/if}}
+        </tbody>
+    </table>
+    {{include 'tmpl-pagin' }}
+</script>
+
+<script>
+
+
+    Project.loadProject2 = function (pageIndex, pageSize) {
+        X.HTTP({
+            url: CONTEXT + "/data/project/list.json",
+            data: {
+                pageIndex: pageIndex,
+                pageSize: pageSize
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#project-list")
+                result.data.fn = "Project.loadProject2"
+                container.html(template("tmpl-project-list", result.data));
+                $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                $("input[type='checkbox']", container).on("click", function () {
+                    if ($("input[type='checkbox']:checked", container).length > 0) {
+                        $("#op-delete").css("color", "").attr("href", "javascript:Project.delete2()")
+                        $("#op-edit").css("color", "").attr("href", "javascript:Project.openEdit2();")
+                    } else {
+                        $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                        $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                    }
+
+                })
+            }
+        });
+    }
+
+    Project.add2 = function () {
+        X.HTTP({
+            url: CONTEXT + "/data/project/add.json",
+            data: {
+                name: $('#projectname').val(),
+            },
+            dataType: 'json',
+            success: function (result) {
+                Project.loadProject2(1, 10)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.close()
+
+                Project.loadProject(1, 10)
+            }
+        });
+    }
+
+    Project.edit2 = function () {
+        var checkBox = $('.check-item:checked');
+        if (checkBox.length > 1) {
+            M.toast({html: 'Select one to edit'})
+            return
+        }
+
+        var projectId;
+        checkBox.each(function () {
+            projectId = parseInt($(this).attr("checkvalue"))
+        })
+        X.HTTP({
+            url: CONTEXT + "/data/project/edit.json",
+            data: {
+                id: projectId,
+                name: $('#projectname').val()
+            },
+            dataType: 'json',
+            success: function (result) {
+                Project.loadProject2(1, 10)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.close()
+                Project.loadProject(1, 10)
+            }
+        });
+    }
+
+    Project.delete2 = function () {
+        if (window.confirm("是否要删除项目及项目下的子项？")) {
+            var zdProjectIds = new Array();
+            $('.check-item:checked').each(function () {
+                zdProjectIds.push(parseInt($(this).attr("checkvalue")))
+            })
+            X.HTTP({
+                url: CONTEXT + "/data/project/delete.json",
+                data: {
+                    zdProjectIds: zdProjectIds,
+                },
+                dataType: 'json',
+                success: function (result) {
+                    Project.loadProject2(1, 10)
+                    Project.loadProject(1, 10)
+                }
+            });
+        }
+    }
+    Project.openAdd2 = function () {
+        var container = $("#project")
+        container.html(template("tmpl-project", {"fn": "Project.add2()"}));
+        var instance = M.Modal.getInstance($('#modal1'));
+        instance.open();
+    }
+    Project.openEdit2 = function () {
+        var checkBox = $('.check-item:checked');
+        if (checkBox.length > 1) {
+            M.toast({html: '选择一项来编辑'})
+            return
+        }
+
+        var projectId;
+        checkBox.each(function () {
+            projectId = parseInt($(this).attr("checkvalue"))
+        })
+        X.HTTP({
+            url: CONTEXT + "/data/project/single.json",
+            data: {
+                id: projectId
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#project")
+                result.data.fn = "Project.edit2()"
+                container.html(template("tmpl-project", result.data));
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.open();
+            }
+        });
+    }
+
+    Project.loadProject2(1, 10);
+
+    // var a = {"a":1,"a":2}
+    // console.log(JSON.stringify(a))
+
+    // $.ajax({
+    //     type:"POST",
+    //     url: CONTEXT + "/data/test/domains.json",
+    //     // dataType:"json",
+    //     contentType:"application/json", // 指定这个协议很重要
+    //     data:JSON.stringify([{"a":"1","b":"2"},{"a":"1","b":"2"}]),
+    //     success:function(data){
+    //
+    //     }
+    // });
+
+
+</script>

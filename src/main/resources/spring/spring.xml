@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       		http://www.springframework.org/schema/beans/spring-beans.xsd
+       		http://www.springframework.org/schema/context
+       		http://www.springframework.org/schema/context/spring-context.xsd
+       		http://www.springframework.org/schema/aop
+       		http://www.springframework.org/schema/aop/spring-aop.xsd
+       		http://www.springframework.org/schema/mvc
+       		http://www.springframework.org/schema/mvc/spring-mvc.xsd"
+       default-autowire="byName">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="zd"/>
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="locations">
+            <list>
+                <value>classpath*:zdtest.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <mvc:annotation-driven/>
+    <mvc:resources mapping="/frontend.s/**" location="/s/" cache-period="864000"/>
+    <mvc:default-servlet-handler/>
+    <mvc:interceptors>
+        <bean class="smarttesting.view.ZDInterceptor"/>
+    </mvc:interceptors>
+
+    <import resource="spring-view.xml"/>
+    <import resource="spring-data.xml"/>
+    <import resource="spring-job.xml"/>
+
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="104857600"/>
+        <property name="maxInMemorySize" value="104857600"/>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="resolveLazily" value="true"/>
+    </bean>
+
+</beans>

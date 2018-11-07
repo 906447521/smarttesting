@@ -1,0 +1,68 @@
+#set($layout="layout/blank.vm")
+
+
+<style>
+    table {
+        width: 800px;
+    }
+    table td{
+        padding: 3px 10px;
+    }
+</style>
+
+<div id="result"></div>
+
+<script id="tmpl-result" type="text/html">
+
+    <div style="padding: 50px;font-family:微软雅黑, Roboto, system-ui, 'PingFang SC', STHeiti, sans-serif;">
+
+        <div style="font-size:18px;color:#777;padding-bottom:30px">测试报告</div>
+
+        <div style="font-size:13px;padding-bottom:30px">
+            <div style="padding:3px"><b style="font-weight:800">Start Time:</b> {{startT}}</div>
+            <div style="padding:3px"><b style="font-weight:800">Duration:</b> {{duration}} ms</div>
+            <div style="padding:3px"><b style="font-weight:800">Status:</b> Pass {{passC}}</div>
+        </div>
+
+        <div style="font-size:13px;padding:3px;padding-bottom:20px;">用例执行情况：</div>
+
+        <div></div>
+
+        <div>
+            <table style="font-size:13px">
+                <tr style="background-color:#777777;color:#fff;font-weight:500">
+                    <td width="600">Test Group/Test case ：{{tName}}</td><td>Count</td><td>Pass</td><td>Fail</td><td>Error</td><td>View</td>
+                </tr>
+                {{if (groups)}}
+                {{each groups as elem i}}
+                <tr style="background-color:#80C972;color:#333;font-weight:500">
+                    <td>{{test_}}</td><td>{{elem.groupCount}}</td><td>{{elem.groupPassC}}</td><td>{{elem.groupFailC}}</td><td>{{elem.groupErrorC}}</td><td>View</td>
+                </tr>
+                {{/each}}
+                {{else}}
+
+                {{/if}}
+            </table>
+        </div>
+
+    </div>
+
+</script>
+
+<script>
+    X.HTTP({
+        url: CONTEXT + "/data/task_result/detail.json",
+        data: {
+            resultId: X.GetUrlParam("resultId"),
+        },
+        dataType: 'json',
+        success: function (result) {
+            var container = $("#result")
+            result.data.result = eval('(' + result.data.result + ")")
+            console.log(result.data.result)
+            container.html(template("tmpl-result", result.data.result));
+
+        }
+    });
+
+</script>

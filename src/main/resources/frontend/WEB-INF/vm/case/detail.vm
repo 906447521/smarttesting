@@ -1,0 +1,304 @@
+<link rel="stylesheet" href="//$!{ServerPath}/s/beautify/codemirror.css">
+<script src="//$!{ServerPath}/s/beautify/beautify.js"></script>
+<script src="//$!{ServerPath}/s/beautify/beautify-css.js"></script>
+<script src="//$!{ServerPath}/s/beautify/beautify-html.js"></script>
+<script src="//$!{ServerPath}/s/beautify/codemirror.js"></script>
+<script src="//$!{ServerPath}/s/beautify/javascript.js"></script>
+<script src="//$!{ServerPath}/s/codetextarea.js"></script>
+
+<main>
+
+    <div class="section name">
+        <div class="container">
+            <div class="row name">
+                <div id="project-name">
+                    &nbsp;
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding: 30px;">
+        <div class="row">
+            <div class="col s8 m8 center-on-small-only">
+                <div id="materialdesign" class="section scrollspy">
+                    <div id="project-case-detail"></div>
+                </div>
+            </div>
+            <div class="col s4">
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s8 m8 center-on-small-only">
+                <div id="materialdesign" class="section scrollspy">
+                    <div id="runSelectTemp-result"></div>
+                </div>
+            </div>
+            <div class="col s4">
+
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<div id="modal1" class="modal modal-fixed-footer">
+    <div id="interface"></div>
+</div>
+<div id="modal2" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <div id="runSelect-result"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+</div>
+
+<script id="tmpl-project-case-detail" type="text/html">
+    <div class="modal-content">
+        <form id="add-case-form">
+            <div class="row">
+                <div class="col s12">
+                    <div class="row">
+                        <input type="hidden" id="casemethod" class="autocomplete" value="{{method}}">
+                        <input type="hidden" id="caseurl" class="autocomplete" value="{{url}}">
+                        <div class="input-field col s12">
+                            <input type="text" id="casename" class="autocomplete" value="{{name}}">
+                            <label for="casename" class="active">用例名</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="method-colorname" class="input-field col s3" style="width: auto;line-height: 48px;padding-right:0;margin-right:0">
+                            {{ include 'tmpl-method-colorname' }}
+                        </div>
+                        <div class="input-field col s6" style="width: auto;line-height: 48px;padding-right:0;margin-right:0">
+                            <span id="caseinterfaceurl" style="font-size: 13px">{{if zdInterface!=null}}{{zdInterface.url}}{{/if}}</span>
+                        </div>
+                        <div class="input-field col s3" style="width: auto;min-width:280px;padding-left:2px;margin-top: 16px;">
+                            <input type="text" id="caseurlsuffix" class="autocomplete" value="{{urlSuffix}}">
+                            <label for="caseurlsuffix" class="active">URL后缀（非必填）</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s6"
+                             id="interface-select" data-interfaceid="{{if zdInterface!=null}}{{zdInterface.id}}{{/if}}" data-interfaceurl="{{if zdInterface!=null}}{{zdInterface.url}}{{/if}}"
+                        >
+
+                        </div>
+                        <div class="input-field col s6">
+                            <select id="casecontenttype">
+                                <option value="" disabled {{if contentType==null}} selected {{/if}}>请选择</option>
+                                <option value="application/x-www-form-urlencoded" {{if contentType=='application/x-www-form-urlencoded'}} selected {{/if}}>application/x-www-form-urlencoded</option>
+                                <option value="application/json" {{if contentType=='application/json'}} selected {{/if}}>application/json</option>
+                                <option value="multipart/form-data" {{if contentType=='multipart/form-data'}} selected {{/if}}>multipart/form-data</option>
+                            </select>
+                            <label>内容类型</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea id="caserequestbody" for="caserequestbody_a" class="beautify-textarea" data-length="4096">{{requestBody}}</textarea>
+                            <a id="caserequestbody_a" class="beautify-textarea-a">
+                                <strong>Pretty</strong>
+                            </a>
+                            <label for="caserequestbody" class="active">请求内容(JSON或URL串)</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea id="caseresultscript" for="caseresultscript_a" class="beautify-textarea" data-length="4096">{{resultScript}}</textarea>
+                            <a id="caseresultscript_a" class="beautify-textarea-a">
+                                <strong>Pretty</strong>
+                            </a>
+                            <label for="caseresultscript" class="active">预期结果(表达式)</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div id="runSelectTemp-result" style="margin-bottom:20px"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="Case.edit()">确认</a>
+        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="Case.runSelectTemp()">发送请求</a>
+    </div>
+</script>
+
+<script id="tmpl-interface-select" type="text/html">
+    <select id="caseinterfaceId" onchange="
+            var selected=$(this).find(':selected');
+            $('#caseinterfaceurl').html(selected.attr('url'));
+            $('#casemethod').val(selected.attr('method'));
+            $('#caseurl').val(selected.attr('url'));
+            var data = {
+                        'zdInterface':{'method':selected.attr('method')}
+                       }
+            $('#method-colorname').html(template('tmpl-method-colorname', data));
+            "
+    >
+        <option value="" disabled selected>请选择</option>
+        {{if (data&&data.length>0)}}
+        {{each data as elem i}}
+        <option value="{{elem.id}}" method="{{elem.method}}" url="{{elem.url}}" {{if interfaceId == elem.id }} selected {{/if}} >{{elem.name}}</option>
+        {{/each}}
+        {{/if}}
+    </select>
+    <label>接口</label>
+</script>
+
+<script id="tmpl-project-name" type="text/html">
+    <span class="a" onclick="window.location.href='//$!{ServerPath}/project/detail_case.html?id={{pid}}'">
+        < 返回用例
+    </span>
+    <span class="b">{{name}}</span>
+</script>
+
+<script id="tmpl-runSelect-result" type="text/html">
+
+    {{if (data&&data.length>0)}}
+    {{each data as elem i}}
+
+    <div class="row">
+        <div class="input-field col s12">
+            <textarea id="runSelectResponseBody" for="runSelectResponseBody_a" class="beautify-textarea" data-length="4096">{{elem.responseBody}}</textarea>
+            <a id="runSelectResponseBody_a" class="beautify-textarea-a">
+                <strong>Pretty</strong>
+            </a>
+            <div id="runSelectResponseBody_a" class="beautify-textarea-b">
+                期望结果：
+                {{if elem.responseResult=='false'}}
+                <span style="font-weight:800;color:#f5a623">失败</span>
+                {{else if elem.responseResult=='true' }}
+                <span style="font-weight:800;color:#28B57F">成功</span>
+                {{else}}
+                <span style="font-weight:800;color:#f5a623">{{elem.responseResult}}</span>
+                {{/if}}
+                &nbsp;&nbsp;&nbsp;
+                返回码：<span style="font-weight:800;color:{{if elem.responseCode=='200'}}#28B57F{{else}}#f5a623{{/if}}">{{elem.responseCode}}</span>
+                &nbsp;&nbsp;&nbsp;
+                执行时间（毫秒）：<span style="color:#28B57F;font-family:Arial;white-space:pre-wrap;word-wrap:break-word;">{{elem.duration}}</span>
+            </div>
+            <label class="active">Response</label>
+        </div>
+    </div>
+    {{/each}}
+    {{/if}}
+</script>
+
+<script>
+
+    var Case = {}
+    // Project.load = function () {
+    //     X.HTTP({
+    //         url: CONTEXT + "/data/project/single.json",
+    //         data: {
+    //             id: parseInt(X.GetUrlParam("projectId"))
+    //         },
+    //         dataType: 'json',
+    //         success: function (result) {
+    //             var container = $("#project-name")
+    //             container.html(template("tmpl-project-name", result.data));
+    //         }
+    //     });
+    // }
+
+    Case.load = function () {
+        X.HTTP({
+            url: CONTEXT + "/data/case/single.json",
+            data: {
+                id: parseInt(X.GetUrlParam("id"))
+            },
+            dataType: 'json',
+            success: function (result) {
+                result.data.pid = Project.getID()
+                var container1 = $("#project-name")
+                container1.html(template("tmpl-project-name", result.data));
+                var container = $("#project-case-detail")
+                container.html(template("tmpl-project-case-detail", result.data));
+                container.find('select').not('.disabled').formSelect();
+                Case.selectInterface()
+                beautytextarea()
+            }
+        });
+    }
+
+    Case.selectInterface = function() {
+        X.HTTP({
+            url: CONTEXT + "/data/interface/list.json",
+            data: {
+                projectId: parseInt(X.GetUrlParam("projectId")),
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#interface-select");
+                result.data.interfaceId=$("#interface-select").attr("data-interfaceid")
+                result.data.interfaceUrl=$("#interface-select").attr("data-interfaceurl")
+                container.html(template("tmpl-interface-select", result.data));
+                container.find('select').not('.disabled').formSelect();
+            }
+        });
+    }
+
+    Case.edit = function () {
+        X.HTTP({
+            url: CONTEXT + "/data/case/edit.json",
+            data: {
+                id: parseInt(X.GetUrlParam("id")),
+                interfaceId: $('#caseinterfaceId').val(),
+                name: $('#casename').val(),
+                method: $('#casemethod').val(),
+                url: $('#caseurl').val(),
+                urlSuffix: $('#caseurlsuffix').val(),
+                contentType: $('#casecontenttype').val(),
+                requestBody: $('#caserequestbody').val(),
+                resultScript: $('#caseresultscript').val()
+            },
+            dataType: 'json',
+            success: function (result) {
+                if(result.code == 0) {
+                    M.toast({html: '保存成功'})
+                } else {
+                    M.toast({html: '保存失败'})
+                }
+
+            }
+        });
+    }
+
+    Case.runSelectTemp = function() {
+        M.toast({html: '开始执行用例'})
+        X.HTTP({
+            url: CONTEXT + "/data/case/runTemp.json",
+            data: {
+                interfaceId: $('#caseinterfaceId').val(),
+                name: $('#casename').val(),
+                method: $('#casemethod').val(),
+                url: $('#caseurl').val(),
+                urlSuffix: $('#caseurlsuffix').val(),
+                contentType: $('#casecontenttype').val(),
+                requestBody: $('#caserequestbody').val(),
+                resultScript: $('#caseresultscript').val()
+            },
+            dataType: 'json',
+            success: function (result) {
+                M.toast({html: '执行用例完成'})
+                var container = $("#runSelectTemp-result")
+                var data = new Object()
+                data.data = result.data
+                container.html(template("tmpl-runSelect-result", data));
+
+                beautytextarea()
+            }
+        });
+    }
+
+    $(function () {
+        // Project.load();
+        Case.load();
+    })
+
+</script>

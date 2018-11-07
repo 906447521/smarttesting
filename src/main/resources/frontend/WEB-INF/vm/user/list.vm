@@ -1,0 +1,266 @@
+<main>
+
+    <div class="section tab">
+        <div class="row tab">
+            <div class="">
+                <div class="nav-content">
+                    <ul class="tabs">
+                        <li class="tab"><a class="active" href="javascript:;">所有用户</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section op" id="index-banner">
+        <div class="container">
+            <div class="row op">
+
+                <a class=" ripple " href="javascript:User.openAdd()" id="op-add">
+                    <i class="icon iconfont icon-folder"></i>
+                    <i class="icon iconfont icon-add" style="position:absolute;left:15px;top:4px;font-size:16px"></i>
+                </a>
+                <a class="ripple" href="javascript:;" id="op-edit" style="color:#ccc">
+                    <i class="icon iconfont icon-edit"></i>
+                </a>
+                <a class="ripple" href="javascript:;" id="op-delete" style="color:#ccc">
+                    <i class="icon iconfont icon-delete"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container" style="padding: 30px;">
+        <div class="row">
+            <div class="col s12 offset-m1 xl12  center-on-small-only">
+                <div id="materialdesign" class="section scrollspy">
+                    <div id="user-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<div id="modal1" class="modal">
+    <div id="user"></div>
+</div>
+
+
+<script id="tmpl-user" type="text/html">
+    <div class="modal-content">
+        <form id="add-user-form">
+            <div class="row">
+                <div class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" id="username" class="autocomplete" value="{{name}}">
+                            <label for="username" class="active" >账号</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="password" id="userpwd" class="autocomplete" value="">
+                            <label for="userpwd" class="active">密码</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="password" id="userpwd2" class="autocomplete" value="">
+                            <label for="userpwd2" class="active">确认密码</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">Agree</a>
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+</script>
+
+<script id="tmpl-user-list" type="text/html">
+    <table class="table-fixed">
+        <thead>
+        <tr>
+            <td width="5%">
+                <label>
+                    <input type="checkbox" class="filled-in" check-for="check-item" onclick="X.checkAll(this)"/>
+                    <span></span>
+                </label>
+            </td>
+            <th width="5%"></th>
+            <th width="5%">ID</th>
+            <th width="20%">Name</th>
+            <th>Group</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {{if (data&&data.length>0)}}
+        {{each data as elem i}}
+        <tr>
+            <td>
+                <label>
+                    <input type="checkbox" class="filled-in check-item" checkvalue="{{elem.id}}"/>
+                    <span></span>
+                </label>
+            </td>
+            <td><i class="icon iconfont icon-account icon-light-blue"></i></td>
+            <td>{{elem.id}}</td>
+            <td><a href="javascript:;">{{elem.name}}</a></td>
+            <td> {{elem.group}} </td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td colspan="4"> 没有数据。</td>
+        </tr>
+        {{/if}}
+        </tbody>
+    </table>
+    {{include 'tmpl-pagin' }}
+</script>
+
+<script>
+
+    var User = {}
+    User.loadUser = function (pageIndex, pageSize) {
+        X.HTTP({
+            url: CONTEXT + "/data/user/list.json",
+            data: {
+                pageIndex: pageIndex,
+                pageSize: pageSize
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#user-list")
+                result.data.fn = "User.loadUser"
+                container.html(template("tmpl-user-list", result.data));
+                $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                $("input[type='checkbox']", container).on("click", function () {
+                    if ($("input[type='checkbox']:checked", container).length > 0) {
+                        $("#op-edit").css("color", "").attr("href", "javascript:User.openEdit();")
+                        $("#op-delete").css("color", "").attr("href", "javascript:User.delete();")
+                    } else {
+                        $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                        $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                    }
+
+                })
+            }
+        });
+    }
+
+
+    User.edit = function () {
+
+        if($('#userpwd').val() != $('#userpwd2').val()) {
+            M.toast({html: "两次输入的密码不匹配！"})
+            return
+        }
+
+        var checkBox = $('.check-item:checked');
+        if (checkBox.length > 1) {
+            M.toast({html: 'Select one to edit'})
+            return
+        }
+
+        var userId;
+        checkBox.each(function () {
+            userId = parseInt($(this).attr("checkvalue"))
+        })
+        X.HTTP({
+            url: CONTEXT + "/data/user/edit.json",
+            data: {
+                id: userId,
+                name: $('#username').val(),
+                pwd: $('#userpwd').val()
+            },
+            dataType: 'json',
+            success: function (result) {
+                User.loadUser(1, 10)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.close()
+            }
+        });
+    }
+
+    User.add = function () {
+        if($('#userpwd').val() != $('#userpwd2').val()) {
+            M.toast({html: "两次输入的密码不匹配！"})
+            return
+        }
+        X.HTTP({
+            url: CONTEXT + "/data/user/add.json",
+            data: {
+                name: $('#username').val(),
+                pwd: $('#userpwd').val()
+            },
+            dataType: 'json',
+            success: function (result) {
+                User.loadUser(1, 10)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.close()
+            }
+        });
+    }
+
+    User.delete = function () {
+        if (window.confirm("是否要删除选中的用户？")) {
+            var zdUserIds = new Array();
+            $('.check-item:checked').each(function () {
+                zdUserIds.push(parseInt($(this).attr("checkvalue")))
+            })
+            X.HTTP({
+                url: CONTEXT + "/data/user/delete.json",
+                data: {
+                    zdUserIds: zdUserIds,
+                },
+                dataType: 'json',
+                success: function (result) {
+                    User.loadUser(1, 10)
+                }
+            });
+        }
+    }
+
+    User.openAdd = function () {
+        var container = $("#user")
+        container.html(template("tmpl-user", {"fn": "User.add()"}));
+        var instance = M.Modal.getInstance($('#modal1'));
+        instance.open();
+    }
+
+    User.openEdit = function () {
+        var checkBox = $('.check-item:checked');
+        if (checkBox.length > 1) {
+            M.toast({html: '选择一个用户来编辑！'})
+            return
+        }
+
+        var userId;
+        checkBox.each(function () {
+            userId = parseInt($(this).attr("checkvalue"))
+        })
+        X.HTTP({
+            url: CONTEXT + "/data/user/single.json",
+            data: {
+                id: userId
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#user")
+                result.data.fn = "User.edit()"
+                container.html(template("tmpl-user", result.data));
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.open();
+            }
+        });
+    }
+
+    User.loadUser(1, 10);
+</script>

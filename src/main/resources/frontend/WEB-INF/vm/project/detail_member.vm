@@ -1,0 +1,220 @@
+<main>
+
+    <div class="section tab">
+        <div class="row tab">
+            <div class="">
+                <div class="nav-content">
+                    <ul class="tabs">
+                        <div id="tabs0"></div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section op" id="index-banner">
+        <div class="container">
+            <div class="row op">
+                <a class=" ripple " href="javascript:Member.openAdd()" id="op-add">
+                    <i class="icon iconfont icon-add-account"></i>
+                </a>
+                <a class="ripple" href="javascript:;" id="op-delete" style="color:#ccc">
+                    <i class="icon iconfont icon-delete"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding: 30px;">
+        <div class="row">
+            <div class="col s12 offset-m1 xl12  center-on-small-only">
+                <div id="materialdesign" class="section scrollspy">
+                    <div id="project-member-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div id="modal1" class="modal ">
+    <div id="member"></div>
+</div>
+
+<script id="tmpl-tabs0" type="text/html">
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_case.html?id=$!{id}'">用例</a></li>
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id=$!{id}'">任务</a></li>
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_interface.html?id=$!{id}'">接口</a></li>
+    {{if creator=='$!{zdPIN}' || '$!{zdGROUP}'=='admin' }}
+    <li class="tab"><a class="active" href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_member.html?id=$!{id}'">成员</a></li>
+    {{/if}}
+</script>
+
+<script id="tmpl-member" type="text/html">
+
+    <div class="modal-content">
+        <form id="add-member-form">
+            <div class="row">
+                <div class="col s12">
+                    <div class="row">
+                        <input type="hidden" id="membertype" value="http">
+                        <div class="input-field col s12">
+                            <input type="text" id="membername" class="autocomplete" value="{{name}}">
+                            <label for="membername" class="active">用户名</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">确认</a>
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
+    </div>
+</script>
+
+<script id="tmpl-project-name" type="text/html">
+    <span class="a" onclick="window.location.href='//$!{ServerPath}/project/list.html'">
+        <i style="vertical-align: middle;" class="icon iconfont icon-back"></i>
+        项目
+    </span>
+    <span class="b">接口</span>
+</script>
+
+<script id="tmpl-project-member-list" type="text/html">
+    <table class="table-fixed">
+        <thead>
+        <tr>
+            <th width="5%">
+                <label>
+                    <input type="checkbox" class="filled-in" check-for="check-item" onclick="X.checkAll(this)"/>
+                    <span></span>
+                </label>
+            </th>
+            <th width="5%"></th>
+            <th width="15%">Name</th>
+            <th width="">Role</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        {{if (data&&data.length>0)}}
+        {{each data as elem i}}
+        <tr>
+            <td>
+                ##创建者为0
+                {{if (elem.role==1)}}
+                <label>
+                    <input type="checkbox" class="filled-in check-item" checkvalue="{{elem.id}}"/>
+                    <span></span>
+                </label>
+                {{/if}}
+            </td>
+            <td><i class="icon iconfont icon-supplierfeatures icon-light-blue"></i></td>
+            <td>{{elem.userName}}</td>
+            <td>{{if (elem.role==0)}}创建者{{else}}成员{{/if}}</td>
+        </tr>
+        {{/each}}
+        {{else}}
+
+        {{/if}}
+        </tbody>
+    </table>
+
+</script>
+
+<script>
+
+    var Member = {}
+    Project.load = function () {
+        X.HTTP({
+            url: CONTEXT + "/data/project/single.json",
+            data: {
+                id: parseInt(X.GetUrlParam("id"))
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#project-name")
+                container.html(template("tmpl-project-name", result.data));
+                var container2 = $("#tabs0")
+                container2.html(template("tmpl-tabs0", result.data));
+            }
+        });
+    }
+
+    Project.loadMember = function (pageIndex, pageSize) {
+        X.HTTP({
+            url: CONTEXT + "/data/project/list_member.json",
+            data: {
+                projectId: parseInt(X.GetUrlParam("id")),
+                pageIndex: pageIndex,
+                pageSize: pageSize
+            },
+            dataType: 'json',
+            success: function (result) {
+                result.data.fn = "Project.loadMember"
+                result.data.pid = Project.getID()
+                var container = $("#project-member-list")
+                container.html(template("tmpl-project-member-list", result));
+                $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                $("input[type='checkbox']", container).on("click", function () {
+                    if ($("input[type='checkbox']:checked", container).length > 0) {
+                        $("#op-delete").css("color", "").attr("href", "javascript:Member.delete()")
+                    } else {
+                        $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                    }
+
+                })
+            }
+        });
+    }
+
+    Member.add = function () {
+        X.HTTP({
+            url: CONTEXT + "/data/project/add_member.json",
+            data: {
+                projectId: parseInt(X.GetUrlParam("id")),
+                userName: $('#membername').val()
+            },
+            dataType: 'json',
+            success: function (result) {
+                Project.loadMember(1, 10)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.close()
+            }
+        });
+    }
+
+    Member.delete = function () {
+        if (window.confirm("是否删除项目下的用户？")) {
+            var zdMemberIds = new Array();
+            $('.check-item:checked').each(function () {
+                zdMemberIds.push(parseInt($(this).attr("checkvalue")))
+            })
+            X.HTTP({
+                url: CONTEXT + "/data/project/delete_member.json",
+                data: {
+                    zdProjectUserIds: zdMemberIds,
+                },
+                dataType: 'json',
+                success: function (result) {
+                    Project.loadMember()
+                }
+            });
+        }
+    }
+
+    Member.openAdd = function () {
+        var container = $("#member")
+        container.html(template("tmpl-member", {"fn": "Member.add()"}));
+        container.find('select').not('.disabled').formSelect();
+        var instance = M.Modal.getInstance($('#modal1'));
+        instance.open();
+    }
+
+    $(function () {
+        Project.load();
+        Project.loadMember()
+    })
+
+</script>

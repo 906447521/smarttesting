@@ -1,0 +1,156 @@
+<html>
+ <head>
+  <title>Title</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+ </head>
+ <body>
+  <table id="from" style="margin:10px;">
+	<tr>
+	 <td>用户名：</td>
+	 <td><input id="userPin" style="width:200px;" value="wudong64"/></td>
+	 <td rowspan=2>
+		<input type="button" value="查 看" style="height:50px;width:80px;" onclick="loadData();"/>
+		<input type="button" value="清 除" style="height:50px;width:80px;" onclick="reset();"/>
+	 </td>
+	</tr>
+	<tr>
+	 <td>Cookie：</td>
+	 <td><input id="cookie" style="width:200px;" value="pinId=CXt5DNsu2tx4t4Y06rqR_Q; pin=wudong310; unick=SnakeJoker; _tp=rf2XByadU3cQkKfLdJEjUg%3D%3D; _pst=wudong310; shshshfpa=ae993822-9e6a-7eb9-2fcf-d79ce2160a0b-1539078973; shshshfpb=0062269cb63d57de468558aca794d4e8a87dfb27e942963255bbc7b453; user-key=a7aa5f91-7ed1-44d3-ae4e-60018d0e9d84; sidebar_collapsed=false; areaId=22; ipLocation=%u56db%u5ddd; ipLoc-djd=22-1930-49314-51890.77757222; PCSYCityID=1930; __jdu=1539060382019179707252; __jdv=50436146|direct|-|none|-|1540363658322; _gcl_au=1.1.1789877292.1540517821; shshshfp=8a3d8cfd7b9030d934c9bfc693996054; TrackID=1OO-ojFAwx1rXwSAHNifNmKdpEc2j8dTPK8bZlu9RJ3ueoL-rBzEPhK6DF_cL3CLdoZvWt49ysHXV1hpnnXbTQ03__LygfuEzSdLaOJrDxUU; jd.erp.lang=zh_CN; cn=29; 3AB9D23F7A4B3C9B=7E5LIWDGFVYQZPQOFCXGQMD3NMN6OY7SPX7LP6SPW52EBHUPR5FQCLE5DM45MHVA6BQQ5VN3L3YQHABJ4DDNSIEKXA; __jda=50436146.1539060382019179707252.1539060382.1540555336.1540608512.93; __jdb=50436146.1.1539060382019179707252|93.1540608512; __jdc=50436146; erp1.jd.com=B6242416F0366A88DFEB43CE738AC437045C0E96F4796A519110C6F70405AEE1B2CEDDB6DD23AEF2745B22157CC6724BDA458D2EA0783276D133FC6E9EDB96E9533C6F9519E08E55D98C9D7EDA2CC424; sso.jd.com=6d9d5b316a74456faea8aa8c2f359b77; _gitlab_session=79d150846a037d4db0e7efc0eb30bf74"/></td>
+	</tr>
+  </table>
+  <div id="monitor" style="position:absolute;width:918px;height:167px;font-size:12px;color:#000;">
+	<div id="week" style="position:absolute;width:19px;top:19px;">
+		<div id="day" style="position:absolute;width:15px;height:15px;top:0px;">日</div>
+		<div id="day" style="position:absolute;width:15px;height:15px;top:18px;">一</div>
+		<div id="day" style="position:absolute;width:15px;height:15px;top:36px;">二</div>
+		<div id="day" style="position:absolute;width:15px;height:15px;top:54px;">三</div>
+		<div id="day" style="position:absolute;width:15px;height:15px;top:72px;">四</div>
+		<div id="day" style="position:absolute;width:15px;height:15px;top:90px;">五</div>
+		<div id="day" style="position:absolute;width:15px;height:15px;top:108px;">六</div>
+	</div>
+	<div class="block" title="no contributions" style="position:absolute;width:15px;height:15px;background-color:#EDEDED;top:152px;left:19px;"></div>
+	<div class="block" title="1~9 contributions" style="position:absolute;width:15px;height:15px;background-color:#ACD5F2;top:152px;left:37px;"></div>
+	<div class="block" title="10~19 contributions" style="position:absolute;width:15px;height:15px;background-color:#7FA8C9;top:152px;left:55px;"></div>
+	<div class="block" title="20~29 contributions" style="position:absolute;width:15px;height:15px;background-color:#527BA0;top:152px;left:73px;"></div>
+	<div class="block" title="30+ contributions" style="position:absolute;width:15px;height:15px;background-color:#254E77;top:152px;left:91px;"></div>
+  </div>
+  <script>
+	function init(){
+		var cur=new Date();
+		var curYear=cur.getFullYear(),curMonth=cur.getMonth(),curDate=cur.getDate();
+		
+		var flag=new Date();
+		flag.setMonth(curMonth-11);
+		flag.setDate(1);
+		var year=flag.getFullYear(),month=flag.getMonth(),date=flag.getDate();
+
+		var dateIndex=1,weekIndex=1;
+		while(true){
+			if($("#"+year+month).length==0){
+				$("#monitor").append('<div id="'+year+month+'" style="position:absolute;top:0px;left:'+(weekIndex*18+1)+'px;">'+(month+1)+'月</div>');
+				dateIndex=1;
+			}
+			
+			if($("#week"+weekIndex).length==0){
+				$("#monitor").append('<div id="week'+weekIndex+'" style="position:absolute;width:19px;top:19px;left:'+(weekIndex*18+1)+'px;"></div>');
+			}
+			
+			var week = flag.getDay();
+			var id = buildId(year,month,date);
+			var title=id+":0";
+			if($("#"+id).length==0){
+				$("#week"+weekIndex).append('<div id="'+id+'" class="block" style="position:absolute;width:15px;height:15px;background-color:#EDEDED;top:'+(week*18+1)+'px;" title="'+title+'"></div>');
+			}
+			
+			if(year==curYear&&month==curMonth&&date==curDate){
+				break;
+			}else if(week==6){
+				weekIndex++;
+			}
+			
+			dateIndex++;
+			flag.setDate(dateIndex);
+			year=flag.getFullYear(),month=flag.getMonth(),date=flag.getDate();
+		}
+		$(".block").on("mouseover mouseout",function(event){
+			if(event.type == "mouseover"){
+				$(event.target).css("border","1px solid #000");
+			}else if(event.type == "mouseout"){
+				$(event.target).css("border","none");
+			}
+		});
+	}
+	
+	function buildId(year,month,date){
+		var id=year+"-";
+		if (month<9){
+			id+="0";
+		}
+		id+=(month+1)+"-";
+		if (date<10){
+			id+="0";
+		}
+		id+=date;
+		return id;
+	}
+
+	init();
+
+	var selected=new Array();
+	function loadData(){
+		var userPin=$("#userPin").val();
+		var cookie=$("#cookie").val();
+		if(userPin==null||cookie==null||userPin==""||cookie==""){
+			$("#from").css("border","1px solid red");
+			return;
+		}else{
+			$("#from").css("border","none");
+		}
+		reset();
+		
+		var result={"2018-10-18":6,"2018-10-19":4,"2018-10-22":3,"2018-10-24":3,"2018-10-09":1}
+		$.each(result,function(key,val){
+			selected.push(key);
+			$("#"+key).attr("title",key+":"+val);
+			if(val>0 && val<10){
+				$("#"+key).css("background-color","#ACD5F2");
+			}else if(val>9 && val<20){
+				$("#"+key).css("background-color","#7FA8C9");
+			}else if(val>19 && val<30){
+				$("#"+key).css("background-color","#527BA0");
+			}else if(val>29){
+				$("#"+key).css("background-color","#254E77");
+			}
+		});
+		/*
+		$.post("http://localhost:8080/data.jsp",{"userPin":userPin,"cookie":cookie},function(result){
+			console.log(result);
+			var dates = JSON.parse(result);
+			$.each(dates,function(key,val){
+				selected.push(key);
+				$("#"+key).attr("title",key+":"+val);
+				if(val>0 && val<10){
+					$("#"+key).css("background-color","#ACD5F2");
+				}else if(val>9 && val<20){
+					$("#"+key).css("background-color","#7FA8C9");
+				}else if(val>19 && val<30){
+					$("#"+key).css("background-color","#527BA0");
+				}else if(val>29){
+					$("#"+key).css("background-color","#254E77");
+				}
+			});
+		});
+		*/
+	}
+	function reset(){
+		while(selected.length>0){
+			var key = selected.shift();
+			$("#"+key).attr("title",key+":0");
+			$("#"+key).css("background-color","#EDEDED");
+		}
+	}
+	loadData();
+  </script>
+ </body>
+</html>

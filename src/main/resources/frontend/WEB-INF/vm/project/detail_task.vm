@@ -1,0 +1,541 @@
+<main>
+
+    <div class="section tab">
+        <div class="row tab">
+            <div class="">
+                <div class="nav-content">
+                    <ul class="tabs">
+                        <div id="tabs0"></div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section op" id="index-banner">
+        <div class="container">
+            <div class="row op">
+                <a class=" ripple " href="javascript:Task.openAdd()" id="op-add">
+                    <i class="icon iconfont icon-folder"></i>
+                    <i class="icon iconfont icon-add" style="position:absolute;left:15px;top:4px;font-size:16px"></i>
+                </a>
+                <a class="ripple" href="javascript:;" id="op-edit" style="color:#ccc">
+                    <i class="icon iconfont icon-edit"></i>
+                </a>
+                <a class="ripple" href="javascript:;" id="op-delete" style="color:#ccc">
+                    <i class="icon iconfont icon-delete"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding: 30px;">
+        <div class="row">
+            <div class="col s12 offset-m1 xl12  center-on-small-only">
+                <div id="materialdesign" class="section scrollspy">
+                    <div id="project-task-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<div id="modal1" class="modal modal-fixed-footer">
+    <div id="task"></div>
+</div>
+<div id="modal2" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <div id="runSelect-result"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+</div>
+
+<script id="tmpl-tabs0" type="text/html">
+    <li class="tab"><a href="javascript:;"
+                       onclick="window.location.href='//$!{ServerPath}/project/detail_case.html?id={{id}}'">用例</a></li>
+    <li class="tab"><a class="active" href="javascript:;"
+                       onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id={{id}}'">任务</a></li>
+    <li class="tab"><a href="javascript:;"
+                       onclick="window.location.href='//$!{ServerPath}/project/detail_interface.html?id={{id}}'">接口</a>
+    </li>
+    {{if creator=='$!{zdPIN}' || '$!{zdGROUP}'=='admin' }}
+    <li class="tab" s="{{creator}}"><a href="javascript:;"
+                                       onclick="window.location.href='//$!{ServerPath}/project/detail_member.html?id={{id}}'">成员</a>
+    </li>
+    {{/if}}
+</script>
+
+<script id="tmpl-task" type="text/html">
+
+    <div class="modal-content">
+        <form id="add-task-form">
+            <div class="row">
+                <div class="col s12">
+                    <div class="row">
+                        <input type="hidden" id="taskcases" value="{{cases}}">
+                        <div class="input-field col s12">
+                            <input type="text" id="taskname" class="autocomplete"
+                                   value="{{if name==null}}新任务{{else}}{{name}}{{/if}}">
+                            <label for="taskname" class="active">任务名称</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s8">
+                            <input type="text" id="taskcon" class="autocomplete" value="{{con}}">
+                            <label for="taskcon" class="active">表达式</label>
+                        </div>
+                        <div class="input-field col s4">
+                            <select id="" onchange="$('#taskcon').val($(this).val())">
+                                <option >请选择</option>
+                                <option value="0 0/30 * * * ?" >每30分钟</option>
+                                <option value="0 0 0/1 * * ?" >每小时</option>
+                                <option value="0 0 2 * * ?" >每天凌晨2点</option>
+                                <option value="0 0 2 ? * SAT" >每周日凌晨2点</option>
+                            </select>
+                            <label>表达式参考</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s7">
+                            <div id="task-case-list-selected" style="margin-top:33px;padding-left:5px"></div>
+                            <label class="active">勾选执行的接口</label>
+                        </div>
+                        <div class="input-field col s5" style="padding-left:50px">
+                            <div id="task-case-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">Agree</a>
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+</script>
+
+<script id="tmpl-project-name" type="text/html">
+    <span class="a" onclick="window.location.href='//$!{ServerPath}/project/list.html'">
+        <i style="vertical-align: middle;" class="icon iconfont icon-back"></i>
+        项目
+    </span>
+    <span class="b">任务</span>
+</script>
+
+<script id="tmpl-project-task-list" type="text/html">
+    <table class="table-fixed">
+        <thead>
+        <tr>
+            <th width="5%">
+                <label>
+                    <input type="checkbox" class="filled-in" check-for="check-item" onclick="X.checkAll(this)"/>
+                    <span></span>
+                </label>
+            </th>
+            <th width="5%"></th>
+            <th width="20%">Name</th>
+            <th width="30%">Con</th>
+            <th width="30%">Last Run</th>
+            <th width=""></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {{if (data&&data.length>0)}}
+        {{each data as elem i}}
+        <tr>
+            <td>
+                <label>
+                    <input type="checkbox" class="filled-in check-item" checkvalue="{{elem.id}}"/>
+                    <span></span>
+                </label>
+            </td>
+            <td><i class="icon iconfont icon-process icon-light-blue"></i></td>
+            <td><a href="//$!{ServerPath}/task/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a></td>
+            <td>{{elem.con}}</td>
+            <td><a target="_blank" href="//$!{ServerPath}/task_result/detail.html?resultId={{elem.lastrun}}">详情</a></td>
+            <td>{{elem.type}}</td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td colspan="4"> 没有数据。</td>
+        </tr>
+        {{/if}}
+        </tbody>
+    </table>
+    {{include 'tmpl-pagin' }}
+</script>
+
+
+<script id="tmpl-task-case-select" type="text/html">
+    <table class="table-fixed">
+        <thead>
+        <tr>
+            <th width="5%">
+                <label>
+                    <input type="checkbox" class="filled-in" check-for="check-item1"
+                           onclick="X.checkAll(this);Task.caseSelectAll(this)"/>
+                    <span></span>
+                </label>
+            </th>
+            <th width="30%">用例</th>
+
+        </tr>
+        </thead>
+
+        <tbody>
+        {{if (data&&data.length>0)}}
+        {{each data as elem i}}
+        <tr>
+            <td style="padding: 3px 10px">
+                <label>
+                    <input type="checkbox" class="filled-in check-item1"
+                           checkvalue="{{elem.id}}"
+                           checkname="{{elem.name}}"
+                           checkmethod="{{elem.method}}"
+                           checkurl="{{elem.url}}"
+                           onclick="Task.caseSelect($(this), {{elem.id}},'{{elem.name}}','{{elem.method}}','{{elem.url}}')"
+                           {{if elem.selected }} checked {{/if}} />
+                    <span></span>
+                </label>
+            </td>
+            <td style="padding: 3px 10px">
+                <span style="display:inline-block;width:50px;font-weight:800;color:{{if elem.method=='GET'}}#3eb63e{{else}}#f5a623{{/if}};"><i>{{elem.method}}</i></span>
+                <a target="_blank"
+                                             href="//$!{ServerPath}/case/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a>
+            </td>
+
+        </tr>
+        {{/each}}
+        {{else}}
+
+        {{/if}}
+        </tbody>
+    </table>
+</script>
+
+<script>
+
+    var Task = {}
+    Project.load = function () {
+        X.HTTP({
+            url: CONTEXT + "/data/project/single.json",
+            data: {
+                id: parseInt(X.GetUrlParam("id"))
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#project-name")
+                container.html(template("tmpl-project-name", result.data));
+                var container2 = $("#tabs0")
+                container2.html(template("tmpl-tabs0", result.data));
+            }
+        });
+    }
+
+    Project.loadTask = function (pageIndex, pageSize) {
+        X.HTTP({
+            url: CONTEXT + "/data/task/list.json",
+            data: {
+                projectId: parseInt(X.GetUrlParam("id")),
+                pageIndex: pageIndex,
+                pageSize: pageSize
+            },
+            dataType: 'json',
+            success: function (result) {
+                result.data.fn = "Project.loadTask"
+                result.data.pid = Project.getID()
+                var container = $("#project-task-list")
+                container.html(template("tmpl-project-task-list", result.data));
+                $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                $("input[type='checkbox']", container).on("click", function () {
+                    if ($("input[type='checkbox']:checked", container).length > 0) {
+                        $("#op-delete").css("color", "").attr("href", "javascript:Task.delete()")
+                        $("#op-edit").css("color", "").attr("href", "javascript:Task.openEdit()")
+                    } else {
+                        $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                        $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                    }
+
+                })
+            }
+        });
+    }
+
+    Task.add = function () {
+        X.HTTP({
+            url: CONTEXT + "/data/task/add.json",
+            data: {
+                projectId: parseInt(X.GetUrlParam("id")),
+                name: $('#taskname').val(),
+                con: $('#taskcon').val(),
+                cases: $('#taskcases').val()
+            },
+            dataType: 'json',
+            success: function (result) {
+                Project.loadTask(1, 10)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.close()
+            }
+        });
+    }
+    Task.edit = function () {
+        var checkBox = $('.check-item:checked');
+        if (checkBox.length > 1) {
+            M.toast({html: '选中一项来编辑！'})
+            return
+        }
+
+        var projectId;
+        checkBox.each(function () {
+            projectId = parseInt($(this).attr("checkvalue"))
+        })
+        X.HTTP({
+            url: CONTEXT + "/data/task/edit.json",
+            data: {
+                id: projectId,
+                name: $('#taskname').val(),
+                con: $('#taskcon').val(),
+                cases: $('#taskcases').val()
+            },
+            dataType: 'json',
+            success: function (result) {
+                Project.loadTask(1, 10)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.close()
+            }
+        });
+    }
+    Task.delete = function () {
+        if (window.confirm("是否要删除选中项？")) {
+            var zdTaskIds = new Array();
+            $('.check-item:checked').each(function () {
+                zdTaskIds.push(parseInt($(this).attr("checkvalue")))
+            })
+            X.HTTP({
+                url: CONTEXT + "/data/task/delete.json",
+                data: {
+                    zdTaskIds: zdTaskIds,
+                },
+                dataType: 'json',
+                success: function (result) {
+                    Project.loadTask(1, 10)
+                }
+            });
+        }
+    }
+
+    Task.openAdd = function () {
+        var container = $("#task")
+        container.html(template("tmpl-task", {"fn": "Task.add()"}));
+        container.find('select').not('.disabled').formSelect();
+        Task.loadSelectedCases()
+        var instance = M.Modal.getInstance($('#modal1'));
+        instance.open();
+    }
+    Task.openEdit = function () {
+        var checkBox = $('.check-item:checked');
+        if (checkBox.length > 1) {
+            M.toast({html: '选中一项来编辑！'})
+            return
+        }
+
+        var taskId;
+        checkBox.each(function () {
+            taskId = parseInt($(this).attr("checkvalue"))
+        })
+        X.HTTP({
+            url: CONTEXT + "/data/task/single.json",
+            data: {
+                id: taskId
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#task")
+                result.data.fn = "Task.edit()"
+                container.html(template("tmpl-task", result.data));
+                container.find('select').not('.disabled').formSelect();
+                Task.loadSelectedCases(result.data.cases)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.open();
+            }
+        });
+    }
+
+    Task.loadSelectedCases = function (cases) {
+
+        X.HTTP({
+            url: CONTEXT + "/data/case/list.json",
+            data: {
+                projectId: parseInt(X.GetUrlParam("id")),
+            },
+            dataType: 'json',
+            success: function (result) {
+                result.data.pid = Project.getID()
+                var selectedObject = toSelectedCaseObject(cases, result.data.data)
+
+                var listContainer = $("#task-case-list");
+                listContainer.html(template("tmpl-task-case-select", result.data));
+                listContainer.find('select').not('.disabled').formSelect();
+
+                var leftCheckedDIV = $("#task-case-list-selected");
+
+                for (var i in selectedObject) {
+                    var id = selectedObject[i].id
+                    var name = selectedObject[i].name
+                    var method = selectedObject[i].method
+                    var url = selectedObject[i].url
+                    leftCheckedDIV.append(taskSelectedCaseDIV(id, name,method,url))
+                }
+
+            }
+        });
+    }
+
+
+    Task.caseSelectAll = function (the) {
+
+        var leftCheckedDIV = $("#task-case-list-selected")
+        var checked = !($(the).not(':checked').length > 0)
+        var checkFor = $(the).attr("check-for")
+
+        if (checked) {
+            $("." + checkFor).each(function () {
+                var id = $(this).attr('checkvalue');
+                var dommentId = "case_" + id
+                leftCheckedDIV.find("#" + dommentId).remove()
+            })
+            $("." + checkFor).each(function () {
+                var id = $(this).attr('checkvalue');
+                var name = $(this).attr('checkname');
+                var method = $(this).attr('checkmethod');
+                var url = $(this).attr('checkurl');
+                Task.caseSelect($(this), id, name, method, url)
+            })
+        } else {
+            $("." + checkFor).each(function () {
+                var id = $(this).attr('checkvalue');
+                var dommentId = "case_" + id
+                leftCheckedDIV.find("#" + dommentId).remove()
+            })
+
+        }
+
+    }
+
+    Task.caseSelect = function (the, id, name, method, url) {
+        var leftCheckedDIV = $("#task-case-list-selected")
+        if (!(the.not(':checked').length > 0)) {
+            leftCheckedDIV.append(taskSelectedCaseDIV(id, name, method, url))
+        } else {
+            var id = "case_" + id
+            leftCheckedDIV.find("#" + id).remove()
+        }
+        resetTaskCases()
+    }
+
+    Task.casePrev = function ($this) {
+        var leftCheckedDIVRow = $this.parent().parent()
+        var leftCheckedDIV = leftCheckedDIVRow.parent()
+        $(".oprow").removeClass("oprow")
+        leftCheckedDIVRow.addClass("oprow")
+        leftCheckedDIVRow.addClass("metril")
+        var index = leftCheckedDIV.find('.oprow');
+        if (index.index() != 0) {
+            leftCheckedDIVRow.prev().before(index)
+        }
+        setTimeout(function() {
+            leftCheckedDIVRow.removeClass("metril")
+        }, 500)
+        resetTaskCases()
+    }
+
+    Task.caseNext = function ($this) {
+        var leftCheckedDIVRow = $this.parent().parent()
+        var leftCheckedDIV = leftCheckedDIVRow.parent()
+        $(".oprow").removeClass("oprow")
+        leftCheckedDIVRow.addClass("oprow")
+        leftCheckedDIVRow.addClass("metril")
+        var index = leftCheckedDIV.find('.oprow');
+        if (index.index() != length - 1) {
+            leftCheckedDIVRow.next().after(index)
+        }
+        setTimeout(function() {
+            leftCheckedDIVRow.removeClass("metril")
+        }, 500)
+        resetTaskCases()
+    }
+
+    var resetTaskCases = function () {
+        var cases = "";
+        var leftCheckedDIV = $("#task-case-list-selected")
+        leftCheckedDIV.find(".row").each(function (i) {
+            if (i != 0) {
+                cases += ","
+            }
+            cases += $(this).attr("cid")
+        });
+        $("#taskcases").val(cases)
+        console.log(cases)
+    }
+
+    var taskSelectedCaseDIV = function (id, name,  method,url) {
+
+        var methodSpan = ""
+        if (method=='GET') {
+            methodSpan = "<span style='display:inline-block;width:50px;font-size:13px;font-weight:800;color:#3eb63e'><i>"+method+"</i></span>"
+        } else {
+            methodSpan = "<span style='display:inline-block;width:50px;font-size:13px;font-weight:800;color:#f5a623'><i>"+method+"</i></span>"
+        }
+
+
+
+        return "<div  class=\"nextRow row\" id=case_" + id + " cid=" + id + ">" +
+                "<div class=\"rowleft input-field col s1\">" +
+                "<div class=prev onclick='Task.casePrev($(this))'><i class='icon iconfont icon-less'></i></div>" +
+                "<div class=next onclick='Task.caseNext($(this))'><i class='icon iconfont icon-moreunfold'></i></div></div>" +
+                "<div class=\"rowname input-field col s9\">" + methodSpan +
+                " <a style='color:rgb(117, 117, 117)' target=\"_blank\" href=\"//$!{ServerPath}/case/detail.html?id="+id+"&&projectId="+parseInt(X.GetUrlParam("id"))+"\">"
+                + name +
+                "</a>"+
+                "</div>" +
+                "<div class=\"rowarrow input-field col s2\">›</div>" +
+                "</div>"
+    }
+
+    var toSelectedCaseObject = function (seletedCasesString, casesObject) {
+        var selectedArray = new Array()
+        if (seletedCasesString && seletedCasesString != null && seletedCasesString.trim() != "") {
+            var casesMapAll = new Object()
+            if (casesObject != null) {
+                for (var j in casesObject) {
+                    var caseEntity = casesObject[j]
+                    casesMapAll[caseEntity.id] = caseEntity
+                }
+            }
+
+            var casesSplited = seletedCasesString.split(",")
+            for (var i in casesSplited) {
+                var caseId = casesSplited[i];
+                casesMapAll[caseId].selected = true;
+                selectedArray.push(casesMapAll[caseId])
+            }
+
+
+        }
+        return selectedArray;
+    }
+
+
+    $(function () {
+        Project.load();
+        Project.loadTask(1, 10)
+    })
+
+</script>

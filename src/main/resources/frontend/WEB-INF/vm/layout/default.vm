@@ -1,0 +1,545 @@
+<link rel="stylesheet" href="//$!{ServerPath}/s/materialize.min.css">
+<link rel="stylesheet" href="//$!{ServerPath}/s/ghpages-materialize.css">
+<link rel="stylesheet" href="//$!{ServerPath}/s/mono/iconfont.css">
+<link rel="stylesheet" href="//$!{ServerPath}/s/colour/iconfont2.css">
+<link rel="stylesheet" href="//$!{ServerPath}/s/common.css">
+<script src="//$!{ServerPath}/s/jquery.js"></script>
+<script src="//$!{ServerPath}/s/template.js"></script>
+<script src="//$!{ServerPath}/s/templateutil.js"></script>
+<script src="//$!{ServerPath}/s/common.js"></script>
+<script src="//$!{ServerPath}/s/colour/iconfont2.js"></script>
+<script>
+    var CONTEXT = '//$!{ServerPath}';
+    var Project = {}
+</script>
+
+
+<head>
+    <title>zdTest</title>
+    <style>
+        .sidenav {
+            /*background: #F6F6F6;*/
+            /*width: 238px;*/
+        }
+        .sidenav li > a > i {
+            margin: 0 8px 0 0;
+        }
+        header, main, footer {
+            /*padding-left: 238px;*/
+        }
+        .site-layout-example-top-ul a {
+            color:#fff;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .site-layout-example-top-ul li {
+            float: left;
+            padding: 0 10px;
+        }
+        .site-layout-example-top-ul a i{
+            vertical-align: middle;
+            font-size: 17px;
+        }
+        .col .row.tab {
+            margin: 0;
+        }
+        .section.tab {
+            padding-top: 20px;
+            padding-bottom: 0;
+        }
+        .section.tab .tabs{
+            line-height: 34px;
+            height: 34px;
+            overflow:unset;
+            /*margin-bottom: -1px;*/
+            padding-left: 10px;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .section.tab .tabs li.tab{
+            margin-right:0px;
+            margin-left: 0px;
+            border: 1px solid #f1f1f1;
+            border-bottom:none;
+            line-height: 30px;
+            height: 34px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+        }
+
+        .section.tab .tabs li a{
+            font-size: 12px;
+            color: #333;
+            padding: 0 28px;
+            /*min-width: 180px;*/
+            background-color: #f9f9f9;
+            border-top: 2px solid transparent;
+            border-bottom: 2px solid transparent;
+        }
+        .section.tab .tabs li a.active{
+            border-top: 2px solid #F26B3A;
+
+        }
+        .section.tab .tabs .indicator {
+            height: 0;
+        }
+        .section.op {
+            border-bottom: 1px solid #f1f1f1 !important;
+            background-color: #f9f9f9;
+        }
+        table td a {
+            color: rgb(117, 117, 117);
+        }
+        .section.name {
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .row.name {
+            font-size: 13px;
+        }
+        .row.name .a {
+            left: -50px;
+            color: #7f7f7f;
+        }
+        .row.name .a:hover {
+            color: #F26B3A;
+        }
+        .dropdown-content li > a, .dropdown-content li > span {
+            color:#444;
+            font-weight: normal;
+        }
+        .dropdown-content li > a:hover, .dropdown-content li > span:hover {
+            color:#F26B3A;
+        }
+        .menu-op {
+            display: none;
+            line-height: 50px;
+            position: absolute;
+            right:5px;
+            top:0;
+            padding:5px;
+            cursor:pointer;
+            font-size:20px;
+        }
+        .menu-op ul {
+            display: none;
+            background-color: #fff;
+            position: absolute;
+            width: 150px;
+            right: -8px;
+            z-index: 199900;
+            box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+            font-size:12px;
+        }
+        .menu-op ul li{
+            padding-left: 13px;
+            color:#555;
+            line-height: 32px !important;
+        }
+        .menu-op ul li:hover{
+            background-color: #f1f1f1;
+            color:#F26B3A;
+        }
+        .menu-op ul li i{
+            margin-right:8px;
+            font-size:16px;
+        }
+
+        .sidenav li.bold:hover .menu-op, .sidenav .menu-op.ac{
+            display: block;
+            color:#F26B3A;
+        }
+
+        .sidenav .menu-op.ac ul{
+            display: block;
+        }
+
+        ul.sidenav.sidenav-fixed li a {
+            padding: 0 15px;
+        }
+        main {
+            margin-top: 60px;
+        }
+        .CodeMirror {
+            border: 1px solid #ccc;
+            font-size: 13px;
+            margin-top: 15px;
+            height:238px !important;
+        }
+        .CodeMirror-scroll {
+            padding-bottom: 0px !important;
+        }
+        .beautify-textarea-a{
+            padding:0 16px;box-shadow:none;
+            background-color:#ddd;color:#444;cursor:pointer;
+            position:absolute;top:-15px;right:10px;height:26px;line-height:26px;font-size:12px
+        }
+        .beautify-textarea-b {
+            padding:0 16px;
+            color:#444;
+            position:absolute;top:-15px;right:200px;height:26px;line-height:26px;font-size:12px
+        }
+        button, input, optgroup, select, textarea {
+            font-family: 微软雅黑, Roboto, system-ui, "PingFang SC", STHeiti, sans-serif;
+            color: rgba(0, 0, 0, 0.87);
+        }
+        .container {
+            max-width: 100%;
+        }
+        .nextRow {
+            font-size:13px;
+        }
+        .nextRow .rowname {
+            padding-bottom:3px;padding-top:3px;margin:0;
+            margin-top: 5px;
+        }
+        .nextRow .rowarrow{
+            font-size:16px;padding-bottom:0px;padding-top:3px;margin:0;
+            margin-top: 3px;
+            margin-bottom: 0;
+            text-align: right;
+        }
+        .nextRow .prev, .nextRow .next {
+            cursor: pointer;
+            height: 15px;
+        }
+        .nextRow .prev:hover, .nextRow .next:hover {
+            cursor: pointer;
+            color:#F26B3A;
+        }
+        .nextRow .iconfont {
+            font-size:13px;
+            font-weight: bold;
+        }
+        .nextRow .rowleft {
+            padding-bottom: 3px;
+            padding-top: 3px;
+            margin: 0;
+        }
+        .nextRow {
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .metril {
+            animation:mymove 0.5s ease infinite;
+        }
+        @keyframes mymove
+        {
+            0% {
+                background-color: rgba(225, 115, 72, 0.3);
+            }
+            50% {
+                background-color: rgba(225, 115, 72, 0.2);
+            }
+            100% {
+                background-color: rgba(225, 115, 72, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div id="site-layout-example-top" class="col s12" style="top: 0;height: 60px;line-height:60px;background-color:#333;z-index:2;position: absolute;
+    width: 100%;">
+
+            <a id="logo-container" href="/" class="brand-logo" style="color:#fff;padding-left:20px;font-weight:bold">
+                <img src="//$!{ServerPath}/s/log.svg" style="height:26px;width:26px;vertical-align:middle;margin-right:10px"/>zdTest
+            </a>
+
+    <ul class="site-layout-example-top-ul" style="float: right;color: #fff;padding:0;margin: 0;line-height: 60px; margin-right:20px;">
+        <li style="font-size: 13px;">
+            <a class='dropdown-trigger btn' href='#' data-target='dropdown1' style="text-transform: none;background-color: #F26B3A;font-weight: normal">$!{zdPIN}</a>
+            <ul id='dropdown1' class='dropdown-content'>
+                <li><a href="//$!{ServerPath}/data/logout.json">退出</a></li>
+            </ul>
+        </li>
+        #if($!{zdGROUP} == 'admin')
+            <li>
+                <a href="//$!{ServerPath}/user/list.html">
+                    <i class="icon iconfont icon-account"></i>
+                </a>
+            </li>
+            <li>
+                <a href="//$!{ServerPath}/project/list.html">
+                    <i class="icon iconfont icon-set"></i>
+                </a>
+            </li>
+        #end
+
+        <li>
+            <a href="//$!{ServerPath}">
+                <i class="icon iconfont icon-form"></i>
+            </a>
+        </li>
+    </ul>
+
+</div>
+
+<div class="col s12">
+    <header>
+        <div id="menu-project-list"></div>
+
+    </header>
+
+    $!{screen_content}
+
+</div>
+
+<div id="menu-modal" class="modal ">
+    <div id="menu-project"></div>
+</div>
+
+<script id="tmpl-menu-project" type="text/html">
+    <div class="modal-content">
+        <form id="add-project-form">
+            <div class="row">
+                <div class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" id="menuprojectname" class="autocomplete" value="{{name}}">
+                            <label for="menuprojectname" class="active">项目名称</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">确认</a>
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
+    </div>
+</script>
+
+<script id="tmpl-menu-project-list" type="text/html">
+
+    <ul id="nav-mobile" class="sidenav sidenav-fixed" style="top: 0;z-index: 1;
+                                                                position: absolute;
+                                                                margin-bottom: 0;
+                                                                bottom: 0;
+                                                                height: 100%;">
+
+        <li style="height:60px">
+
+        </li>
+
+        <li class="search" style="position: relative;top: 0;padding: 0">
+            <div class="search-wrapper">
+                <input id="search" placeholder="Search"><i
+                    style="font-size:20px;position:absolute;top:11px;right:20px;cursor:pointer;"
+                    class="icon iconfont icon-search"></i>
+                <div class="search-results"></div>
+            </div>
+        </li>
+
+        <li style="position: relative;top: 0;padding: 0;">
+            <div class="search-wrapper" style="position:relative;text-align:right;margin-right:10px;font-size:13px;border-bottom: 1px solid rgba(0, 0, 0, 0.14);color: #F26B3A">
+                <span style="cursor:pointer;font-weight: bold" onclick="Project.openAdd()" >
+                    <i class="icon iconfont icon-add" style="font-size: 14px;"></i>
+                    创建项目
+                </span>
+            </div>
+        </li>
+
+        {{if (data&&data.length>0)}}
+        {{each data as elem i}}
+        <li class="bold {{if pid==elem.id}} active {{/if}} " id="{{elem.id}}" pid="{{pid}}" style="position: relative">
+            <a href="//$!{ServerPath}/project/detail_case.html?id={{elem.id}}" class="waves-effect waves-teal"
+               style="line-height:60px;height:60px;margin-right:30px">
+                <i class="icon iconfont icon-folder " style=" {{if elem.creator=='$!{zdPIN}' }}color:#F26B3A;{{else}}color:grey;{{/if}}font-size:12px;height:60px;line-height:60px;"></i>
+                <div style="display: inline-block">
+                <span style="margin-top:-8px;display:block;font-weight:normal;max-width:190px;overflow:hidden;height:60px;font-size:12px">
+                {{elem.name}}
+                </span>
+                    <span style="color:grey;font-size:12px;margin-top:-38px;display:block;">
+                    {{elem.caseCount}} cases
+                </span>
+                </div>
+            </a>
+            {{if elem.creator=='$!{zdPIN}' }}
+            <div class="menu-op" style="" onclick="showMenuOp(this)">
+                ›
+                <div style="position:relative">
+                    <ul>
+                        <li onclick="Project.openEdit({{elem.id}})"><i class="icon iconfont icon-edit" ></i> 编辑</li>
+                        <li onclick="Project.delete({{elem.id}})"><i class="icon iconfont icon-delete"></i> 删除</li>
+                    </ul>
+                </div>
+            </div>
+            {{/if}}
+        </li>
+        {{/each}}
+        {{else}}
+
+        {{/if}}
+    </ul>
+
+
+</script>
+
+<script>
+
+    Project.getID = function() {
+        var pid = parseInt(X.GetUrlParam("projectId"))
+        if(isNaN(pid)) {
+            pid = parseInt(X.GetUrlParam("id"))
+        }
+        return pid
+    }
+
+    Project.loadProject = function (pageIndex, pageSize) {
+        X.HTTP({
+            url: CONTEXT + "/data/project/list_promotion.json",
+            data: {
+
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#menu-project-list")
+                result.data.fn  = "Project.loadProject"
+                result.data.pid = Project.getID()
+                container.html(template("tmpl-menu-project-list", result.data));
+                $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                $("input[type='checkbox']", container).on("click", function () {
+                    if ($("input[type='checkbox']:checked", container).length > 0) {
+                        $("#op-delete").css("color", "").attr("href", "javascript:Project.delete()")
+                        $("#op-edit").css("color", "").attr("href", "javascript:Project.openEdit();")
+                    } else {
+                        $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                        $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                    }
+
+                })
+            }
+        });
+    }
+
+    Project.add = function () {
+        X.HTTP({
+            url: CONTEXT + "/data/project/add.json",
+            data: {
+                name: $('#menuprojectname').val(),
+            },
+            dataType: 'json',
+            success: function (result) {
+                Project.loadProject(1, 10)
+                var instance = M.Modal.getInstance($('#menu-modal'));
+                instance.close()
+            }
+        });
+    }
+
+    Project.edit = function (projectId) {
+        X.HTTP({
+            url: CONTEXT + "/data/project/edit.json",
+            data: {
+                id: projectId,
+                name: $('#menuprojectname').val()
+            },
+            dataType: 'json',
+            success: function (result) {
+                Project.loadProject(1, 10)
+                var instance = M.Modal.getInstance($('#menu-modal'));
+                instance.close()
+            }
+        });
+    }
+
+    Project.delete = function (projectId) {
+        if (window.confirm("是否删除项目及其子项？")) {
+            X.HTTP({
+                url: CONTEXT + "/data/project/delete.json",
+                data: {
+                    zdProjectIds: [projectId],
+                },
+                dataType: 'json',
+                success: function (result) {
+                    Project.loadProject(1, 10)
+                }
+            });
+        }
+    }
+    Project.openAdd = function () {
+        var container = $("#menu-project")
+        container.html(template("tmpl-menu-project", {"fn": "Project.add()"}));
+        var instance = M.Modal.getInstance($('#menu-modal'));
+        instance.open();
+    }
+    Project.openEdit = function (projectId) {
+        X.HTTP({
+            url: CONTEXT + "/data/project/single.json",
+            data: {
+                id: projectId
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#menu-project")
+                result.data.fn = "Project.edit("+projectId+")"
+                container.html(template("tmpl-menu-project", result.data));
+                var instance = M.Modal.getInstance($('#menu-modal'));
+                instance.open();
+            }
+        });
+    }
+
+    Project.loadProject(1, 10);
+
+    function showMenuOp(that) {
+        $(".ac").removeClass("ac")
+        $(document).off('click.ac')
+        var that = $(that)
+        that.addClass('ac');
+        setTimeout(function () {
+            $(document).on('click.ac',function(){
+                $(".ac").removeClass("ac")
+                $(document).off('click.ac')
+            })
+        },0)
+    }
+
+    // var a = {"a":1,"a":2}
+    // console.log(JSON.stringify(a))
+
+    // $.ajax({
+    //     type:"POST",
+    //     url: CONTEXT + "/data/test/domains.json",
+    //     // dataType:"json",
+    //     contentType:"application/json", // 指定这个协议很重要
+    //     data:JSON.stringify([{"a":"1","b":"2"},{"a":"1","b":"2"}]),
+    //     success:function(data){
+    //
+    //     }
+    // });
+</script>
+
+<script id="tmpl-method-colorname" type="text/html">
+    {{if zdInterface!=null}}
+    <span style="display:inline-block;width:50px;font-size:13px;font-weight:800;color:{{if zdInterface.method=='GET'}}#3eb63e{{else}}#f5a623{{/if}};">
+        <i>{{zdInterface.method}}</i>
+    </span>
+    {{/if}}
+</script>
+
+
+<script id="tmpl-pagin" type="text/html">
+    <div class="clearfix"style="font-family:Arial">
+        <div class="pagin fr"data-totalpage="{{totalPage}}"data-curpage="{{pageIndex}}"data-pagesize="{{pageSize}}">
+            <div class="row page"style="line-height: 40px; vertical-align: middle;">
+                <div class="col ">
+                    <span>共&nbsp;{{totalPage}}&nbsp;页&nbsp;&nbsp;总计&nbsp;{{totalRecord}}&nbsp;条记录</span>
+                </div>
+                <div class="col ">
+                    <a class=""href="javascript:void(0);"{{if pageIndex!=1}}onclick="{{fn}}(1, {{pageSize}}, this);"{{/if}}>
+                    «
+                    </a>
+                    <a class=""href="javascript:void(0);"{{if pageIndex!=prevPage}}onclick="{{fn}}({{prevPage}}, {{pageSize}}, this);"{{/if}}>
+                    &#8249;
+                    </a>
+                    <a class=""href="javascript:void(0);"{{if pageIndex!=nextPage}}onclick="{{fn}}({{nextPage}}, {{pageSize}}, this);"{{/if}}>
+                    &#8250;
+                    </a>
+                    <a class=""href="javascript:void(0);"{{if pageIndex!=totalPage}}onclick="{{fn}}({{totalPage}}, {{pageSize}}, this);"{{/if}}>
+                    »
+                    </a>
+                </div>
+                <div class="col "><span>显示行数：</span><select class="browser-default"style="display: inline-block;width:56px;height: 26px;vertical-align: middle;"name="pageSize"onchange="{{fn}}(1, this.value, this);"><option value="5"{{if pageSize==5}}selected="selected"{{/if}}>5</option><option value="10"{{if pageSize==10}}selected="selected"{{/if}}>10</option><option value="25"{{if pageSize==25}}selected="selected"{{/if}}>25</option><option value="50"{{if pageSize==50}}selected="selected"{{/if}}>50</option><option value="100"{{if pageSize==100}}selected="selected"{{/if}}>100</option></select>&nbsp;&nbsp;转到：<input class=""type="text"style="display: inline-block;width: 38px;margin: 0;height: 18px;vertical-align: middle;border: 1px solid #f2f2f2;border-radius: 2px;padding: 3px;"asname="currPage"value="{{pageIndex}}"onkeypress="if (event.keyCode == '13') { event.preventDefault();$(this).val(Math.max(1, Math.min(this.value, {{totalPage}})));var index=this.value; if({{pageIndex}} != index) {{fn}}(index, {{pageSize}}, this)}"></div></div></div></div>
+</script>
+<script src="//$!{ServerPath}/s/materialize.min.js"></script>
+<script src="//$!{ServerPath}/s/run.js"></script>

@@ -1,0 +1,200 @@
+<main>
+
+    <div class="section tab">
+        <div class="row tab">
+            <div class="">
+                <div class="nav-content">
+                    <ul class="tabs">
+                        <li class="tab"><a class="" href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/list.html'">所有项目</a></li>
+                        <li class="tab"><a class="active" href="javascript:;" onclick="window.location.href='//$!{ServerPath}/plugin/list.html'">所有插件</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section op" id="index-banner">
+        <div class="container">
+            <div class="row op">
+
+                <a class="ripple" href="javascript:;" id="op-edit" style="color:#ccc">
+                    <i class="icon iconfont icon-edit"></i>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container" style="padding: 30px;">
+        <div class="row">
+            <div class="col s12 m8 offset-m1 xl12  center-on-small-only">
+                <div id="materialdesign" class="section scrollspy">
+                    <div id="plugin-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<div id="modal1" class="modal">
+    <div id="plugin"></div>
+</div>
+
+
+<script id="tmpl-plugin" type="text/html">
+    <div class="modal-content">
+        <form id="add-plugin-form">
+            <div class="row">
+                <div class="col s12">
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" id="pluginname" class="autocomplete" value="{{name}}">
+                            <label for="pluginname" class="active" >Name</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <input type="text" id="pluginhome" class="autocomplete" value="{{home}}">
+                            <label for="pluginhome" class="active">Home</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">Agree</a>
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+</script>
+
+<script id="tmpl-plugin-list" type="text/html">
+    <table class="table-fixed">
+        <thead>
+        <tr>
+            <td width="5%">
+                <label>
+                    <input type="checkbox" class="filled-in" check-for="check-item" onclick="X.checkAll(this)"/>
+                    <span></span>
+                </label>
+            </td>
+            <th width="5%"></th>
+            <th width="5%">ID</th>
+            <th>Name</th>
+            <th>Home</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {{if (data&&data.length>0)}}
+        {{each data as elem i}}
+        <tr>
+            <td>
+                <label>
+                    <input type="checkbox" class="filled-in check-item" checkvalue="{{elem.id}}"/>
+                    <span></span>
+                </label>
+            </td>
+            <td><i class="icon iconfont icon-component icon-light-blue"></i></td>
+            <td>{{elem.id}}</td>
+            <td><a href="javascript:;">{{elem.name}}</a></td>
+            <td> {{elem.home}} </td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td colspan="4"> 没有数据。</td>
+        </tr>
+        {{/if}}
+        </tbody>
+    </table>
+    {{include 'tmpl-pagin' }}
+</script>
+
+<script>
+
+    var Plugin = {}
+    Plugin.loadPlugin = function (pageIndex, pageSize) {
+        X.HTTP({
+            url: CONTEXT + "/data/plugin/list.json",
+            data: {
+                pageIndex: pageIndex,
+                pageSize: pageSize
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#plugin-list")
+                result.data.fn = "Plugin.loadPlugin"
+                container.html(template("tmpl-plugin-list", result.data));
+                $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                $("input[type='checkbox']", container).on("click", function () {
+                    if ($("input[type='checkbox']:checked", container).length > 0) {
+                        $("#op-edit").css("color", "").attr("href", "javascript:Plugin.openEdit();")
+                    } else {
+                        $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                    }
+
+                })
+            }
+        });
+    }
+
+
+    Plugin.edit = function () {
+        var checkBox = $('.check-item:checked');
+        if (checkBox.length > 1) {
+            M.toast({html: 'Select one to edit'})
+            return
+        }
+
+        var pluginId;
+        checkBox.each(function () {
+            pluginId = parseInt($(this).attr("checkvalue"))
+        })
+        X.HTTP({
+            url: CONTEXT + "/data/plugin/edit.json",
+            data: {
+                id: pluginId,
+                name: $('#pluginname').val(),
+                home: $('#pluginhome').val()
+            },
+            dataType: 'json',
+            success: function (result) {
+                Plugin.loadPlugin(1, 10)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.close()
+            }
+        });
+    }
+
+    Plugin.openEdit = function () {
+        var checkBox = $('.check-item:checked');
+        if (checkBox.length > 1) {
+            M.toast({html: 'Select one to edit'})
+            return
+        }
+
+        var pluginId;
+        checkBox.each(function () {
+            pluginId = parseInt($(this).attr("checkvalue"))
+        })
+        X.HTTP({
+            url: CONTEXT + "/data/plugin/single.json",
+            data: {
+                id: pluginId
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#plugin")
+                result.data.fn = "Plugin.edit()"
+                container.html(template("tmpl-plugin", result.data));
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.open();
+            }
+        });
+    }
+
+    Plugin.loadPlugin(1, 10);
+</script>

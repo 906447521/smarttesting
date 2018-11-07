@@ -1,0 +1,384 @@
+<link rel="stylesheet" href="//$!{ServerPath}/s/beautify/codemirror.css">
+<script src="//$!{ServerPath}/s/beautify/beautify.js"></script>
+<script src="//$!{ServerPath}/s/beautify/beautify-css.js"></script>
+<script src="//$!{ServerPath}/s/beautify/beautify-html.js"></script>
+<script src="//$!{ServerPath}/s/beautify/codemirror.js"></script>
+<script src="//$!{ServerPath}/s/beautify/javascript.js"></script>
+<script src="//$!{ServerPath}/s/codetextarea.js"></script>
+
+<main>
+
+    <div class="section tab">
+        <div class="row tab">
+            <div class="">
+                <div class="nav-content">
+                    <ul class="tabs">
+                        <div id="tabs0"></div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section op" id="index-banner">
+        <div class="container">
+            <div class="row op">
+                <a class=" ripple " href="javascript:Interface.openAdd()" id="op-add">
+                    <i class="icon iconfont icon-folder"></i>
+                    <i class="icon iconfont icon-add" style="position:absolute;left:15px;top:4px;font-size:16px"></i>
+                </a>
+                <a class="ripple" href="javascript:;" id="op-edit" style="color:#ccc">
+                    <i class="icon iconfont icon-edit"></i>
+                </a>
+                <a class="ripple" href="javascript:;" id="op-delete" style="color:#ccc">
+                    <i class="icon iconfont icon-delete"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" style="padding: 30px;">
+        <div class="row">
+            <div class="col s12 offset-m1 xl12  center-on-small-only">
+                <div id="materialdesign" class="section scrollspy">
+                    <div id="project-interface-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<div id="modal1" class="modal modal-fixed-footer">
+    <div id="interface"></div>
+</div>
+<div id="modal2" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <div id="runSelect-result"></div>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+</div>
+
+<script id="tmpl-tabs0" type="text/html">
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_case.html?id=$!{id}'">用例</a></li>
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id=$!{id}'">任务</a></li>
+    <li class="tab"><a class="active" href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_interface.html?id=$!{id}'">接口</a></li>
+    {{if creator=='$!{zdPIN}' || '$!{zdGROUP}'=='admin' }}
+    <li class="tab" s="{{creator}}"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_member.html?id={{id}}'">成员</a></li>
+    {{/if}}
+</script>
+
+<script id="tmpl-interface" type="text/html">
+
+    <div class="modal-content">
+        <form id="add-interface-form">
+            <div class="row">
+                <div class="col s12">
+                    <div class="row">
+                        <input type="hidden" id="interfacetype" value="http">
+                        <div class="input-field col s12">
+                            <input type="text" id="interfacename" class="autocomplete" value="{{if url==null}}新接口{{else}}{{name}}{{/if}}">
+                            <label for="interfacename" class="active">接口名称</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s3">
+                            <select id="interfacemethod">
+                                <option value="GET" {{if method=='GET'|| method==null}} selected {{/if}}>GET</option>
+                                <option value="POST" {{if method=='POST'}} selected {{/if}}>POST</option>
+                                <option value="PUT" {{if method=='PUT'}} selected {{/if}}>PUT</option>
+                                <option value="DELETE" {{if method=='DELETE'}} selected {{/if}}>DELETE</option>
+                                <option value="HEAD" {{if method=='HEAD'}} selected {{/if}}>HEAD</option>
+                                <option value="PATCH" {{if method=='PATCH'}} selected {{/if}}>PATCH</option>
+                            </select>
+                            <label>请求方法</label>
+                        </div>
+                        <div class="input-field col s9">
+                            <input type="text" id="interfaceurl" class="autocomplete" value="{{if url==null}}http://{{else}}{{url}}{{/if}}">
+                            <label for="interfaceurl" class="active">接口地址（HTTP URL）</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <select id="interfaceresponsecharset">
+                                <option value="UTF8" {{if responseCharset=='UTF8' || responseCharset==null}} selected {{/if}}>UTF8</option>
+                                <option value="GBK" {{if responseCharset=='GBK'}} selected {{/if}}>GBK</option>
+                            </select>
+                            <label>返回结果字符集</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <textarea id="interfacerequestheader" for="interfacerequestheader_a" class="beautify-textarea" data-length="4096">{{requestHeader}}</textarea>
+                            <a id="interfacerequestheader_a" class="beautify-textarea-a">
+                                <strong>Pretty</strong>
+                            </a>
+                            <label for="interfacerequestheader" class="active">请求头（HTTPHeader JSON）</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">确认</a>
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
+    </div>
+</script>
+
+<script id="tmpl-project-name" type="text/html">
+    <span class="a" onclick="window.location.href='//$!{ServerPath}/project/list.html'">
+        <i style="vertical-align: middle;" class="icon iconfont icon-back"></i>
+        项目
+    </span>
+    <span class="b">接口</span>
+</script>
+
+<script id="tmpl-project-interface-list" type="text/html">
+    <table class="table-fixed">
+        <thead>
+        <tr>
+            <th width="5%">
+                <label>
+                    <input type="checkbox" class="filled-in" check-for="check-item" onclick="X.checkAll(this)"/>
+                    <span></span>
+                </label>
+            </th>
+            <th width="5%"></th>
+##            <th width="5%">ID</th>
+            <th width="20%">Name</th>
+            <th width="35%">URL</th>
+            <th>Response Charset</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {{if (data&&data.length>0)}}
+        {{each data as elem i}}
+        <tr>
+            <td>
+                <label>
+                    <input type="checkbox" class="filled-in check-item" checkvalue="{{elem.id}}"/>
+                    <span></span>
+                </label>
+            </td>
+            <td><i class="icon iconfont icon-box icon-light-blue"></i></td>
+##            <td>{{elem.id}}</td>
+            <td><a href="//$!{ServerPath}/interface/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a></td>
+            <td>
+                <span style="display:inline-block;width:50px;font-weight:800;color:{{if elem.method=='GET'}}#3eb63e{{else}}#f5a623{{/if}};"><i>{{elem.method}}</i></span>
+                <i> <a target="_blank" href="{{elem.url}}">{{elem.url}} </a> </i>
+            </td>
+            <td>{{elem.responseCharset}}</td>
+        </tr>
+        {{/each}}
+        {{else}}
+        <tr>
+            <td colspan="5"> 没有数据。</td>
+        </tr>
+        {{/if}}
+        </tbody>
+    </table>
+    {{include 'tmpl-pagin' }}
+</script>
+
+<script>
+
+    var container = $("#interface")
+    container.html(template("tmpl-interface", {"fn": "Interface.add()"}));
+    var Interface = {}
+    Project.load = function () {
+        X.HTTP({
+            url: CONTEXT + "/data/project/single.json",
+            data: {
+                id: parseInt(X.GetUrlParam("id"))
+            },
+            dataType: 'json',
+            success: function (result) {
+                var container = $("#project-name")
+                container.html(template("tmpl-project-name", result.data));
+                var container2 = $("#tabs0")
+                container2.html(template("tmpl-tabs0", result.data));
+            }
+        });
+    }
+
+    Project.loadInterface = function (pageIndex, pageSize) {
+        X.HTTP({
+            url: CONTEXT + "/data/interface/list.json",
+            data: {
+                projectId: parseInt(X.GetUrlParam("id")),
+                pageIndex: pageIndex,
+                pageSize: pageSize
+            },
+            dataType: 'json',
+            success: function (result) {
+                result.data.fn = "Project.loadInterface"
+                result.data.pid = Project.getID()
+                var container = $("#project-interface-list")
+                container.html(template("tmpl-project-interface-list", result.data));
+                $("#op-run").css("color", "#ccc").attr("href", "javascript:;")
+                $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                $("input[type='checkbox']", container).on("click", function () {
+                    if ($("input[type='checkbox']:checked", container).length > 0) {
+                        $("#op-run").css("color", "").attr("href", "javascript:Interface.runSelect()")
+                        $("#op-delete").css("color", "").attr("href", "javascript:Interface.delete()")
+                        $("#op-edit").css("color", "").attr("href", "javascript:Interface.openEdit()")
+                    } else {
+                        $("#op-run").css("color", "#ccc").attr("href", "javascript:;")
+                        $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
+                        $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
+                    }
+
+                })
+            }
+        });
+    }
+
+    Interface.add = function () {
+        X.HTTP({
+            url: CONTEXT + "/data/interface/add.json",
+            data: {
+                projectId: parseInt(X.GetUrlParam("id")),
+                name: $('#interfacename').val(),
+                type: $('#interfacetype').val(),
+                url: $('#interfaceurl').val(),
+                method: $('#interfacemethod').val(),
+                requestHeader: $('#interfacerequestheader').val(),
+                responseCharset: $('#interfaceresponsecharset').val(),
+            },
+            dataType: 'json',
+            success: function (result) {
+                Project.loadInterface(1, 10)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.close()
+            }
+        });
+    }
+    Interface.edit = function () {
+        var checkBox = $('.check-item:checked');
+        if (checkBox.length > 1) {
+            M.toast({html: 'Select one to edit'})
+            return
+        }
+
+        var interfaceId;
+        checkBox.each(function () {
+            interfaceId = parseInt($(this).attr("checkvalue"))
+        })
+        X.HTTP({
+            url: CONTEXT + "/data/interface/edit.json",
+            data: {
+                id: interfaceId,
+                name: $('#interfacename').val(),
+                type: $('#interfacetype').val(),
+                url: $('#interfaceurl').val(),
+                method: $('#interfacemethod').val(),
+                requestHeader: $('#interfacerequestheader').val(),
+                responseCharset: $('#interfaceresponsecharset').val(),
+            },
+            dataType: 'json',
+            success: function (result) {
+                Project.loadInterface(1, 10)
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.close()
+            }
+        });
+    }
+    Interface.delete = function () {
+        if (window.confirm("Can delete and delete child items？")) {
+            var zdInterfaceIds = new Array();
+            $('.check-item:checked').each(function () {
+                zdInterfaceIds.push(parseInt($(this).attr("checkvalue")))
+            })
+            X.HTTP({
+                url: CONTEXT + "/data/interface/delete.json",
+                data: {
+                    zdInterfaceIds: zdInterfaceIds,
+                },
+                dataType: 'json',
+                success: function (result) {
+                    Project.loadInterface(1, 10)
+                }
+            });
+        }
+    }
+
+    Interface.openAdd = function () {
+        $('#modal1').attr("style", "")
+        $('#modal1').css("display", "block")
+        var container = $("#interface")
+        container.html(template("tmpl-interface", {"fn": "Interface.add()"}));
+        container.find('select').not('.disabled').formSelect();
+
+        beautytextarea()
+
+        var instance = M.Modal.getInstance($('#modal1'));
+        instance.open();
+
+    }
+    Interface.openEdit = function () {
+        var checkBox = $('.check-item:checked');
+        if (checkBox.length > 1) {
+            M.toast({html: 'Select one to edit'})
+            return
+        }
+
+        var interfaceId;
+        checkBox.each(function () {
+            interfaceId = parseInt($(this).attr("checkvalue"))
+        })
+        X.HTTP({
+            url: CONTEXT + "/data/interface/single.json",
+            data: {
+                id: interfaceId
+            },
+            dataType: 'json',
+            success: function (result) {
+                $('#modal1').attr("style", "")
+                $('#modal1').css("display", "block")
+                var container = $("#interface")
+                result.data.fn = "Interface.edit()"
+                container.html(template("tmpl-interface", result.data));
+                container.find('select').not('.disabled').formSelect();
+                beautytextarea()
+
+                var instance = M.Modal.getInstance($('#modal1'));
+                instance.open();
+            }
+        });
+    }
+
+    // Interface.runSelect = function () {
+    //     var zdInterfaceIds = new Array();
+    //     $('.check-item:checked').each(function () {
+    //         zdInterfaceIds.push(parseInt($(this).attr("checkvalue")))
+    //     })
+    //     M.toast({html: 'Run Interface Case'})
+    //     X.HTTP({
+    //         url: CONTEXT + "/data/interface/run.json",
+    //         data: {
+    //             zdInterfaceIds: zdInterfaceIds
+    //         },
+    //         dataType: 'json',
+    //         success: function (result) {
+    //             M.toast({html: 'Run Interface Case Over'})
+    //             var instance = M.Modal.getInstance($("#modal2"));
+    //             var container = $("#runSelect-result")
+    //             var data = new Object()
+    //             data.data = result.data
+    //             container.html(template("tmpl-runSelect-result", data));
+    //             instance.open()
+    //         }
+    //     });
+    // }
+
+    $(function () {
+        Project.load();
+        Project.loadInterface(1, 10)
+    })
+
+</script>
