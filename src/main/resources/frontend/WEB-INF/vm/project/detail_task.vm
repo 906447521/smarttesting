@@ -140,8 +140,9 @@
             <th width="5%"></th>
             <th width="20%">Name</th>
             <th width="10%">Con</th>
-            <th width="10%">Last Run</th>
-            <th width="">Running</th>
+            <th width="5%">Last</th>
+            <th width="5%">Running</th>
+            <th width=""></th>
         </tr>
         </thead>
 
@@ -166,6 +167,9 @@
                         <span class="lever"></span>
                     </label>
                 </div>
+            </td>
+            <td>
+
             </td>
         </tr>
         {{/each}}
