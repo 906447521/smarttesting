@@ -52,7 +52,7 @@ var domsortMouseDown = function (e, the, fn) {
         offset = $this.offset(),
         disX = e.pageX - offset.left,
         disY = e.pageY - offset.top,
-
+        scrollY = $(document).scrollTop(),
         clone = $this.clone()
             .css(settings.cloneStyle)
             .css('height', $this[height]())
@@ -80,7 +80,7 @@ var domsortMouseDown = function (e, the, fn) {
         }
 
         var left = e.pageX - disX,
-            top = e.pageY - disY,
+            top = e.pageY - disY - scrollY,
 
             prev = clone.prev(),
             next = clone.next().not($this);
@@ -90,11 +90,11 @@ var domsortMouseDown = function (e, the, fn) {
             top: top
         });
 
-        if (prev.length && top < prev.offset().top + prev.outerHeight() / 2) {
+        if (prev.length && top < prev.offset().top - scrollY + prev.outerHeight() / 2) {
 
             clone.after(prev);
 
-        } else if (next.length && top + thisOuterHeight > next.offset().top + next.outerHeight() / 2) {
+        } else if (next.length && top + thisOuterHeight > next.offset().top - scrollY + next.outerHeight() / 2) {
 
             clone.before(next);
 
