@@ -1,3 +1,4 @@
+<script src="//$!{ServerPath}/s/domsort.js"></script>
 <main>
 
     <div class="section tab">
@@ -140,8 +141,8 @@
             <th width="5%"></th>
             <th width="20%">Name</th>
             <th width="10%">Con</th>
-            <th width="5%">Last</th>
-            <th width="5%">Running</th>
+            <th width="8%">Last</th>
+            <th width="8%">Running</th>
             <th width=""></th>
         </tr>
         </thead>
@@ -523,16 +524,17 @@
         }
 
 
-        return "<div  class=\"nextRow row\" id=case_" + id + " cid=" + id + ">" +
-                "<div class=\"rowleft input-field col s1\">" +
-                "<div class=prev onclick='Task.casePrev($(this))'><i class='icon iconfont icon-less'></i></div>" +
-                "<div class=next onclick='Task.caseNext($(this))'><i class='icon iconfont icon-moreunfold'></i></div></div>" +
+        return "<div onmousedown='domsortMouseDown(event,this,resetTaskCases);' class=\"nextRow row \" id=case_" + id + " cid=" + id + ">" +
+                // "<div class=\"rowleft input-field col s1\">" +
+                // "<div class=prev onclick='Task.casePrev($(this))'><i class='icon iconfont icon-less'></i></div>" +
+                // "<div class=next onclick='Task.caseNext($(this))'><i class='icon iconfont icon-moreunfold'></i></div>" +
+                // "</div>" +
                 "<div class=\"rowname input-field col s9\">" + methodSpan +
-                " <a style='color:rgb(117, 117, 117)' target=\"_blank\" href=\"//$!{ServerPath}/case/detail.html?id=" + id + "&&projectId=" + parseInt(X.GetUrlParam("id")) + "\">"
+                " <a style='color:rgb(117, 117, 117)' target=\"_blank\" href=\"//$!{ServerPath}/case/detail.html?id="+id+"&&projectId="+parseInt(X.GetUrlParam("id"))+"\">"
                 + name +
-                "</a>" +
+                "</a>"+
                 "</div>" +
-                "<div class=\"rowarrow input-field col s2\">›</div>" +
+                // "<div class=\"rowarrow input-field col s2\">›</div>" +
                 "</div>"
     }
 

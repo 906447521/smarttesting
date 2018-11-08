@@ -188,10 +188,19 @@
         }
         .nextRow {
             font-size:13px;
+            background-color:#f6f6f6;
+            cursor: move;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -khtml-user-select: none;
+            user-select: none;
+            margin-bottom:2px !important;
+            border-radius: 10px;
         }
         .nextRow .rowname {
             padding-bottom:3px;padding-top:3px;margin:0;
-            margin-top: 5px;
+            margin-top: 1px;
         }
         .nextRow .rowarrow{
             font-size:16px;padding-bottom:0px;padding-top:3px;margin:0;
@@ -216,9 +225,7 @@
             padding-top: 3px;
             margin: 0;
         }
-        .nextRow {
-            border-bottom: 1px solid #f1f1f1;
-        }
+
         .metril {
             animation:mymove 0.5s ease infinite;
         }
