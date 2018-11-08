@@ -9,7 +9,7 @@ public class QuartzJobFactoryTestAdd {
     @Test
     public void test() throws Exception {
         ClassPathXmlApplicationContext xmlApplicationContext = new ClassPathXmlApplicationContext("spring.xml");
-        ClusteredJob quartzScheduler = xmlApplicationContext.getBean(ClusteredJob.class);
+        ClusteredScheduler quartzScheduler = xmlApplicationContext.getBean(ClusteredScheduler.class);
         quartzScheduler.add(
                 "job1",
                 Comment1.class,

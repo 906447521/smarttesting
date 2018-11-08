@@ -11,20 +11,20 @@ import java.util.Map;
  * @author
  */
 @Component
-public class ClusteredJob {
+public class ClusteredScheduler {
 
     @Resource
     org.springframework.scheduling.quartz.SchedulerFactoryBean
             schedulerFactoryBean;
 
-    public ClusteredJob add
+    public ClusteredScheduler add
             (String jobName, Class jobClass, String Cron) throws Exception {
 
         add(jobName, jobClass, Cron, null);
         return this;
     }
 
-    public ClusteredJob add
+    public ClusteredScheduler add
             (String jobName, Class jobClass, String Cron, Map data) throws Exception {
 
         if (data == null) {
@@ -51,7 +51,7 @@ public class ClusteredJob {
         return this;
     }
 
-    public ClusteredJob remove
+    public ClusteredScheduler remove
             (String jobName) throws Exception {
 
 
@@ -67,7 +67,7 @@ public class ClusteredJob {
         return this;
     }
 
-    public ClusteredJob pause
+    public ClusteredScheduler pause
             (String jobName) throws Exception {
         String jobGroupName = jobName + ".g";
         Scheduler scheduler = schedulerFactoryBean.getScheduler();

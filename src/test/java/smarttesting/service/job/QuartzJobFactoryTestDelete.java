@@ -9,7 +9,7 @@ public class QuartzJobFactoryTestDelete {
     @Test
     public void test() throws Exception {
         ClassPathXmlApplicationContext xmlApplicationContext = new ClassPathXmlApplicationContext("spring.xml");
-        ClusteredJob quartzScheduler = xmlApplicationContext.getBean(ClusteredJob.class);
+        ClusteredScheduler quartzScheduler = xmlApplicationContext.getBean(ClusteredScheduler.class);
         quartzScheduler.remove("job1");
 
     }

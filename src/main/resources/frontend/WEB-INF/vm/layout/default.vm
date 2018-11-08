@@ -1,20 +1,22 @@
-<link rel="stylesheet" href="//$!{ServerPath}/s/materialize.min.css">
-<link rel="stylesheet" href="//$!{ServerPath}/s/ghpages-materialize.css">
-<link rel="stylesheet" href="//$!{ServerPath}/s/mono/iconfont.css">
-<link rel="stylesheet" href="//$!{ServerPath}/s/colour/iconfont2.css">
-<link rel="stylesheet" href="//$!{ServerPath}/s/common.css">
-<script src="//$!{ServerPath}/s/jquery.js"></script>
-<script src="//$!{ServerPath}/s/template.js"></script>
-<script src="//$!{ServerPath}/s/templateutil.js"></script>
-<script src="//$!{ServerPath}/s/common.js"></script>
-<script src="//$!{ServerPath}/s/colour/iconfont2.js"></script>
-<script>
-    var CONTEXT = '//$!{ServerPath}';
-    var Project = {}
-</script>
 
 
 <head>
+    <link rel="stylesheet" href="//$!{ServerPath}/s/materialize.min.css">
+    <link rel="stylesheet" href="//$!{ServerPath}/s/ghpages-materialize.css">
+    <link rel="stylesheet" href="//$!{ServerPath}/s/mono/iconfont.css">
+    <link rel="stylesheet" href="//$!{ServerPath}/s/colour/iconfont2.css">
+    <link rel="stylesheet" href="//$!{ServerPath}/s/common.css">
+    <script src="//$!{ServerPath}/s/jquery.js"></script>
+    <script src="//$!{ServerPath}/s/template.js"></script>
+    <script src="//$!{ServerPath}/s/templateutil.js"></script>
+    <script src="//$!{ServerPath}/s/common.js"></script>
+    <script src="//$!{ServerPath}/s/colour/iconfont2.js"></script>
+
+    <script>
+        var CONTEXT = '//$!{ServerPath}';
+        var Project = {}
+    </script>
+    <link rel="icon" href="//$!{ServerPath}/s/log.svg" sizes="32x32">
     <title>SmartTesting</title>
     <style>
         .sidenav {

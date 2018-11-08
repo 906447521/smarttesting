@@ -37,6 +37,16 @@ public class ZDDataTaskController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/task/autorun.json")
+    public DataResult data_task_autorun(ZDTask zdTask) {
+        if (zdTask.getRun()) {
+            return DataResult.successResult(zdTaskService.startTask(zdTask));
+        } else {
+            return DataResult.successResult(zdTaskService.stopTask(zdTask));
+        }
+    }
+
+    @ResponseBody
     @RequestMapping(value = "/task/single.json")
     public DataResult data_task_single(Integer id) {
         return DataResult.successResult(

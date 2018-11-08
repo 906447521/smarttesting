@@ -89,11 +89,11 @@
                         </div>
                         <div class="input-field col s4">
                             <select id="" onchange="$('#taskcon').val($(this).val())">
-                                <option >请选择</option>
-                                <option value="0 0/30 * * * ?" >每30分钟</option>
-                                <option value="0 0 0/1 * * ?" >每小时</option>
-                                <option value="0 0 2 * * ?" >每天凌晨2点</option>
-                                <option value="0 0 2 ? * SAT" >每周日凌晨2点</option>
+                                <option>请选择</option>
+                                <option value="0 0/30 * * * ?">每30分钟</option>
+                                <option value="0 0 0/1 * * ?">每小时</option>
+                                <option value="0 0 2 * * ?">每天凌晨2点</option>
+                                <option value="0 0 2 ? * SAT">每周日凌晨2点</option>
                             </select>
                             <label>表达式参考</label>
                         </div>
@@ -132,15 +132,16 @@
         <tr>
             <th width="5%">
                 <label>
-                    <input type="checkbox" class="filled-in" check-for="check-item" onclick="X.checkAll(this)"/>
+                    <input type="checkbox" class="filled-in list-checkbox" check-for="check-item"
+                           onclick="X.checkAll(this)"/>
                     <span></span>
                 </label>
             </th>
             <th width="5%"></th>
             <th width="20%">Name</th>
-            <th width="30%">Con</th>
-            <th width="30%">Last Run</th>
-            <th width=""></th>
+            <th width="10%">Con</th>
+            <th width="10%">Last Run</th>
+            <th width="">Running</th>
         </tr>
         </thead>
 
@@ -150,7 +151,7 @@
         <tr>
             <td>
                 <label>
-                    <input type="checkbox" class="filled-in check-item" checkvalue="{{elem.id}}"/>
+                    <input type="checkbox" class="filled-in check-item list-checkbox" checkvalue="{{elem.id}}"/>
                     <span></span>
                 </label>
             </td>
@@ -158,7 +159,14 @@
             <td><a href="//$!{ServerPath}/task/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a></td>
             <td>{{elem.con}}</td>
             <td><a target="_blank" href="//$!{ServerPath}/task_result/detail.html?resultId={{elem.lastrun}}">详情</a></td>
-            <td>{{elem.type}}</td>
+            <td>
+                <div class="switch">
+                    <label>
+                        <input type="checkbox" {{if elem.run }} checked {{/if}} onchange="Task.autoRun(this, {{elem.id}})">
+                        <span class="lever"></span>
+                    </label>
+                </div>
+            </td>
         </tr>
         {{/each}}
         {{else}}
@@ -207,7 +215,7 @@
             <td style="padding: 3px 10px">
                 <span style="display:inline-block;width:50px;font-weight:800;color:{{if elem.method=='GET'}}#3eb63e{{else}}#f5a623{{/if}};"><i>{{elem.method}}</i></span>
                 <a target="_blank"
-                                             href="//$!{ServerPath}/case/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a>
+                   href="//$!{ServerPath}/case/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a>
             </td>
 
         </tr>
@@ -254,8 +262,8 @@
                 container.html(template("tmpl-project-task-list", result.data));
                 $("#op-delete").css("color", "#ccc").attr("href", "javascript:;")
                 $("#op-edit").css("color", "#ccc").attr("href", "javascript:;")
-                $("input[type='checkbox']", container).on("click", function () {
-                    if ($("input[type='checkbox']:checked", container).length > 0) {
+                $(".list-checkbox").on("click", function () {
+                    if ($(".list-checkbox:checked").length > 0) {
                         $("#op-delete").css("color", "").attr("href", "javascript:Task.delete()")
                         $("#op-edit").css("color", "").attr("href", "javascript:Task.openEdit()")
                     } else {
@@ -368,6 +376,22 @@
         });
     }
 
+    Task.autoRun = function (the, taskId) {
+        the = $(the)
+        var checked = the.is(':checked')
+        X.HTTP({
+            url: CONTEXT + "/data/task/autorun.json",
+            data: {
+                id: taskId,
+                run: checked ? true : false
+            },
+            dataType: 'json',
+            success: function (result) {
+                console.log(result)
+            }
+        });
+    }
+
     Task.loadSelectedCases = function (cases) {
 
         X.HTTP({
@@ -391,7 +415,7 @@
                     var name = selectedObject[i].name
                     var method = selectedObject[i].method
                     var url = selectedObject[i].url
-                    leftCheckedDIV.append(taskSelectedCaseDIV(id, name,method,url))
+                    leftCheckedDIV.append(taskSelectedCaseDIV(id, name, method, url))
                 }
 
             }
@@ -450,7 +474,7 @@
         if (index.index() != 0) {
             leftCheckedDIVRow.prev().before(index)
         }
-        setTimeout(function() {
+        setTimeout(function () {
             leftCheckedDIVRow.removeClass("metril")
         }, 500)
         resetTaskCases()
@@ -466,7 +490,7 @@
         if (index.index() != length - 1) {
             leftCheckedDIVRow.next().after(index)
         }
-        setTimeout(function() {
+        setTimeout(function () {
             leftCheckedDIVRow.removeClass("metril")
         }, 500)
         resetTaskCases()
@@ -485,15 +509,14 @@
         console.log(cases)
     }
 
-    var taskSelectedCaseDIV = function (id, name,  method,url) {
+    var taskSelectedCaseDIV = function (id, name, method, url) {
 
         var methodSpan = ""
-        if (method=='GET') {
-            methodSpan = "<span style='display:inline-block;width:50px;font-size:13px;font-weight:800;color:#3eb63e'><i>"+method+"</i></span>"
+        if (method == 'GET') {
+            methodSpan = "<span style='display:inline-block;width:50px;font-size:13px;font-weight:800;color:#3eb63e'><i>" + method + "</i></span>"
         } else {
-            methodSpan = "<span style='display:inline-block;width:50px;font-size:13px;font-weight:800;color:#f5a623'><i>"+method+"</i></span>"
+            methodSpan = "<span style='display:inline-block;width:50px;font-size:13px;font-weight:800;color:#f5a623'><i>" + method + "</i></span>"
         }
-
 
 
         return "<div  class=\"nextRow row\" id=case_" + id + " cid=" + id + ">" +
@@ -501,9 +524,9 @@
                 "<div class=prev onclick='Task.casePrev($(this))'><i class='icon iconfont icon-less'></i></div>" +
                 "<div class=next onclick='Task.caseNext($(this))'><i class='icon iconfont icon-moreunfold'></i></div></div>" +
                 "<div class=\"rowname input-field col s9\">" + methodSpan +
-                " <a style='color:rgb(117, 117, 117)' target=\"_blank\" href=\"//$!{ServerPath}/case/detail.html?id="+id+"&&projectId="+parseInt(X.GetUrlParam("id"))+"\">"
+                " <a style='color:rgb(117, 117, 117)' target=\"_blank\" href=\"//$!{ServerPath}/case/detail.html?id=" + id + "&&projectId=" + parseInt(X.GetUrlParam("id")) + "\">"
                 + name +
-                "</a>"+
+                "</a>" +
                 "</div>" +
                 "<div class=\"rowarrow input-field col s2\">›</div>" +
                 "</div>"

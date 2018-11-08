@@ -9,7 +9,7 @@ import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 /**
  * @author
  */
-public class ClusteredJobFactory extends SpringBeanJobFactory implements ApplicationContextAware {
+public class ClusteredSpringBeanJobFactory extends SpringBeanJobFactory implements ApplicationContextAware {
 
     private ApplicationContext applicationContext;
 

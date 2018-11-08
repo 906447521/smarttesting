@@ -8,7 +8,7 @@
     <bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" init-method="start">
 
         <property name="jobFactory">
-            <bean class="smarttesting.service.job.ClusteredJobFactory"/>
+            <bean class="smarttesting.service.job.ClusteredSpringBeanJobFactory"/>
         </property>
         <property name="dataSource" ref="masterDataSource"/>
         <property name="configLocation" value="classpath:quartz.properties"/>
