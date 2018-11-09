@@ -160,7 +160,11 @@
         main {
             margin-top: 60px;
             overflow-y: scroll;
-            height:100%;
+            height:calc(100% - 60px)
+        }
+        ul.sidenav.sidenav-fixed {
+            height:calc(100% - 60px);
+            padding-bottom:0;
         }
         .CodeMirror {
             border: 1px solid #ccc;
