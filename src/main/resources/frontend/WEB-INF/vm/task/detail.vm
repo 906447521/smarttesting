@@ -39,7 +39,7 @@
         <div id="runSelect-result"></div>
     </div>
     <div class="modal-footer">
-        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">Close</a>
+        <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
     </div>
 </div>
 
