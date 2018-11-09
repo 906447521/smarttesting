@@ -49,10 +49,10 @@
 
 </main>
 
-<div id="modal1" class="modal modal-fixed-footer">
+<div id="modal1" class="modal ">
     <div id="interface"></div>
 </div>
-<div id="modal2" class="modal modal-fixed-footer">
+<div id="modal2" class="modal ">
     <div class="modal-content">
         <div id="runSelect-result"></div>
     </div>
@@ -261,7 +261,7 @@
     Interface.edit = function () {
         var checkBox = $('.check-item:checked');
         if (checkBox.length > 1) {
-            M.toast({html: 'Select one to edit'})
+            M.toast({html: '选择一个项目编辑'})
             return
         }
 
@@ -289,7 +289,7 @@
         });
     }
     Interface.delete = function () {
-        if (window.confirm("Can delete and delete child items？")) {
+        if (window.confirm("是否要删除选中的项目？")) {
             var zdInterfaceIds = new Array();
             $('.check-item:checked').each(function () {
                 zdInterfaceIds.push(parseInt($(this).attr("checkvalue")))

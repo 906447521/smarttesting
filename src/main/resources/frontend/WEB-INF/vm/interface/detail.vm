@@ -31,10 +31,10 @@
 
 </main>
 
-<div id="modal1" class="modal modal-fixed-footer">
+<div id="modal1" class="modal ">
     <div id="interface"></div>
 </div>
-<div id="modal2" class="modal modal-fixed-footer">
+<div id="modal2" class="modal ">
     <div class="modal-content">
         <div id="runSelect-result"></div>
     </div>

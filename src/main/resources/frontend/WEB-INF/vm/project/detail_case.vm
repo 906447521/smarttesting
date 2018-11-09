@@ -51,7 +51,7 @@
 
 </main>
 
-<div id="modal1" class="modal modal-fixed-footer">
+<div id="modal1" class="modal ">
     <div id="case"></div>
 </div>
 <div id="modal2" class="modal">
@@ -332,7 +332,7 @@
             },
             dataType: 'json',
             success: function (result) {
-                Project.loadCase(1, 10)
+                Project.loadCase(1, 25)
                 var instance = M.Modal.getInstance($('#modal1'));
                 instance.close()
             }
@@ -342,7 +342,7 @@
     Case.edit = function () {
         var checkBox = $('.check-item:checked');
         if (checkBox.length > 1) {
-            M.toast({html: 'Select one to edit'})
+            M.toast({html: '选择一项来编辑'})
             return
         }
 
@@ -365,7 +365,7 @@
             },
             dataType: 'json',
             success: function (result) {
-                Project.loadCase(1, 10)
+                Project.loadCase(1, 25)
                 var instance = M.Modal.getInstance($('#modal1'));
                 instance.close()
             }
@@ -373,7 +373,7 @@
     }
 
     Case.delete = function () {
-        if (window.confirm("Can delete and delete child items？")) {
+        if (window.confirm("是否删除选中的项目？")) {
             var zdCaseIds = new Array();
             $('.check-item:checked').each(function () {
                 zdCaseIds.push(parseInt($(this).attr("checkvalue")))
@@ -385,7 +385,7 @@
                 },
                 dataType: 'json',
                 success: function (result) {
-                    Project.loadCase(1, 10);
+                    Project.loadCase(1, 25);
                 }
             });
         }
@@ -407,7 +407,7 @@
     Case.openEdit = function () {
         var checkBox = $('.check-item:checked');
         if (checkBox.length > 1) {
-            M.toast({html: 'Select one to edit'})
+            M.toast({html: '选择一个项目编辑'})
             return
         }
 
@@ -510,5 +510,5 @@
     }
 
     Project.load();
-    Project.loadCase(1, 10);
+    Project.loadCase(1, 25);
 </script>

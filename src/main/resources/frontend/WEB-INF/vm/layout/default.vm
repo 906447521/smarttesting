@@ -159,6 +159,8 @@
         }
         main {
             margin-top: 60px;
+            overflow-y: scroll;
+            height:100%;
         }
         .CodeMirror {
             border: 1px solid #ccc;
@@ -241,9 +243,52 @@
                 background-color: rgba(225, 115, 72, 0.1);
             }
         }
+        ul.sidenav.sidenav-fixed > li:last-child {
+            margin-bottom: 0;
+        }
+        .modal .modal-footer {
+            border-top: 0;
+            position: absolute;
+            top:0;
+            border-bottom: 1px solid #f1f1f1;
+            height:44px;
+            background-color: #444;
+            color:#fff
+        }
+        .modal .modal-footer a {
+            color:#fff
+        }
+        .modal .modal-footer .btn-flat {
+            margin: 0;
+        }
+        .modal {
+          height: 70%;
+            border-radius: 10px;
+        }
+        .modal .modal-close {
+            float: left;
+        }
+        .modal .btn-flat {
+            /*font-weight:bold;*/
+        }
+        .modal .modal-title {
+            width: 100%;
+            position: absolute;
+            top: 8px;
+            left: -3px;
+            font-size: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .modal .modal-content {
+            margin-top:44px;
+            height: calc(100% - 56px);
+            max-height: 100%;
+            overflow-y: auto;
+        }
     </style>
 </head>
-<body>
+<body style="overflow: hidden">
 
 <div id="site-layout-example-top" class="col s12" style="top: 0;height: 60px;line-height:60px;background-color:#333;z-index:2;position: absolute;
     width: 100%;">
@@ -312,6 +357,7 @@
     </div>
     <div class="modal-footer">
         <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">确认</a>
+        <div class="modal-title">创建项目</div>
         <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
     </div>
 </script>
@@ -321,12 +367,8 @@
     <ul id="nav-mobile" class="sidenav sidenav-fixed" style="top: 0;z-index: 1;
                                                                 position: absolute;
                                                                 margin-bottom: 0;
-                                                                bottom: 0;
-                                                                height: 100%;">
+                                                                bottom: 0;top:60">
 
-        <li style="height:60px">
-
-        </li>
 
         <li class="search" style="position: relative;top: 0;padding: 0">
             <div class="search-wrapper">

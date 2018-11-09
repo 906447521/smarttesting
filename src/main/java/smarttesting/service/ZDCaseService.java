@@ -51,6 +51,9 @@ public class ZDCaseService {
     }
 
     public ZDCase add(ZDCase zdCase) {
+        if (zdCase.getInterfaceId() == null) {
+            throw new ServiceResultFail("接口不能为空");
+        }
         zdCaseMapper.insert(zdCase);
         return zdCase;
     }
