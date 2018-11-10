@@ -65,8 +65,10 @@
 
 <script id="tmpl-tabs0" type="text/html">
     <li class="tab"><a class="active" href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_case.html?id=$!{id}'">用例</a></li>
-    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id=$!{id}'">任务</a></li>
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_scene.html?id=$!{id}'">场景</a></li>
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_interface.html?id=$!{id}'">接口</a></li>
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id=$!{id}'">任务</a></li>
+
     {{if creator=='$!{zdPIN}' || '$!{zdGROUP}'=='admin' }}
     <li class="tab" s="{{creator}}"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_member.html?id={{id}}'">成员</a></li>
     {{/if}}
@@ -214,7 +216,7 @@
 </script>
 
 <script id="tmpl-interface-case-list" type="text/html">
-    <table class="table-fixed">
+    <table class="table-fixed highlight">
         <thead>
         <tr>
             <th width="5%">
@@ -226,8 +228,9 @@
             <th width="5%"></th>
             <th width="20%">Name</th>
             <th width="35%">URL</th>
-            <th width="20%">ContextType</th>
-            <th>ResponseCharset</th>
+##            <th width="15%">Context Type</th>
+            <th width="15%">Response Charset</th>
+            <th></th>
         </tr>
         </thead>
 
@@ -248,11 +251,23 @@
 
                 {{ include 'tmpl-method-colorname' elem}}
 
+##                <span data-badge-caption="{{if elem.zdInterface!=null}}{{elem.zdInterface.responseCharset}}{{/if}}" class="new badge"></span>
+
                 <i> <a target="_blank" href="{{elem.zdInterface.url}}{{elem.urlSuffix}}">{{elem.zdInterface.url}}{{elem.urlSuffix}} </a></i>
                 {{/if}}
+
+
             </td>
-            <td>{{elem.contentType}}</td>
-            <td>{{if elem.zdInterface!=null}}{{elem.zdInterface.responseCharset}}{{/if}}</td>
+##            <td>{{elem.contentType}}</td>
+            <td>
+##                <span data-badge-caption="{{if elem.zdInterface!=null}}{{elem.zdInterface.responseCharset}}{{/if}}" class="new badge"></span>
+                {{if elem.zdInterface!=null}}{{elem.zdInterface.responseCharset}}{{/if}}
+            </td>
+            <td>
+                <a class="ripple" href="javascript:Case.openEdit({{elem.id}});" id="op-edit">
+                    <i class="icon iconfont icon-edit"></i>
+                </a>
+            </td>
         </tr>
         {{/each}}
         {{else}}
@@ -339,17 +354,17 @@
         });
     }
 
-    Case.edit = function () {
-        var checkBox = $('.check-item:checked');
-        if (checkBox.length > 1) {
-            M.toast({html: '选择一项来编辑'})
-            return
-        }
-
-        var caseId;
-        checkBox.each(function () {
-            caseId = parseInt($(this).attr("checkvalue"))
-        })
+    Case.edit = function (caseId) {
+      if(!caseId) {
+          var checkBox = $('.check-item:checked');
+          if (checkBox.length > 1) {
+              M.toast({html: '选择一项来编辑'})
+              return
+          }
+          checkBox.each(function () {
+              caseId = parseInt($(this).attr("checkvalue"))
+          })
+      }
         X.HTTP({
             url: CONTEXT + "/data/case/edit.json",
             data: {
@@ -404,17 +419,21 @@
         instance.open();
 
     }
-    Case.openEdit = function () {
-        var checkBox = $('.check-item:checked');
-        if (checkBox.length > 1) {
-            M.toast({html: '选择一个项目编辑'})
-            return
-        }
+    Case.openEdit = function (caseId) {
 
-        var caseId;
-        checkBox.each(function () {
-            caseId = parseInt($(this).attr("checkvalue"))
-        })
+
+        if(!caseId) {
+
+            var checkBox = $('.check-item:checked');
+            console.log(checkBox.length)
+            if (checkBox.length != 1) {
+                M.toast({html: '选择一个项目编辑'})
+                return
+            }
+            checkBox.each(function () {
+                caseId = parseInt($(this).attr("checkvalue"))
+            })
+        }
         X.HTTP({
             url: CONTEXT + "/data/case/single.json",
             data: {
@@ -425,7 +444,7 @@
                 $('#modal1').attr("style", "")
                 $('#modal1').css("display", "block")
                 var container = $("#case")
-                result.data.fn = "Case.edit()"
+                result.data.fn = "Case.edit("+caseId+")"
                 container.html(template("tmpl-case", result.data));
                 container.find('select').not('.disabled').formSelect();
                 beautytextarea()

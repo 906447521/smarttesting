@@ -4,7 +4,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.stereotype.Service;
-import smarttesting.service.ZDUserService;
+import smarttesting.service.STUserService;
 
 import javax.annotation.Resource;
 import java.text.SimpleDateFormat;
@@ -17,7 +17,7 @@ import java.util.Date;
 public class Comment1 implements Job {
 
     @Resource
-    ZDUserService zdUserService;
+    STUserService zdUserService;
 
     public Comment1() {
     }

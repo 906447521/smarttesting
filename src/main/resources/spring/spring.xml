@@ -31,7 +31,7 @@
     <mvc:resources mapping="/frontend.s/**" location="/s/" cache-period="864000"/>
     <mvc:default-servlet-handler/>
     <mvc:interceptors>
-        <bean class="smarttesting.view.ZDInterceptor"/>
+        <bean class="smarttesting.view.STInterceptor"/>
     </mvc:interceptors>
 
     <import resource="spring-view.xml"/>

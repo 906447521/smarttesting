@@ -4,7 +4,7 @@ import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobKey;
 import org.springframework.stereotype.Service;
-import smarttesting.service.ZDTaskService;
+import smarttesting.service.STTaskService;
 
 import javax.annotation.Resource;
 
@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 public class SmartTestingTaskJob implements Job {
 
     @Resource
-    private ZDTaskService zdTaskService;
+    private STTaskService zdTaskService;
 
     public SmartTestingTaskJob() {
     }

@@ -16,7 +16,7 @@
         var CONTEXT = '//$!{ServerPath}';
         var Project = {}
     </script>
-    <link rel="icon" href="//$!{ServerPath}/s/log.svg" sizes="32x32">
+##    <link rel="shortcut icon" href="//$!{ServerPath}/s/log.svg" sizes="32x32">
     <title>SmartTesting</title>
     <style>
         .sidenav {
@@ -90,6 +90,16 @@
         }
         table td a {
             color: rgb(117, 117, 117);
+        }
+        table td a.ripple {
+            color: rgb(0, 113, 235);
+        }
+        table td a.ripple:hover {
+            color: #F26B3A;
+        }
+        table td {
+            font-size:12px;
+            padding: 5px 10px;
         }
         .section.name {
             border-bottom: 1px solid #f1f1f1;

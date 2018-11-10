@@ -44,6 +44,11 @@
 </div>
 
 <script id="tmpl-project-interface-detail" type="text/html">
+    <div class="modal-footer" style="margin-top:-25px;margin-bottom:25px">
+        <a href="javascript:;" class="waves-effect waves-green" onclick="Interface.edit()">
+            <i class="icon iconfont icon-save"></i>
+        </a>
+    </div>
     <div class="modal-content">
         <form id="add-interface-form">
             <div class="row">
@@ -91,9 +96,6 @@
                 </div>
             </div>
         </form>
-    </div>
-    <div class="modal-footer">
-        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="Interface.edit()">保存</a>
     </div>
 </script>
 

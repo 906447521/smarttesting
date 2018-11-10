@@ -23,7 +23,7 @@
         <div class="row">
             <div class="col s12 m8 center-on-small-only">
                 <div id="materialdesign" class="section scrollspy">
-                    <div id="project-task-detail"></div>
+                    <div id="project-scene-detail"></div>
                 </div>
             </div>
         </div>
@@ -32,7 +32,7 @@
 </main>
 
 <div id="modal1" class="modal ">
-    <div id="task"></div>
+    <div id="scene"></div>
 </div>
 <div id="modal2" class="modal ">
     <div class="modal-content">
@@ -43,30 +43,30 @@
     </div>
 </div>
 
-<script id="tmpl-project-task-detail" type="text/html">
+<script id="tmpl-project-scene-detail" type="text/html">
     <div class="modal-footer" style="margin-top:-25px;margin-bottom:25px">
-        <a href="javascript:;" class="waves-effect waves-green" onclick="Task.edit()">
+        <a href="javascript:;" class="waves-effect waves-green" onclick="Scene.edit()">
             <i class="icon iconfont icon-save"></i>
         </a>
     </div>
     <div class="modal-content">
-        <form id="add-task-form">
+        <form id="add-scene-form">
             <div class="row">
                 <div class="col s12">
                     <div class="row">
-                        <input type="hidden" id="taskcases" value="{{cases}}">
+                        <input type="hidden" id="scenecases" value="{{cases}}">
                         <div class="input-field col s12">
-                            <input type="text" id="taskname" class="autocomplete" value="{{name}}">
-                            <label for="taskname" class="active">接口名称</label>
+                            <input type="text" id="scenename" class="autocomplete" value="{{name}}">
+                            <label for="scenename" class="active">接口名称</label>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s8">
-                            <input type="text" id="taskcon" class="autocomplete" value="{{con}}">
-                            <label for="taskcon" class="active">表达式</label>
+                            <input type="text" id="scenecon" class="autocomplete" value="{{con}}">
+                            <label for="scenecon" class="active">表达式</label>
                         </div>
                         <div class="input-field col s4">
-                            <select id="" onchange="$('#taskcon').val($(this).val())">
+                            <select id="" onchange="$('#scenecon').val($(this).val())">
                                 <option >请选择</option>
                                 <option value="0 0/30 * * * ?" >每30分钟</option>
                                 <option value="0 0 0/1 * * ?" >每小时</option>
@@ -79,11 +79,11 @@
 
                     <div class="row">
                         <div class="input-field col s7">
-                            <div id="task-case-list-selected" style="margin-top:33px;padding-left:5px"></div>
+                            <div id="scene-case-list-selected" style="margin-top:33px;padding-left:5px"></div>
                             <label class="active">勾选执行的接口</label>
                         </div>
                         <div class="input-field col s5" style="padding-left:50px">
-                            <div id="task-case-list"></div>
+                            <div id="scene-case-list"></div>
                         </div>
                     </div>
 
@@ -91,23 +91,24 @@
             </div>
         </form>
     </div>
+
 </script>
 
 <script id="tmpl-project-name" type="text/html">
-    <span class="a" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id={{pid}}'">
-        < 返回任务
+    <span class="a" onclick="window.location.href='//$!{ServerPath}/project/detail_scene.html?id={{pid}}'">
+        < 返回场景
     </span>
     <span class="b">{{name}}</span>
 </script>
 
-<script id="tmpl-task-case-select" type="text/html">
+<script id="tmpl-scene-case-select" type="text/html">
     <table class="table-fixed">
         <thead>
         <tr>
             <th width="5%">
                 <label>
                     <input type="checkbox" class="filled-in" check-for="check-item1"
-                           onclick="X.checkAll(this);Task.caseSelectAll(this)"/>
+                           onclick="X.checkAll(this);Scene.caseSelectAll(this)"/>
                     <span></span>
                 </label>
             </th>
@@ -127,7 +128,7 @@
                            checkname="{{elem.name}}"
                            checkmethod="{{elem.method}}"
                            checkurl="{{elem.url}}"
-                           onclick="Task.caseSelect($(this), {{elem.id}},'{{elem.name}}','{{elem.method}}','{{elem.url}}')"
+                           onclick="Scene.caseSelect($(this), {{elem.id}},'{{elem.name}}','{{elem.method}}','{{elem.url}}')"
                            {{if elem.selected }} checked {{/if}} />
                     <span></span>
                 </label>
@@ -149,7 +150,7 @@
 
 <script>
 
-    var Task = {}
+    var Scene = {}
     // Project.load = function () {
     //     X.HTTP({
     //         url: CONTEXT + "/data/project/single.json",
@@ -164,9 +165,9 @@
     //     });
     // }
 
-    Task.load = function () {
+    Scene.load = function () {
         X.HTTP({
-            url: CONTEXT + "/data/task/single.json",
+            url: CONTEXT + "/data/scene/single.json",
             data: {
                 id: parseInt(X.GetUrlParam("id"))
             },
@@ -175,24 +176,23 @@
                 result.data.pid = Project.getID()
                 var container1 = $("#project-name")
                 container1.html(template("tmpl-project-name", result.data));
-                var container = $("#project-task-detail")
-                container.html(template("tmpl-project-task-detail", result.data));
+                var container = $("#project-scene-detail")
+                container.html(template("tmpl-project-scene-detail", result.data));
                 container.find('select').not('.disabled').formSelect();
                 beautytextarea()
 
-                Task.loadSelectedCases(result.data.cases)
+                Scene.loadSelectedCases(result.data.cases)
             }
         });
     }
 
-    Task.edit = function () {
+    Scene.edit = function () {
         X.HTTP({
-            url: CONTEXT + "/data/task/edit.json",
+            url: CONTEXT + "/data/scene/edit.json",
             data: {
                 id: parseInt(X.GetUrlParam("id")),
-                name: $('#taskname').val(),
-                con: $('#taskcon').val(),
-                cases: $('#taskcases').val()
+                name: $('#scenename').val(),
+                cases: $('#scenecases').val()
             },
             dataType: 'json',
             success: function (result) {
@@ -206,7 +206,7 @@
         });
     }
 
-    Task.loadSelectedCases = function (cases) {
+    Scene.loadSelectedCases = function (cases) {
 
         X.HTTP({
             url: CONTEXT + "/data/case/list.json",
@@ -218,18 +218,18 @@
                 result.data.pid = Project.getID()
                 var selectedObject = toSelectedCaseObject(cases, result.data.data)
 
-                var listContainer = $("#task-case-list");
-                listContainer.html(template("tmpl-task-case-select", result.data));
+                var listContainer = $("#scene-case-list");
+                listContainer.html(template("tmpl-scene-case-select", result.data));
                 listContainer.find('select').not('.disabled').formSelect();
 
-                var leftCheckedDIV = $("#task-case-list-selected");
+                var leftCheckedDIV = $("#scene-case-list-selected");
 
                 for (var i in selectedObject) {
                     var id = selectedObject[i].id
                     var name = selectedObject[i].name
                     var method = selectedObject[i].method
                     var url = selectedObject[i].url
-                    leftCheckedDIV.append(taskSelectedCaseDIV(id, name,method,url))
+                    leftCheckedDIV.append(sceneSelectedCaseDIV(id, name,method,url))
                 }
 
             }
@@ -237,9 +237,9 @@
     }
 
 
-    Task.caseSelectAll = function (the) {
+    Scene.caseSelectAll = function (the) {
 
-        var leftCheckedDIV = $("#task-case-list-selected")
+        var leftCheckedDIV = $("#scene-case-list-selected")
         var checked = !($(the).not(':checked').length > 0)
         var checkFor = $(the).attr("check-for")
 
@@ -254,7 +254,7 @@
                 var name = $(this).attr('checkname');
                 var method = $(this).attr('checkmethod');
                 var url = $(this).attr('checkurl');
-                Task.caseSelect($(this), id, name ,method,url)
+                Scene.caseSelect($(this), id, name ,method,url)
             })
         } else {
             $("." + checkFor).each(function () {
@@ -267,18 +267,18 @@
 
     }
 
-    Task.caseSelect = function (the, id, name,  method,url) {
-        var leftCheckedDIV = $("#task-case-list-selected")
+    Scene.caseSelect = function (the, id, name,  method,url) {
+        var leftCheckedDIV = $("#scene-case-list-selected")
         if (!(the.not(':checked').length > 0)) {
-            leftCheckedDIV.append(taskSelectedCaseDIV(id, name,  method,url))
+            leftCheckedDIV.append(sceneSelectedCaseDIV(id, name,  method,url))
         } else {
             var id = "case_" + id
             leftCheckedDIV.find("#" + id).remove()
         }
-        resetTaskCases()
+        resetSceneCases()
     }
 
-    Task.casePrev = function ($this) {
+    Scene.casePrev = function ($this) {
         var leftCheckedDIVRow = $this.parent().parent()
         var leftCheckedDIV = leftCheckedDIVRow.parent()
         $(".oprow").removeClass("oprow")
@@ -291,10 +291,10 @@
         setTimeout(function() {
             leftCheckedDIVRow.removeClass("metril")
         }, 500)
-        resetTaskCases()
+        resetSceneCases()
     }
 
-    Task.caseNext = function ($this) {
+    Scene.caseNext = function ($this) {
         var leftCheckedDIVRow = $this.parent().parent()
         var leftCheckedDIV = leftCheckedDIVRow.parent()
         $(".oprow").removeClass("oprow")
@@ -307,22 +307,22 @@
         setTimeout(function() {
             leftCheckedDIVRow.removeClass("metril")
         }, 500)
-        resetTaskCases()
+        resetSceneCases()
     }
 
-    var resetTaskCases = function () {
+    var resetSceneCases = function () {
         var cases = "";
-        var leftCheckedDIV = $("#task-case-list-selected")
+        var leftCheckedDIV = $("#scene-case-list-selected")
         leftCheckedDIV.find(".row").each(function (i) {
             if (i != 0) {
                 cases += ","
             }
             cases += $(this).attr("cid")
         });
-        $("#taskcases").val(cases)
+        $("#scenecases").val(cases)
     }
 
-    var taskSelectedCaseDIV = function (id, name,  method,url) {
+    var sceneSelectedCaseDIV = function (id, name,  method,url) {
 
         var methodSpan = ""
         if (method=='GET') {
@@ -333,10 +333,10 @@
 
 
 
-        return "<div onmousedown='domsortMouseDown(event,this,resetTaskCases);' class=\"nextRow row \" id=case_" + id + " cid=" + id + ">" +
+        return "<div onmousedown='domsortMouseDown(event,this,resetSceneCases);' class=\"nextRow row \" id=case_" + id + " cid=" + id + ">" +
                 // "<div class=\"rowleft input-field col s1\">" +
-                // "<div class=prev onclick='Task.casePrev($(this))'><i class='icon iconfont icon-less'></i></div>" +
-                // "<div class=next onclick='Task.caseNext($(this))'><i class='icon iconfont icon-moreunfold'></i></div>" +
+                // "<div class=prev onclick='Scene.casePrev($(this))'><i class='icon iconfont icon-less'></i></div>" +
+                // "<div class=next onclick='Scene.caseNext($(this))'><i class='icon iconfont icon-moreunfold'></i></div>" +
                 // "</div>" +
                 "<div class=\"rowname input-field col s9\">" + methodSpan +
                 " <a style='color:rgb(117, 117, 117)' target=\"_blank\" href=\"//$!{ServerPath}/case/detail.html?id="+id+"&&projectId="+parseInt(X.GetUrlParam("projectId"))+"\">"
@@ -373,7 +373,7 @@
 
     $(function () {
         // Project.load();
-        Task.load();
+        Scene.load();
     })
 
 </script>

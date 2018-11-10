@@ -63,8 +63,9 @@
 
 <script id="tmpl-tabs0" type="text/html">
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_case.html?id=$!{id}'">用例</a></li>
-    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id=$!{id}'">任务</a></li>
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_scene.html?id=$!{id}'">场景</a></li>
     <li class="tab"><a class="active" href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_interface.html?id=$!{id}'">接口</a></li>
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id=$!{id}'">任务</a></li>
     {{if creator=='$!{zdPIN}' || '$!{zdGROUP}'=='admin' }}
     <li class="tab" s="{{creator}}"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_member.html?id={{id}}'">成员</a></li>
     {{/if}}
@@ -137,7 +138,7 @@
 </script>
 
 <script id="tmpl-project-interface-list" type="text/html">
-    <table class="table-fixed">
+    <table class="table-fixed highlight">
         <thead>
         <tr>
             <th width="5%">
@@ -150,7 +151,8 @@
 ##            <th width="5%">ID</th>
             <th width="20%">Name</th>
             <th width="35%">URL</th>
-            <th>Response Charset</th>
+            <th width="15%">Response Charset</th>
+            <th></th>
         </tr>
         </thead>
 
@@ -172,6 +174,11 @@
                 <i> <a target="_blank" href="{{elem.url}}">{{elem.url}} </a> </i>
             </td>
             <td>{{elem.responseCharset}}</td>
+            <td>
+                <a class="ripple" href="javascript:Interface.openEdit({{elem.id}});" id="op-edit">
+                    <i class="icon iconfont icon-edit"></i>
+                </a>
+            </td>
         </tr>
         {{/each}}
         {{else}}
@@ -258,17 +265,17 @@
             }
         });
     }
-    Interface.edit = function () {
-        var checkBox = $('.check-item:checked');
-        if (checkBox.length > 1) {
-            M.toast({html: '选择一个项目编辑'})
-            return
+    Interface.edit = function (interfaceId) {
+        if(!interfaceId) {
+            var checkBox = $('.check-item:checked');
+            if (checkBox.length > 1) {
+                M.toast({html: '选择一个项目编辑'})
+                return
+            }
+            checkBox.each(function () {
+                interfaceId = parseInt($(this).attr("checkvalue"))
+            })
         }
-
-        var interfaceId;
-        checkBox.each(function () {
-            interfaceId = parseInt($(this).attr("checkvalue"))
-        })
         X.HTTP({
             url: CONTEXT + "/data/interface/edit.json",
             data: {
@@ -320,17 +327,18 @@
         instance.open();
 
     }
-    Interface.openEdit = function () {
-        var checkBox = $('.check-item:checked');
-        if (checkBox.length > 1) {
-            M.toast({html: 'Select one to edit'})
-            return
+    Interface.openEdit = function (interfaceId) {
+        if(!interfaceId) {
+            var checkBox = $('.check-item:checked');
+            if (checkBox.length != 1) {
+                M.toast({html: '选择一个项目来编辑！'})
+                return
+            }
+            checkBox.each(function () {
+                interfaceId = parseInt($(this).attr("checkvalue"))
+            })
         }
 
-        var interfaceId;
-        checkBox.each(function () {
-            interfaceId = parseInt($(this).attr("checkvalue"))
-        })
         X.HTTP({
             url: CONTEXT + "/data/interface/single.json",
             data: {
@@ -341,7 +349,7 @@
                 $('#modal1').attr("style", "")
                 $('#modal1').css("display", "block")
                 var container = $("#interface")
-                result.data.fn = "Interface.edit()"
+                result.data.fn = "Interface.edit("+interfaceId+")"
                 container.html(template("tmpl-interface", result.data));
                 container.find('select').not('.disabled').formSelect();
                 beautytextarea()

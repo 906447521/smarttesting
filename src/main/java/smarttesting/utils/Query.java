@@ -21,6 +21,12 @@ public class Query extends HashMap {
         return pageCriteria;
     }
 
+    public PageCriteria getPageCriteriaIfNullWithMaxInteger() {
+        if (pageCriteria == null)
+            withPager(1, Integer.MAX_VALUE);
+        return pageCriteria;
+    }
+
     public OrderCriteria getOrderCriteria() {
         if (orderCriteria == null)
             withOrder("id", "desc");
