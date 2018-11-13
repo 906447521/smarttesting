@@ -181,7 +181,10 @@
             </td>
             <td><i class="icon iconfont icon-box icon-light-blue"></i></td>
 ##            <td>{{elem.id}}</td>
-            <td><a href="//$!{ServerPath}/interface/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a></td>
+            <td><a href="//$!{ServerPath}/interface/detail.html?id={{elem.id}}&&projectId={{pid}}"
+                      ondragend="listElemDragend2(event)"
+                      ondragstart="listElemDragstart(event,{{elem.id}},'Interface.delete');"
+                      >{{elem.name}}</a></td>
             <td>
                 <span style="display:inline-block;width:50px;font-weight:800;color:{{if elem.method=='GET'}}#3eb63e{{else}}#f5a623{{/if}};"><i>{{elem.method}}</i></span>
                 <i> <a target="_blank" href="{{elem.url}}">{{elem.url}} </a> </i>
@@ -308,12 +311,17 @@
             }
         });
     }
-    Interface.delete = function () {
+    Interface.delete = function (interfaceId) {
+        var zdInterfaceIds = new Array();
         if (window.confirm("是否要删除选中的项目？")) {
-            var zdInterfaceIds = new Array();
-            $('.check-item:checked').each(function () {
-                zdInterfaceIds.push(parseInt($(this).attr("checkvalue")))
-            })
+            if(!interfaceId) {
+                $('.check-item:checked').each(function () {
+                    zdInterfaceIds.push(parseInt($(this).attr("checkvalue")))
+                })
+            } else {
+                zdInterfaceIds.push(interfaceId)
+            }
+
             X.HTTP({
                 url: CONTEXT + "/data/interface/delete.json",
                 data: {

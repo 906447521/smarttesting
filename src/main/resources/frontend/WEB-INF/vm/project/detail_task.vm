@@ -173,7 +173,10 @@
                 </label>
             </td>
             <td><i class="icon iconfont icon-task-management icon-light-blue"></i></td>
-            <td><a href="//$!{ServerPath}/task/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a></td>
+            <td><a href="//$!{ServerPath}/task/detail.html?id={{elem.id}}&&projectId={{pid}}"
+                      ondragend="listElemDragend2(event)"
+                      ondragstart="listElemDragstart(event,{{elem.id}},'Task.delete');"
+                      >{{elem.name}}</a></td>
             <td>{{elem.con}}</td>
             <td><a target="_blank" href="//$!{ServerPath}/task_result/detail.html?resultId={{elem.lastrun}}">详情</a></td>
             <td>
@@ -342,12 +345,17 @@
             }
         });
     }
-    Task.delete = function () {
+    Task.delete = function (taskId) {
+        var zdTaskIds = new Array();
         if (window.confirm("是否要删除选中项？")) {
-            var zdTaskIds = new Array();
-            $('.check-item:checked').each(function () {
-                zdTaskIds.push(parseInt($(this).attr("checkvalue")))
-            })
+            if(!taskId) {
+                $('.check-item:checked').each(function () {
+                    zdTaskIds.push(parseInt($(this).attr("checkvalue")))
+                })
+            } else {
+                zdTaskIds.push(taskId)
+            }
+
             X.HTTP({
                 url: CONTEXT + "/data/task/delete.json",
                 data: {

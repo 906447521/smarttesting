@@ -258,7 +258,10 @@
                 </label>
             </td>
             <td><i class="icon iconfont icon-process icon-light-blue"></i></td>
-            <td><a href="//$!{ServerPath}/case/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a></td>
+            <td><a href="//$!{ServerPath}/case/detail.html?id={{elem.id}}&&projectId={{pid}}"
+                      ondragend="listElemDragend2(event)"
+                      ondragstart="listElemDragstart(event,{{elem.id}},'Case.delete');"
+                      >{{elem.name}}</a></td>
             <td>
                 {{if elem.zdInterface!=null}}
 
@@ -400,12 +403,18 @@
         });
     }
 
-    Case.delete = function () {
+    Case.delete = function (caseId) {
+        var zdCaseIds = new Array();
         if (window.confirm("是否删除选中的项目？")) {
-            var zdCaseIds = new Array();
-            $('.check-item:checked').each(function () {
-                zdCaseIds.push(parseInt($(this).attr("checkvalue")))
-            })
+
+            if(!caseId) {
+                $('.check-item:checked').each(function () {
+                    zdCaseIds.push(parseInt($(this).attr("checkvalue")))
+                })
+            } else {
+                zdCaseIds.push(caseId)
+            }
+
             X.HTTP({
                 url: CONTEXT + "/data/case/delete.json",
                 data: {

@@ -146,7 +146,10 @@
                 </label>
             </td>
             <td><i class="icon iconfont icon-scene-management icon-light-blue"></i></td>
-            <td><a href="//$!{ServerPath}/scene/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a></td>
+            <td><a href="//$!{ServerPath}/scene/detail.html?id={{elem.id}}&&projectId={{pid}}"
+                      ondragend="listElemDragend2(event)"
+                      ondragstart="listElemDragstart(event,{{elem.id}},'Scene.delete');"
+                      >{{elem.name}}</a></td>
             <td>
                 <a class="ripple" href="javascript:Scene.openEdit({{elem.id}});" id="op-edit">
                     <i class="icon iconfont icon-edit"></i>
@@ -303,12 +306,16 @@
             }
         });
     }
-    Scene.delete = function () {
+    Scene.delete = function (sceneId) {
+        var zdSceneIds = new Array();
         if (window.confirm("是否要删除选中项？")) {
-            var zdSceneIds = new Array();
-            $('.check-item:checked').each(function () {
-                zdSceneIds.push(parseInt($(this).attr("checkvalue")))
-            })
+            if(!sceneId) {
+                $('.check-item:checked').each(function () {
+                    zdSceneIds.push(parseInt($(this).attr("checkvalue")))
+                })
+            } else {
+                zdSceneIds.push(sceneId)
+            }
             X.HTTP({
                 url: CONTEXT + "/data/scene/delete.json",
                 data: {
