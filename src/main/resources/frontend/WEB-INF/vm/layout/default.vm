@@ -348,7 +348,8 @@
     <script>
         function listElemDragstart(e,id,fn) {
             $('#index-banner').append(
-                '<div id="index-banner-d" ondrop="alert()"  style="text-align:center;opacity:0.6;top:0;position:absolute;background-color:grey;width:100%;height:100%"><i class="icon iconfont icon-delete" style="font-size:24px;color:#fff" /></div>')
+                '<div id="index-banner-d" ondrop="alert()"  ' +
+                    'style="text-align:center;opacity:0.9;top:0;position:absolute;background-color:ccc;width:100%;height:100%"><i class="icon iconfont icon-delete" style="font-size:24px;color:#fff" /></div>')
             $('#index-banner').append(
                     '<div id="index-banner-d2" ' +
                     'ondrop="listElemDragend(event,'+id+','+fn+');" ' +
@@ -385,11 +386,11 @@
             return false
         }
         function listElemDragenter(e) {
-            $('#index-banner-d').css("background-color", "red")
+            $('#index-banner-d').css("background-color", "#DB6859")
             window.deleteElemLeave = false;
         }
         function listElemDragoleave(e) {
-            $('#index-banner-d').css("background-color", "grey")
+            $('#index-banner-d').css("background-color", "#ccc")
             window.deleteElemLeave = true;
         }
     </script>
