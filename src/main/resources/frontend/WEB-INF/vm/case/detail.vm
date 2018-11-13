@@ -58,10 +58,12 @@
 
 <script id="tmpl-project-case-detail" type="text/html">
     <div class="modal-footer" style="margin-top:-25px;margin-bottom:25px">
-        <a href="javascript:;" class="waves-effect waves-green" onclick="Case.edit()">
+        <a href="javascript:;" class="waves-effect waves-green" onclick="Case.edit()" style="margin-right:20px">
             <i class="icon iconfont icon-save"></i>
         </a>
-        <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="Case.runSelectTemp()">发送请求</a>
+        <a href="javascript:;" class="waves-effect waves-green" onclick="Case.runSelectTemp()">
+            <i class="icon iconfont icon-iconfontplay2" style="font-size:20px" ></i>
+        </a>
     </div>
     <div class="modal-content">
         <form id="add-case-form">

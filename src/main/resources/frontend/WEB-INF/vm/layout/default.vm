@@ -97,6 +97,15 @@
         table td a.ripple:hover {
             color: #F26B3A;
         }
+        table th {
+            color: #9bacbd;
+            background-color: #f7f9fa;
+            position: relative;
+        }
+        table th.ant-table-column-has-actions:hover {
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
         table td {
             font-size:12px;
             padding: 5px 10px;
@@ -299,6 +308,39 @@
             height: calc(100% - 56px);
             max-height: 100%;
             overflow-y: auto;
+        }
+        .ant-table-column-sorter {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            width: 14px;
+            height: 17px;
+            margin-top: -8.5px;
+            text-align: center;
+            color: #bfbfbf;
+            -webkit-transition: all .3s;
+            -o-transition: all .3s;
+            transition: all .3s;
+        }
+        .ant-table-column-sorter-down, .ant-table-column-sorter-up {
+            display: inline-block;
+            font-size: 12px;
+            font-size: 11px\9;
+            -webkit-transform: scale(.91666667) rotate(0deg);
+            -ms-transform: scale(.91666667) rotate(0deg);
+            transform: scale(.91666667) rotate(0deg);
+            line-height: 4px;
+            height: 4px;
+            -webkit-transition: all .3s;
+            -o-transition: all .3s;
+            transition: all .3s;
+            display: block;
+        }
+        .ant-table-column-sorter-down.on, .ant-table-column-sorter-up.on {
+            color: #17a7f3;
+        }
+        .ant-table-column-sorter-down {
+            margin-top: 4px;
         }
     </style>
 </head>

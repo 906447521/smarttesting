@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import smarttesting.data.STTaskMapper;
 import smarttesting.data.STTaskResultMapper;
 import smarttesting.data.model.STCase;
+import smarttesting.data.model.STScene;
 import smarttesting.data.model.STTask;
 import smarttesting.data.model.STTaskResult;
 import smarttesting.service.job.ClusteredScheduler;
@@ -42,6 +43,8 @@ public class STTaskService {
     private ClusteredScheduler clusteredJob;
     @Resource
     private STCaseService      zdCaseService;
+    @Resource
+    private STSceneService     zdSceneService;
 
 
     public List<STTask> findAll(Query query) {
@@ -156,15 +159,16 @@ public class STTaskService {
         try {
 
             log.info("ID: {} START DO TASK====================================> ", requestId);
+
+
             STTaskResult zdTaskResult = new STTaskResult();
             zdTaskResult.setStart(new Date());
-            log.info("ID: {} JobKey :" + JSON.write(jobKey), requestId);
             STTask zdTask = this.find(new Query().with("id", taskId)).singleResult();
 
-            log.info("ID: {} ZDTask :" + JSON.write(zdTask), requestId);
 
-            String cases = zdTask.getScenes();
-            String[] caseIds = cases.split(",");
+            String scenes = zdTask.getScenes();
+            String[] sceneIds = scenes.split(",");
+
 
             List<CallerResult> callerResultsF = new ArrayList<CallerResult>();
 
@@ -177,51 +181,83 @@ public class STTaskService {
             Map<String, Map> groups = new LinkedHashMap<String, Map>();
 
             {
-
-                String groupId = new UUID().toString32();
-                Map groupBody = new HashMap();
-                groupBody.put("groupId", groupId);
-
-                Map<String, Map> rowBody = new LinkedHashMap<String, Map>();
-                int groupCount = 0;
-                int groupPassC = 0;
-                int groupFailC = 0;
-                int groupErrorC = 0;
-
-                for (String caseIdString : caseIds) {
+                for (String sceneId : sceneIds) {
                     try {
-                        String callId = new UUID().toString32();
-                        Long caseId = Long.parseLong(caseIdString);
-                        STCase zdCase = zdCaseService.find(new Query().with("id", caseId)).singleResult();
-                        List<CallerResult> callerResults = zdCaseService.run(zdCase);
-                        CallerResult callerResult = callerResults.get(0);
-                        callerResultsF.add(callerResult);
-                        count++;
-                        groupCount++;
-                        if ("true".equals(callerResult.getResponseResult())) {
-                            passC++;
-                            groupPassC++;
-                        } else if ("false".equals(callerResult.getResponseResult())) {
-                            failC++;
-                            groupFailC++;
-                        } else {
-                            errorC++;
-                            groupErrorC++;
+
+
+                        STScene zdScene = zdSceneService.find(new Query().with("id", sceneId)).singleResult();
+
+                        if (zdScene == null) {
+                            log.info("ID: {} 场景 : " + sceneId + " 已经被删除，跳过执行 ", requestId);
+                            continue;
                         }
-                        rowBody.put(callId, JSON.read(JSON.write(callerResult), Map.class));
-                        log.info("ID: {} CallerResult :" + JSON.write(callerResult), requestId);
+
+                        String groupId = new UUID().toString32();
+                        Map groupBody = new HashMap();
+                        groupBody.put("groupId", groupId);
+                        groupBody.put("sceneId", sceneId);
+                        groupBody.put("sceneName", zdScene.getName());
+
+                        Map<String, Map> rowBody = new LinkedHashMap<String, Map>();
+                        int groupCount = 0;
+                        int groupPassC = 0;
+                        int groupFailC = 0;
+                        int groupErrorC = 0;
+
+                        String cases = zdScene.getCases();
+                        String[] caseIds = cases.split(",");
+
+                        for (String caseIdString : caseIds) {
+
+
+                            try {
+
+                                String callId = new UUID().toString32();
+                                Long caseId = Long.parseLong(caseIdString);
+                                STCase zdCase = zdCaseService.find(new Query().with("id", caseId)).singleResult();
+
+                                if (zdCase == null) {
+                                    log.info("ID: {} 用例 : " + caseId + " 已经被删除，跳过执行 ", requestId);
+                                    continue;
+                                }
+
+                                List<CallerResult> callerResults = zdCaseService.run(zdCase);
+                                CallerResult callerResult = callerResults.get(0);
+                                callerResultsF.add(callerResult);
+                                count++;
+                                groupCount++;
+                                if ("true".equals(callerResult.getResponseResult())) {
+                                    passC++;
+                                    groupPassC++;
+                                } else if ("false".equals(callerResult.getResponseResult())) {
+                                    failC++;
+                                    groupFailC++;
+                                } else {
+                                    errorC++;
+                                    groupErrorC++;
+                                }
+                                rowBody.put(callId, JSON.read(JSON.write(callerResult), Map.class));
+
+
+                            } catch (Exception e) {
+
+                            }
+                        }
+
+
+                        groupBody.put("groupCount", groupCount);
+                        groupBody.put("groupPassC", groupPassC);
+                        groupBody.put("groupFailC", groupFailC);
+                        groupBody.put("groupErrorC", groupErrorC);
+                        groupBody.put("rowBody", rowBody);
+
+                        groups.put(groupId, groupBody);
+
+
                     } catch (Exception e) {
 
                     }
                 }
-
-                groupBody.put("groupCount", groupCount);
-                groupBody.put("groupPassC", groupPassC);
-                groupBody.put("groupFailC", groupFailC);
-                groupBody.put("groupErrorC", groupErrorC);
-                groupBody.put("rowBody", rowBody);
-
-                groups.put(groupId, groupBody);
 
 
             }
@@ -249,6 +285,10 @@ public class STTaskService {
             zdTaskResult.setResult(result);
 
             this.addZDTaskResult(zdTaskResult);
+
+
+            log.info("ID: {} RESULT : \r\t {} ", new Object[]{requestId, result});
+
 
         } catch (Exception e) {
             log.error("ID: {} DO TASK [" + taskId + "] FAIL：" + e.getMessage(), requestId, e);

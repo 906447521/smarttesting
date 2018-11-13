@@ -1,18 +1,23 @@
 #set($layout="layout/blank.vm")
 
 
+
 <style>
     table {
-        width: 800px;
+        width: 100%;
+        border-collapse:collapse;border:none;
     }
     table td{
         padding: 3px 10px;
+        border:solid #000 1px;
     }
 </style>
 
 <div id="result"></div>
 
 <script id="tmpl-result" type="text/html">
+
+    <title>SmartTesting - {{tName}}</title>
 
     <div style="padding: 50px;font-family:微软雅黑, Roboto, system-ui, 'PingFang SC', STHeiti, sans-serif;">
 
@@ -36,7 +41,7 @@
                 {{if (groups)}}
                 {{each groups as elem i}}
                 <tr style="background-color:#80C972;color:#333;font-weight:500">
-                    <td>{{test_}}</td><td>{{elem.groupCount}}</td><td>{{elem.groupPassC}}</td><td>{{elem.groupFailC}}</td><td>{{elem.groupErrorC}}</td><td>View</td>
+                    <td>{{elem.sceneName}}</td><td>{{elem.groupCount}}</td><td>{{elem.groupPassC}}</td><td>{{elem.groupFailC}}</td><td>{{elem.groupErrorC}}</td><td>View</td>
                 </tr>
                 {{/each}}
                 {{else}}

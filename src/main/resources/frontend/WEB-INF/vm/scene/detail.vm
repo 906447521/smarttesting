@@ -334,16 +334,11 @@
 
 
         return "<div onmousedown='domsortMouseDown(event,this,resetSceneCases);' class=\"nextRow row \" id=case_" + id + " cid=" + id + ">" +
-                // "<div class=\"rowleft input-field col s1\">" +
-                // "<div class=prev onclick='Scene.casePrev($(this))'><i class='icon iconfont icon-less'></i></div>" +
-                // "<div class=next onclick='Scene.caseNext($(this))'><i class='icon iconfont icon-moreunfold'></i></div>" +
-                // "</div>" +
                 "<div class=\"rowname input-field col s9\">" + methodSpan +
-                " <a style='color:rgb(117, 117, 117)' target=\"_blank\" href=\"//$!{ServerPath}/case/detail.html?id="+id+"&&projectId="+parseInt(X.GetUrlParam("projectId"))+"\">"
+                " <a style='color:rgb(117, 117, 117)' target=\"_blank\"  ondragstart=\"return false\"  href=\"//$!{ServerPath}/case/detail.html?id="+id+"&&projectId="+parseInt(X.GetUrlParam("projectId"))+"\">"
                 + name +
                 "</a>"+
                 "</div>" +
-                // "<div class=\"rowarrow input-field col s2\">›</div>" +
                 "</div>"
     }
 
