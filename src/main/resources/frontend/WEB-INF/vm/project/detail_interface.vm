@@ -179,7 +179,7 @@
                     <span></span>
                 </label>
             </td>
-            <td><i class="icon iconfont icon-box icon-light-blue"></i></td>
+            <td><i class="icon iconfont icon-link icon-light-blue"></i></td>
 ##            <td>{{elem.id}}</td>
             <td><a href="//$!{ServerPath}/interface/detail.html?id={{elem.id}}&&projectId={{pid}}"
                       ondragend="listElemDragend2(event)"

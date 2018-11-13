@@ -238,7 +238,9 @@
                 </label>
             </td>
             <td style="padding: 3px 10px">
-                <span style="display:inline-block;width:50px;font-weight:800;color:{{if elem.method=='GET'}}#3eb63e{{else}}#f5a623{{/if}};"><i>{{elem.method}}</i></span>
+                <span style="display:inline-block;width:50px;color:{{if elem.method=='GET'}}#3eb63e{{else}}#f5a623{{/if}};">
+                    <i class="icon iconfont icon-similarproduct icon-light-blue"></i>
+                </span>
                 <a target="_blank"
                    href="//$!{ServerPath}/scene/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a>
             </td>
@@ -542,11 +544,11 @@
     var taskSelectedSceneDIV = function (id, name, method, url) {
 
         var methodSpan = ""
-        // if (method == 'GET') {
-        //     methodSpan = "<span style='display:inline-block;width:50px;font-size:13px;font-weight:800;color:#3eb63e'><i>" + method + "</i></span>"
-        // } else {
-        //     methodSpan = "<span style='display:inline-block;width:50px;font-size:13px;font-weight:800;color:#f5a623'><i>" + method + "</i></span>"
-        // }
+        if (method == 'GET') {
+            methodSpan = "<i class=\"icon iconfont icon-similarproduct icon-light-blue\"></i></span>"
+        } else {
+            methodSpan = "<i class=\"icon iconfont icon-similarproduct icon-light-blue\"></i>"
+        }
 
 
         return "<div onmousedown='domsortMouseDown(event,this,resetTaskScenes);' class=\"nextRow row \" id=scene_" + id + " cid=" + id + ">" +

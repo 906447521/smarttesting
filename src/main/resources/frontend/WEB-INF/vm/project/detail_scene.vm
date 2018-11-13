@@ -145,7 +145,7 @@
                     <span></span>
                 </label>
             </td>
-            <td><i class="icon iconfont icon-scene-management icon-light-blue"></i></td>
+            <td><i class="icon iconfont icon-similarproduct icon-light-blue"></i></td>
             <td><a href="//$!{ServerPath}/scene/detail.html?id={{elem.id}}&&projectId={{pid}}"
                       ondragend="listElemDragend2(event)"
                       ondragstart="listElemDragstart(event,{{elem.id}},'Scene.delete');"

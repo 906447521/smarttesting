@@ -257,7 +257,7 @@
                     <span></span>
                 </label>
             </td>
-            <td><i class="icon iconfont icon-process icon-light-blue"></i></td>
+            <td><i class="icon iconfont icon-pin icon-light-blue"></i></td>
             <td><a href="//$!{ServerPath}/case/detail.html?id={{elem.id}}&&projectId={{pid}}"
                       ondragend="listElemDragend2(event)"
                       ondragstart="listElemDragstart(event,{{elem.id}},'Case.delete');"
