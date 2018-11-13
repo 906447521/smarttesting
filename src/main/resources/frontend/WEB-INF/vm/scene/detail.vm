@@ -357,8 +357,13 @@
             var casesSplited = seletedCasesString.split(",")
             for (var i in casesSplited) {
                 var caseId = casesSplited[i];
-                casesMapAll[caseId].selected = true;
-                selectedArray.push(casesMapAll[caseId])
+                if(!casesMapAll[caseId]) {
+
+                } else {
+                    casesMapAll[caseId].selected = true;
+                    selectedArray.push(casesMapAll[caseId])
+                }
+
             }
 
 

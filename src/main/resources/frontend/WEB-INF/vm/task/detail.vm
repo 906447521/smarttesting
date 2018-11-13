@@ -54,7 +54,7 @@
             <div class="row">
                 <div class="col s12">
                     <div class="row">
-                        <input type="hidden" id="taskcases" value="{{cases}}">
+                        <input type="hidden" id="taskscenes" value="{{scenes}}">
                         <div class="input-field col s12">
                             <input type="text" id="taskname" class="autocomplete" value="{{name}}">
                             <label for="taskname" class="active">接口名称</label>
@@ -79,11 +79,11 @@
 
                     <div class="row">
                         <div class="input-field col s7">
-                            <div id="task-case-list-selected" style="margin-top:33px;padding-left:5px"></div>
+                            <div id="task-scene-list-selected" style="margin-top:33px;padding-left:5px"></div>
                             <label class="active">勾选执行的接口</label>
                         </div>
                         <div class="input-field col s5" style="padding-left:50px">
-                            <div id="task-case-list"></div>
+                            <div id="task-scene-list"></div>
                         </div>
                     </div>
 
@@ -100,18 +100,18 @@
     <span class="b">{{name}}</span>
 </script>
 
-<script id="tmpl-task-case-select" type="text/html">
+<script id="tmpl-task-scene-select" type="text/html">
     <table class="table-fixed">
         <thead>
         <tr>
             <th width="5%">
                 <label>
                     <input type="checkbox" class="filled-in" check-for="check-item1"
-                           onclick="X.checkAll(this);Task.caseSelectAll(this)"/>
+                           onclick="X.checkAll(this);Task.sceneSelectAll(this)"/>
                     <span></span>
                 </label>
             </th>
-            <th width="30%">用例</th>
+            <th width="30%">场景</th>
 
         </tr>
         </thead>
@@ -127,7 +127,7 @@
                            checkname="{{elem.name}}"
                            checkmethod="{{elem.method}}"
                            checkurl="{{elem.url}}"
-                           onclick="Task.caseSelect($(this), {{elem.id}},'{{elem.name}}','{{elem.method}}','{{elem.url}}')"
+                           onclick="Task.sceneSelect($(this), {{elem.id}},'{{elem.name}}','{{elem.method}}','{{elem.url}}')"
                            {{if elem.selected }} checked {{/if}} />
                     <span></span>
                 </label>
@@ -135,7 +135,7 @@
             <td style="padding: 3px 10px">
                 <span style="display:inline-block;width:50px;font-weight:800;color:{{if elem.method=='GET'}}#3eb63e{{else}}#f5a623{{/if}};"><i>{{elem.method}}</i></span>
                 <a target="_blank"
-                                             href="//$!{ServerPath}/case/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a>
+                                             href="//$!{ServerPath}/scene/detail.html?id={{elem.id}}&&projectId={{pid}}">{{elem.name}}</a>
             </td>
 
         </tr>
@@ -180,7 +180,7 @@
                 container.find('select').not('.disabled').formSelect();
                 beautytextarea()
 
-                Task.loadSelectedCases(result.data.cases)
+                Task.loadSelectedScenes(result.data.scenes)
             }
         });
     }
@@ -192,7 +192,7 @@
                 id: parseInt(X.GetUrlParam("id")),
                 name: $('#taskname').val(),
                 con: $('#taskcon').val(),
-                cases: $('#taskcases').val()
+                scenes: $('#taskscenes').val()
             },
             dataType: 'json',
             success: function (result) {
@@ -206,30 +206,30 @@
         });
     }
 
-    Task.loadSelectedCases = function (cases) {
+    Task.loadSelectedScenes = function (scenes) {
 
         X.HTTP({
-            url: CONTEXT + "/data/case/list.json",
+            url: CONTEXT + "/data/scene/list.json",
             data: {
                 projectId: parseInt(X.GetUrlParam("projectId")),
             },
             dataType: 'json',
             success: function (result) {
                 result.data.pid = Project.getID()
-                var selectedObject = toSelectedCaseObject(cases, result.data.data)
+                var selectedObject = toSelectedSceneObject(scenes, result.data.data)
 
-                var listContainer = $("#task-case-list");
-                listContainer.html(template("tmpl-task-case-select", result.data));
+                var listContainer = $("#task-scene-list");
+                listContainer.html(template("tmpl-task-scene-select", result.data));
                 listContainer.find('select').not('.disabled').formSelect();
 
-                var leftCheckedDIV = $("#task-case-list-selected");
+                var leftCheckedDIV = $("#task-scene-list-selected");
 
                 for (var i in selectedObject) {
                     var id = selectedObject[i].id
                     var name = selectedObject[i].name
                     var method = selectedObject[i].method
                     var url = selectedObject[i].url
-                    leftCheckedDIV.append(taskSelectedCaseDIV(id, name,method,url))
+                    leftCheckedDIV.append(taskSelectedSceneDIV(id, name,method,url))
                 }
 
             }
@@ -237,16 +237,16 @@
     }
 
 
-    Task.caseSelectAll = function (the) {
+    Task.sceneSelectAll = function (the) {
 
-        var leftCheckedDIV = $("#task-case-list-selected")
+        var leftCheckedDIV = $("#task-scene-list-selected")
         var checked = !($(the).not(':checked').length > 0)
         var checkFor = $(the).attr("check-for")
 
         if (checked) {
             $("." + checkFor).each(function () {
                 var id = $(this).attr('checkvalue');
-                var dommentId = "case_" + id
+                var dommentId = "scene_" + id
                 leftCheckedDIV.find("#" + dommentId).remove()
             })
             $("." + checkFor).each(function () {
@@ -254,12 +254,12 @@
                 var name = $(this).attr('checkname');
                 var method = $(this).attr('checkmethod');
                 var url = $(this).attr('checkurl');
-                Task.caseSelect($(this), id, name ,method,url)
+                Task.sceneSelect($(this), id, name ,method,url)
             })
         } else {
             $("." + checkFor).each(function () {
                 var id = $(this).attr('checkvalue');
-                var dommentId = "case_" + id
+                var dommentId = "scene_" + id
                 leftCheckedDIV.find("#" + dommentId).remove()
             })
 
@@ -267,18 +267,18 @@
 
     }
 
-    Task.caseSelect = function (the, id, name,  method,url) {
-        var leftCheckedDIV = $("#task-case-list-selected")
+    Task.sceneSelect = function (the, id, name,  method,url) {
+        var leftCheckedDIV = $("#task-scene-list-selected")
         if (!(the.not(':checked').length > 0)) {
-            leftCheckedDIV.append(taskSelectedCaseDIV(id, name,  method,url))
+            leftCheckedDIV.append(taskSelectedSceneDIV(id, name,  method,url))
         } else {
-            var id = "case_" + id
+            var id = "scene_" + id
             leftCheckedDIV.find("#" + id).remove()
         }
-        resetTaskCases()
+        resetTaskScenes()
     }
 
-    Task.casePrev = function ($this) {
+    Task.scenePrev = function ($this) {
         var leftCheckedDIVRow = $this.parent().parent()
         var leftCheckedDIV = leftCheckedDIVRow.parent()
         $(".oprow").removeClass("oprow")
@@ -291,10 +291,10 @@
         setTimeout(function() {
             leftCheckedDIVRow.removeClass("metril")
         }, 500)
-        resetTaskCases()
+        resetTaskScenes()
     }
 
-    Task.caseNext = function ($this) {
+    Task.sceneNext = function ($this) {
         var leftCheckedDIVRow = $this.parent().parent()
         var leftCheckedDIV = leftCheckedDIVRow.parent()
         $(".oprow").removeClass("oprow")
@@ -307,22 +307,22 @@
         setTimeout(function() {
             leftCheckedDIVRow.removeClass("metril")
         }, 500)
-        resetTaskCases()
+        resetTaskScenes()
     }
 
-    var resetTaskCases = function () {
-        var cases = "";
-        var leftCheckedDIV = $("#task-case-list-selected")
+    var resetTaskScenes = function () {
+        var scenes = "";
+        var leftCheckedDIV = $("#task-scene-list-selected")
         leftCheckedDIV.find(".row").each(function (i) {
             if (i != 0) {
-                cases += ","
+                scenes += ","
             }
-            cases += $(this).attr("cid")
+            scenes += $(this).attr("cid")
         });
-        $("#taskcases").val(cases)
+        $("#taskscenes").val(scenes)
     }
 
-    var taskSelectedCaseDIV = function (id, name,  method,url) {
+    var taskSelectedSceneDIV = function (id, name,  method,url) {
 
         var methodSpan = ""
         // if (method=='GET') {
@@ -333,9 +333,9 @@
 
 
 
-        return "<div onmousedown='domsortMouseDown(event,this,resetTaskCases);' class=\"nextRow row \" id=case_" + id + " cid=" + id + ">" +
+        return "<div onmousedown='domsortMouseDown(event,this,resetTaskScenes);' class=\"nextRow row \" id=scene_" + id + " cid=" + id + ">" +
                 "<div class=\"rowname input-field col s9\">" + methodSpan +
-                " <a style='color:rgb(117, 117, 117)' target=\"_blank\"  ondragstart=\"return false\"  href=\"//$!{ServerPath}/case/detail.html?id="+id+"&&projectId="+parseInt(X.GetUrlParam("projectId"))+"\">"
+                " <a style='color:rgb(117, 117, 117)' target=\"_blank\"  ondragstart=\"return false\"  href=\"//$!{ServerPath}/scene/detail.html?id="+id+"&&projectId="+parseInt(X.GetUrlParam("projectId"))+"\">"
                 + name +
                 "</a>"+
                 "</div>" +
@@ -343,22 +343,26 @@
     }
 
 
-    var toSelectedCaseObject = function (seletedCasesString, casesObject) {
+    var toSelectedSceneObject = function (seletedScenesString, scenesObject) {
         var selectedArray = new Array()
-        if (seletedCasesString && seletedCasesString != null && seletedCasesString.trim() != "") {
-            var casesMapAll = new Object()
-            if (casesObject != null) {
-                for (var j in casesObject) {
-                    var caseEntity = casesObject[j]
-                    casesMapAll[caseEntity.id] = caseEntity
+        if (seletedScenesString && seletedScenesString != null && seletedScenesString.trim() != "") {
+            var scenesMapAll = new Object()
+            if (scenesObject != null) {
+                for (var j in scenesObject) {
+                    var sceneEntity = scenesObject[j]
+                    scenesMapAll[sceneEntity.id] = sceneEntity
                 }
             }
 
-            var casesSplited = seletedCasesString.split(",")
-            for (var i in casesSplited) {
-                var caseId = casesSplited[i];
-                casesMapAll[caseId].selected = true;
-                selectedArray.push(casesMapAll[caseId])
+            var scenesSplited = seletedScenesString.split(",")
+            for (var i in scenesSplited) {
+                var sceneId = scenesSplited[i];
+                if(!scenesMapAll[sceneId]) {
+
+                } else {
+                    scenesMapAll[sceneId].selected = true;
+                    selectedArray.push(scenesMapAll[sceneId])
+                }
             }
 
 

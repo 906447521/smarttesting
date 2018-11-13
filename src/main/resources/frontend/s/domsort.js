@@ -29,10 +29,10 @@ var domsortMouseDown = function (e, the, fn) {
                 'position': 'fixed',
                 'border': '1px solid #ddd',
                 'box-shadow': '-2px 2px 6px rgba(0,0,0,.2)',
-                'webkitTransform': 'rotate(2deg)',
-                'mozTransform': 'rotate(2deg)',
-                'msTransform': 'rotate(2deg)',
-                'transform': 'rotate(2deg)',
+                'webkitTransform': 'rotate(1deg)',
+                'mozTransform': 'rotate(1deg)',
+                'msTransform': 'rotate(1deg)',
+                'transform': 'rotate(1deg)',
                 'z-index': 999999
             }
 

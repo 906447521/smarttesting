@@ -1,10 +1,7 @@
 package smarttesting.service;
 
 import org.springframework.stereotype.Service;
-import smarttesting.data.STCaseMapper;
-import smarttesting.data.STInterfaceMapper;
-import smarttesting.data.STProjectMapper;
-import smarttesting.data.STProjectUserMapper;
+import smarttesting.data.*;
 import smarttesting.data.model.*;
 import smarttesting.service.model.ServiceResultFail;
 import smarttesting.utils.Pagination;
@@ -33,7 +30,10 @@ public class STProjectService {
     private STProjectUserMapper zdProjectUserMapper;
     @Resource
     private STUserService       zdUserService;
-
+    @Resource
+    private STSceneService      zdSceneService;
+    @Resource
+    private STSceneMapper       zdSceneMapper;
 
     public List<STProject> findAll(Query query) {
         List<STProject> zdProjectList = zdProjectMapper.select(query);
@@ -111,6 +111,15 @@ public class STProjectService {
                     zdCaseMapper.delete(new Query().with("id", zdCase.getId()));
                 }
             }
+
+            // 删除场景
+            List<STScene> stScenes = zdSceneService.find(new Query().with("projectId", id)).getData();
+            if (stScenes.size() > 0) {
+                for (STScene stScene : stScenes) {
+                    zdSceneMapper.delete(new Query().with("id", stScene.getId()));
+                }
+            }
+
 
             // 删除用户
             List<STProjectUser> zdProjectUsers = zdProjectUserMapper.select(new Query().with("projectId", id));
