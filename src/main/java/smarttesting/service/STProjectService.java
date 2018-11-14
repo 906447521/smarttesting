@@ -112,7 +112,7 @@ public class STProjectService {
                 }
             }
 
-            // 删除场景
+            // 删除测试集
             List<STScene> stScenes = zdSceneService.find(new Query().with("projectId", id)).getData();
             if (stScenes.size() > 0) {
                 for (STScene stScene : stScenes) {

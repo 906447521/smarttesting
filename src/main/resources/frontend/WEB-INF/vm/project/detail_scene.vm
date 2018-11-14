@@ -56,7 +56,7 @@
 
 <script id="tmpl-tabs0" type="text/html">
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_case.html?id={{id}}'">用例</a></li>
-    <li class="tab"><a class="active"  href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_scene.html?id=$!{id}'">场景</a></li>
+    <li class="tab"><a class="active"  href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_scene.html?id=$!{id}'">测试集</a></li>
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_interface.html?id={{id}}'">接口</a></li>
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id={{id}}'">任务</a></li>
     {{if creator=='$!{zdPIN}' || '$!{zdGROUP}'=='admin' }}
@@ -73,8 +73,8 @@
                     <div class="row">
                         <input type="hidden" id="scenecases" value="{{cases}}">
                         <div class="input-field col s12">
-                            <input type="text" id="scenename" class="autocomplete" value="{{if name==null}}新场景{{else}}{{name}}{{/if}}">
-                            <label for="scenename" class="active">场景名称</label>
+                            <input type="text" id="scenename" class="autocomplete" value="{{if name==null}}新测试集{{else}}{{name}}{{/if}}">
+                            <label for="scenename" class="active">测试集名称</label>
                         </div>
                     </div>
                     <div class="row">
@@ -117,7 +117,7 @@
             </th>
             <th width="5%"></th>
             <th width="20%" class="ant-table-column-has-actions">
-                Name
+                测试集名称
                 <div class="ant-table-column-sorter">
                     <i class="anticon anticon-caret-up ant-table-column-sorter-up on">
                         <svg viewBox="0 0 1024 1024" class="" data-icon="caret-up" width="1em" height="1em" fill="currentColor" aria-hidden="true">
@@ -130,7 +130,7 @@
                     </i>
                 </div>
             </th>
-
+            <th width="8%">用例个数</th>
             <th width=""></th>
         </tr>
         </thead>
@@ -149,7 +149,11 @@
             <td><a href="//$!{ServerPath}/scene/detail.html?id={{elem.id}}&&projectId={{pid}}"
                       ondragend="listElemDragend2(event)"
                       ondragstart="listElemDragstart(event,{{elem.id}},'Scene.delete');"
-                      >{{elem.name}}</a></td>
+                      >{{elem.name}} </a>
+            </td>
+            <td>
+                ( {{ splitLen(elem.cases, ',') }} )
+            </td>
             <td>
                 <a class="ripple" href="javascript:Scene.openEdit({{elem.id}});" id="op-edit">
                     <i class="icon iconfont icon-edit"></i>
@@ -159,7 +163,7 @@
         {{/each}}
         {{else}}
         <tr>
-            <td colspan="4"> 没有数据。</td>
+            <td colspan="5"> 没有数据。</td>
         </tr>
         {{/if}}
         </tbody>

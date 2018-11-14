@@ -187,6 +187,22 @@
             height:calc(100% - 60px);
             padding-bottom:0;
         }
+        .switch label .lever:before, .switch label .lever:after {
+            width: 16px;
+            height: 16px;
+            top: -2px;
+            left: -1px;
+        }
+        .switch label .lever {
+            width: 32px;
+            height: 12px;
+        }
+        .switch label input[type=checkbox]:checked + .lever:after {
+            background-color: #5384ED;
+        }
+        .switch label input[type=checkbox]:checked + .lever {
+            background-color: #BACEF8;
+        }
         .CodeMirror {
             border: 1px solid #ccc;
             font-size: 13px;

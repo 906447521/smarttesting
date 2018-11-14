@@ -11,7 +11,7 @@
  Target Server Version : 50723
  File Encoding         : 65001
 
- Date: 10/11/2018 16:05:33
+ Date: 14/11/2018 13:33:54
 */
 
 SET NAMES utf8mb4;
@@ -147,7 +147,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE` (
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
 BEGIN;
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('scheduler', 'XNMAC-C02W29EVH.local1541836446777', 1541837130061, 7500);
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('scheduler', 'XNMAC-C02W29EVH.local1542173367672', 1542173630703, 7500);
 COMMIT;
 
 -- ----------------------------
@@ -243,7 +243,7 @@ CREATE TABLE `ST_CASE` (
   PRIMARY KEY (`id`),
   KEY `project_id_index` (`project_id`),
   KEY `interface_id_index` (`interface_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ST_CASE
@@ -294,7 +294,7 @@ INSERT INTO `ST_CASE` VALUES (43, 49, 16, '新用例', 'POST', 'http://127.0.0.1
 INSERT INTO `ST_CASE` VALUES (44, 49, 16, '新用例', 'POST', 'http://127.0.0.1', '', 'application/x-www-form-urlencoded', '', '');
 INSERT INTO `ST_CASE` VALUES (45, 49, 15, '新用例666676576', 'GET', 'http://127.0.0.1:6060/data/test/domain.json', '', 'application/x-www-form-urlencoded', '', '');
 INSERT INTO `ST_CASE` VALUES (46, 49, 20, '新用例', 'PUT', 'http://', '45656464564', 'application/x-www-form-urlencoded', '', '');
-INSERT INTO `ST_CASE` VALUES (47, 49, 16, '用来删除的新用例11122', 'POST', 'http://127.0.0.1', '', 'application/x-www-form-urlencoded', '', '');
+INSERT INTO `ST_CASE` VALUES (50, 49, 16, '新用例', 'POST', 'http://127.0.0.1', '', 'application/x-www-form-urlencoded', '', '');
 COMMIT;
 
 -- ----------------------------
@@ -329,7 +329,7 @@ INSERT INTO `ST_INTERFACE` VALUES (10, 37, '本地接口', 'http', 'http://127.0
 INSERT INTO `ST_INTERFACE` VALUES (11, 35, '百度接口', 'http', 'https://www.baidu.com', 'POST', '{}', 'UTF8');
 INSERT INTO `ST_INTERFACE` VALUES (13, 35, '网易接口', 'http', 'https://www.163.com', 'POST', '', 'GBK');
 INSERT INTO `ST_INTERFACE` VALUES (14, 1, '23', 'http', '333', 'POST', '33', '');
-INSERT INTO `ST_INTERFACE` VALUES (15, 49, 'http://127.0.0.1:6060/data/test/domain.json', 'http', 'http://127.0.0.1:6060/data/test/domain.json', 'GET', '{\n \"cookie\":\"zdPIN= 34F7B6491123A0DBE7D34FD1B22C23CA754FEFCD3DE696A7448FFD928B7B6131CEE9A3C8814D9E0302262F9A16945A819FAE7042DF740AA01EAF91AE8F9AB33481673CC5DE3C6B84579F2EACF300CBF143C2B23CEDC9E027F750B4AAE3FECEBE\"\n\n}', 'UTF8');
+INSERT INTO `ST_INTERFACE` VALUES (15, 49, 'http://127.0.0.1:6060/data/test/domain.json', 'http', 'http://127.0.0.1:6060/data/test/domain.json', 'GET', '{\n \"cookie\":\"zdPIN=34F7B6491123A0DBE7D34FD1B22C23CA754FEFCD3DE696A7448FFD928B7B6131CEE9A3C8814D9E0302262F9A16945A819FAE7042DF740AA01EAF91AE8F9AB33481673CC5DE3C6B84579F2EACF300CBF143C2B23CEDC9E027F750B4AAE3FECEBE\"\n\n}', 'UTF8');
 INSERT INTO `ST_INTERFACE` VALUES (16, 49, 'http://127.0.0.1', 'http', 'http://127.0.0.1', 'POST', '', 'UTF8');
 INSERT INTO `ST_INTERFACE` VALUES (18, 50, '新接口', 'http', 'http://', 'GET', '', 'UTF8');
 INSERT INTO `ST_INTERFACE` VALUES (19, 50, '新接口2', 'http', 'http://www.163.com', 'POST', '', 'UTF8');
@@ -395,7 +395,7 @@ CREATE TABLE `ST_PROJECT_USER` (
   `project_id` bigint(11) NOT NULL,
   `role` smallint(4) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ST_PROJECT_USER
@@ -415,6 +415,9 @@ INSERT INTO `ST_PROJECT_USER` VALUES (20, 'wanghai', 50, 0);
 INSERT INTO `ST_PROJECT_USER` VALUES (21, 'wanghai', 51, 0);
 INSERT INTO `ST_PROJECT_USER` VALUES (22, 'wanghai', 52, 0);
 INSERT INTO `ST_PROJECT_USER` VALUES (23, 'wanghai', 53, 0);
+INSERT INTO `ST_PROJECT_USER` VALUES (27, 'limaogui', 51, 1);
+INSERT INTO `ST_PROJECT_USER` VALUES (28, 'limaogui', 52, 1);
+INSERT INTO `ST_PROJECT_USER` VALUES (29, 'limaogui', 53, 1);
 COMMIT;
 
 -- ----------------------------
@@ -427,15 +430,14 @@ CREATE TABLE `ST_SCENE` (
   `name` varchar(512) NOT NULL,
   `cases` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ST_SCENE
 -- ----------------------------
 BEGIN;
-INSERT INTO `ST_SCENE` VALUES (1, 49, '场景1', '34,36,33,32,31,30,28,35,27,26,25,24,23,22,21,20,19');
-INSERT INTO `ST_SCENE` VALUES (2, 49, '场景2', '45,26,18,44');
-INSERT INTO `ST_SCENE` VALUES (3, 49, '有删除用例的场景', '45,47');
+INSERT INTO `ST_SCENE` VALUES (1, 49, '测试集1', '34,36,33,32,31,30,28,27,26,25,24,23,22,21,20,19');
+INSERT INTO `ST_SCENE` VALUES (2, 49, '测试集2', '26,18,45,44,42');
 COMMIT;
 
 -- ----------------------------
@@ -465,7 +467,7 @@ INSERT INTO `ST_TASK` VALUES (3, 49, '新任务12', '', '', 0, NULL, NULL, NULL)
 INSERT INTO `ST_TASK` VALUES (4, 49, '新任务', '0 0 2 * * ?', '', 0, NULL, NULL, NULL);
 INSERT INTO `ST_TASK` VALUES (5, 49, '新任务(每天凌晨两点)', '0 0 2 ? * SAT', '', 0, NULL, NULL, NULL);
 INSERT INTO `ST_TASK` VALUES (6, 49, '可用的新任务', '0 0/2 * * * ?', '', 0, '', NULL, NULL);
-INSERT INTO `ST_TASK` VALUES (7, 49, '可用的新任务2', '0 0/1 * * * ?', '2,3', 0, '', NULL, NULL);
+INSERT INTO `ST_TASK` VALUES (7, 49, '可用的新任务2', '0 0/1 * * * ?', '2', 0, '7b6b29e0e7ce11e8893a8c8590a564f1', '2018-11-14 13:31:06', '{\"duration\":297,\"count\":5,\"passC\":2,\"failC\":0,\"errorC\":3}');
 INSERT INTO `ST_TASK` VALUES (8, 49, '新任务', '', '1,2', 0, NULL, NULL, NULL);
 COMMIT;
 
@@ -482,7 +484,14 @@ CREATE TABLE `ST_TASK_RESULT` (
   `start` timestamp NULL DEFAULT NULL,
   `end` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of ST_TASK_RESULT
+-- ----------------------------
+BEGIN;
+INSERT INTO `ST_TASK_RESULT` VALUES (10, 7, '7b6b29e0e7ce11e8893a8c8590a564f1', '{\"duration\":297,\"count\":5,\"tName\":\"可用的新任务2\",\"groups\":{\"7b6e1010e7ce11e8893a8c8590a564f1\":{\"rowBody\":{\"7b6e1011e7ce11e8893a8c8590a564f1\":{\"request\":{\"requestCaseName\":\"新用例7\",\"requestMethod\":\"GET\",\"requestCharset\":null,\"requestURL\":\"http://127.0.0.1:6060/data/test/domain.json\",\"requestHeaderProperties\":\"{\\n \\\"cookie\\\":\\\"zdPIN=34F7B6491123A0DBE7D34FD1B22C23CA754FEFCD3DE696A7448FFD928B7B6131CEE9A3C8814D9E0302262F9A16945A819FAE7042DF740AA01EAF91AE8F9AB33481673CC5DE3C6B84579F2EACF300CBF143C2B23CEDC9E027F750B4AAE3FECEBE\\\"\\n\\n}\",\"requestContentType\":\"application/x-www-form-urlencoded\",\"requestBody\":\"{\\n    \\\"a\\\": 1,\\n    \\\"b\\\": 2\\n}\",\"responseCharset\":\"UTF8\",\"resultScript\":\"#code==200 && #object.data.a==1\"},\"responseCode\":\"200\",\"responseBody\":\"{\\\"code\\\":0,\\\"message\\\":null,\\\"data\\\":{\\\"a\\\":\\\"1\\\",\\\"b\\\":\\\"2\\\",\\\"c\\\":null}}\",\"responseResult\":\"true\",\"begin\":1542173465524,\"end\":1542173465573,\"duration\":49},\"7b7c19d0e7ce11e8893a8c8590a564f1\":{\"request\":{\"requestCaseName\":\"a=2&b=3&c.a=1&c.b=2\",\"requestMethod\":\"GET\",\"requestCharset\":null,\"requestURL\":\"http://127.0.0.1:6060/data/test/domain.json\",\"requestHeaderProperties\":\"{\\n \\\"cookie\\\":\\\"zdPIN=34F7B6491123A0DBE7D34FD1B22C23CA754FEFCD3DE696A7448FFD928B7B6131CEE9A3C8814D9E0302262F9A16945A819FAE7042DF740AA01EAF91AE8F9AB33481673CC5DE3C6B84579F2EACF300CBF143C2B23CEDC9E027F750B4AAE3FECEBE\\\"\\n\\n}\",\"requestContentType\":\"application/x-www-form-urlencoded\",\"requestBody\":\"a=2&b=3&c.a=1&c.b=1\",\"responseCharset\":\"UTF8\",\"resultScript\":\"#code == 200 && #object.data.a == \\\"2\\\"\"},\"responseCode\":\"200\",\"responseBody\":\"{\\\"code\\\":0,\\\"message\\\":null,\\\"data\\\":{\\\"a\\\":\\\"2\\\",\\\"b\\\":\\\"3\\\",\\\"c\\\":{}}}\",\"responseResult\":\"true\",\"begin\":1542173465594,\"end\":1542173465604,\"duration\":10},\"7b7fc350e7ce11e8893a8c8590a564f1\":{\"request\":{\"requestCaseName\":\"新用例666676576\",\"requestMethod\":\"GET\",\"requestCharset\":null,\"requestURL\":\"http://127.0.0.1:6060/data/test/domain.json\",\"requestHeaderProperties\":\"{\\n \\\"cookie\\\":\\\"zdPIN=34F7B6491123A0DBE7D34FD1B22C23CA754FEFCD3DE696A7448FFD928B7B6131CEE9A3C8814D9E0302262F9A16945A819FAE7042DF740AA01EAF91AE8F9AB33481673CC5DE3C6B84579F2EACF300CBF143C2B23CEDC9E027F750B4AAE3FECEBE\\\"\\n\\n}\",\"requestContentType\":\"application/x-www-form-urlencoded\",\"requestBody\":\"\",\"responseCharset\":\"UTF8\",\"resultScript\":\"\"},\"responseCode\":\"200\",\"responseBody\":\"{\\\"code\\\":0,\\\"message\\\":null,\\\"data\\\":{\\\"a\\\":null,\\\"b\\\":null,\\\"c\\\":null}}\",\"responseResult\":\"未添加脚本\",\"begin\":1542173465617,\"end\":1542173465621,\"duration\":4},\"7b825b60e7ce11e8893a8c8590a564f1\":{\"request\":{\"requestCaseName\":\"新用例\",\"requestMethod\":\"POST\",\"requestCharset\":null,\"requestURL\":\"http://127.0.0.1\",\"requestHeaderProperties\":\"\",\"requestContentType\":\"application/x-www-form-urlencoded\",\"requestBody\":\"\",\"responseCharset\":\"UTF8\",\"resultScript\":\"\"},\"responseCode\":\"502\",\"responseBody\":\"Server returned HTTP response code: 502 for URL: http://127.0.0.1\",\"responseResult\":\"未添加脚本\",\"begin\":1542173465633,\"end\":1542173465757,\"duration\":124},\"7b96f4d0e7ce11e8893a8c8590a564f1\":{\"request\":{\"requestCaseName\":\"新用例666\",\"requestMethod\":\"PUT\",\"requestCharset\":null,\"requestURL\":\"http://\",\"requestHeaderProperties\":\"\",\"requestContentType\":\"application/x-www-form-urlencoded\",\"requestBody\":\"\",\"responseCharset\":\"UTF8\",\"resultScript\":\"\"},\"responseCode\":\"-1\",\"responseBody\":\"protocol = http host = null\",\"responseResult\":\"未添加脚本\",\"begin\":1542173465766,\"end\":1542173465768,\"duration\":2}},\"groupCount\":5,\"groupPassC\":2,\"groupId\":\"7b6e1010e7ce11e8893a8c8590a564f1\",\"sceneName\":\"测试集2\",\"sceneId\":\"2\",\"groupErrorC\":3,\"groupFailC\":0}},\"passC\":2,\"failC\":0,\"errorC\":3,\"startT\":\"2018-11-14 13:31:05\"}', '2018-11-14 13:31:06', '2018-11-14 13:31:05', '2018-11-14 13:31:06');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for ST_USER

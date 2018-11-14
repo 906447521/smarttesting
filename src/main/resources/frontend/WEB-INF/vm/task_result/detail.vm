@@ -34,7 +34,7 @@
         <div></div>
 
         <div>
-            <table style="font-size:13px">
+            <table style="font-size:12px">
                 <tr style="background-color:#777777;color:#fff;font-weight:500">
                     <td width="600">Test Group/Test case ：{{tName}}</td><td>Count</td><td>Pass</td><td>Fail</td><td>Error</td><td>View</td>
                 </tr>

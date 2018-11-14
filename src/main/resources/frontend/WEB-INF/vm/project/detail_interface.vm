@@ -63,7 +63,7 @@
 
 <script id="tmpl-tabs0" type="text/html">
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_case.html?id=$!{id}'">用例</a></li>
-    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_scene.html?id=$!{id}'">场景</a></li>
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_scene.html?id=$!{id}'">测试集</a></li>
     <li class="tab"><a class="active" href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_interface.html?id=$!{id}'">接口</a></li>
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id=$!{id}'">任务</a></li>
     {{if creator=='$!{zdPIN}' || '$!{zdGROUP}'=='admin' }}
@@ -150,7 +150,7 @@
             <th width="5%"></th>
 ##            <th width="5%">ID</th>
             <th width="20%" class="ant-table-column-has-actions">
-                Name
+                接口名称
                 <div class="ant-table-column-sorter">
                     <i class="anticon anticon-caret-up ant-table-column-sorter-up on">
                         <svg viewBox="0 0 1024 1024" class="" data-icon="caret-up" width="1em" height="1em" fill="currentColor" aria-hidden="true">
@@ -163,8 +163,8 @@
                     </i>
                 </div>
             </th>
-            <th width="35%">URL</th>
-            <th width="15%">Response Charset</th>
+            <th width="35%">请求链接</th>
+##            <th width="15%">返回结果字符集</th>
             <th></th>
         </tr>
         </thead>
@@ -189,7 +189,7 @@
                 <span style="display:inline-block;width:50px;font-weight:800;color:{{if elem.method=='GET'}}#3eb63e{{else}}#f5a623{{/if}};"><i>{{elem.method}}</i></span>
                 <i> <a target="_blank" href="{{elem.url}}">{{elem.url}} </a> </i>
             </td>
-            <td>{{elem.responseCharset}}</td>
+##            <td>{{elem.responseCharset}}</td>
             <td>
                 <a class="ripple" href="javascript:Interface.openEdit({{elem.id}});" id="op-edit">
                     <i class="icon iconfont icon-edit"></i>
@@ -199,7 +199,7 @@
         {{/each}}
         {{else}}
         <tr>
-            <td colspan="5"> 没有数据。</td>
+            <td colspan="4"> 没有数据。</td>
         </tr>
         {{/if}}
         </tbody>

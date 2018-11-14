@@ -96,7 +96,7 @@
 
 <script id="tmpl-project-name" type="text/html">
     <span class="a" onclick="window.location.href='//$!{ServerPath}/project/detail_scene.html?id={{pid}}'">
-        < 返回场景
+        < 返回测试集
     </span>
     <span class="b">{{name}}</span>
 </script>

@@ -188,7 +188,7 @@ public class STTaskService {
                         STScene zdScene = zdSceneService.find(new Query().with("id", sceneId)).singleResult();
 
                         if (zdScene == null) {
-                            log.info("ID: {} 场景 : " + sceneId + " 已经被删除，跳过执行 ", requestId);
+                            log.info("ID: {} 测试集 : " + sceneId + " 已经被删除，跳过执行 ", requestId);
                             continue;
                         }
 
@@ -262,12 +262,23 @@ public class STTaskService {
 
             }
 
+            Date date = new Date();
+
+            Map map = new HashMap();
+            map.put("duration", date.getTime() - zdTaskResult.getStart().getTime());
+            map.put("count", count);
+            map.put("passC", passC);
+            map.put("failC", failC);
+            map.put("errorC", errorC);
+
             zdTask.setLastrun(requestId);
+            zdTask.setLastrunstatus(JSON.write(map));
+            zdTask.setLastruntime(date);
             this.edit(zdTask);
 
 
-            zdTaskResult.setTime(new Date());
-            zdTaskResult.setEnd(new Date());
+            zdTaskResult.setTime(date);
+            zdTaskResult.setEnd(date);
             zdTaskResult.setTid(taskId);
             zdTaskResult.setRid(requestId);
 
