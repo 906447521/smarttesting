@@ -111,8 +111,8 @@
             </td>
             <td><i class="icon iconfont icon-folder icon-light-blue"></i></td>
             <td><a href="//$!{ServerPath}/project/detail_task.html?id={{elem.id}}">{{elem.name}}</a></td>
-            <td>{{elem.creator}}</td>
             <td>{{elem.caseCount}}</td>
+            <td>{{elem.creator}}</td>
         </tr>
         {{/each}}
         {{else}}

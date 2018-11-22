@@ -55,9 +55,9 @@
 </div>
 
 <script id="tmpl-tabs0" type="text/html">
+    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_interface.html?id={{id}}'">接口</a></li>
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_case.html?id={{id}}'">用例</a></li>
     <li class="tab"><a class="active"  href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_scene.html?id=$!{id}'">测试集</a></li>
-    <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_interface.html?id={{id}}'">接口</a></li>
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id={{id}}'">任务</a></li>
     {{if creator=='$!{zdPIN}' || '$!{zdGROUP}'=='admin' }}
     <li class="tab" s="{{creator}}"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_member.html?id={{id}}'">成员</a></li>

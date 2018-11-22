@@ -178,6 +178,12 @@
         ul.sidenav.sidenav-fixed li a {
             padding: 0 15px;
         }
+        ul.sidenav.sidenav-fixed li:hover {
+            background-color: rgba(0, 0, 0, 0.05)
+        }
+        ul.sidenav.sidenav-fixed li.add:hover {
+            background-color: rgba(0, 0, 0, 0.00)
+        }
         main {
             margin-top: 60px;
             overflow-y: scroll;
@@ -429,12 +435,12 @@
         </li>
         #if($!{zdGROUP} == 'admin')
             <li>
-                <a href="//$!{ServerPath}/user/list.html">
+                <a href="//$!{ServerPath}/user/list.html" title="账号管理">
                     <i class="icon iconfont icon-account"></i>
                 </a>
             </li>
             <li>
-                <a href="//$!{ServerPath}/project/list.html">
+                <a href="//$!{ServerPath}/project/list.html" title="其他设置">
                     <i class="icon iconfont icon-set"></i>
                 </a>
             </li>
@@ -442,7 +448,7 @@
 
         <li>
             <a href="//$!{ServerPath}">
-                <i class="icon iconfont icon-form"></i>
+                <i class="icon iconfont icon-form" title="文档"></i>
             </a>
         </li>
     </ul>
@@ -502,7 +508,7 @@
             </div>
         </li>
 
-        <li style="position: relative;top: 0;padding: 0;">
+        <li class="add" style="position: relative;top: 0;padding: 0;">
             <div class="search-wrapper" style="position:relative;text-align:right;margin-right:10px;font-size:13px;border-bottom: 1px solid rgba(0, 0, 0, 0.14);color: #F26B3A">
                 <span style="cursor:pointer;font-weight: bold" onclick="Project.openAdd()" >
                     <i class="icon iconfont icon-add" style="font-size: 14px;"></i>
@@ -514,7 +520,7 @@
         {{if (data&&data.length>0)}}
         {{each data as elem i}}
         <li class="bold {{if pid==elem.id}} active {{/if}} " id="{{elem.id}}" pid="{{pid}}" style="position: relative">
-            <a href="//$!{ServerPath}/project/detail_case.html?id={{elem.id}}" class="waves-effect waves-teal"
+            <a href="//$!{ServerPath}/project/detail_interface.html?id={{elem.id}}" class="waves-effect waves-teal"
                style="line-height:60px;height:60px;margin-right:30px">
                 <i class="icon iconfont icon-folder " style=" {{if elem.creator=='$!{zdPIN}' }}color:#F26B3A;{{else}}color:grey;{{/if}}font-size:12px;height:60px;line-height:60px;"></i>
                 <div style="display: inline-block">
@@ -526,7 +532,7 @@
                 </span>
                 </div>
             </a>
-            {{if elem.creator=='$!{zdPIN}' }}
+            {{if elem.creator=='$!{zdPIN}' || '$!{zdGROUP}' == 'admin' }}
             <div class="menu-op" style="" onclick="showMenuOp(this)">
                 ›
                 <div style="position:relative">
