@@ -211,9 +211,9 @@
         }
         .CodeMirror {
             border: 1px solid #ccc;
-            font-size: 13px;
+            font-size: 12px;
             margin-top: 15px;
-            height:238px !important;
+            height:208px !important;
         }
         .CodeMirror-scroll {
             padding-bottom: 0px !important;
@@ -366,8 +366,29 @@
         .ant-table-column-sorter-down {
             margin-top: 4px;
         }
+        label.tab {
+            padding:5px;
+            border-bottom: 4px solid transparent;
+            cursor:pointer;
+        }
+        label.tab.tab-active {
+            padding:5px;
+            border-bottom: 4px solid #F26B3A;
+            color:#333;
+        }
+        .tab-hide {
+
+        }
     </style>
     <script>
+        function tabCheck(container, that) {
+            var hideDIV = container.find('.tab-div')
+            var activeLabel = container.find('.tab-active')
+            hideDIV.addClass('tab-hide').hide();
+            activeLabel.removeClass('tab-active');
+            that.addClass('tab-active');
+            $('#'+that.attr('tab-for')).removeClass('tab-hide').show();
+        }
         function listElemDragstart(e,id,fn) {
             $('#index-banner').append(
                 '<div id="index-banner-d" ondrop="alert()"  ' +

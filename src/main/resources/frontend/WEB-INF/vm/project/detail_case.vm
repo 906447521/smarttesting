@@ -118,27 +118,70 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row" id="label-tab">
+
                         <div class="input-field col s12">
-                            <textarea id="caserequestbody" for="caserequestbody_a" class="beautify-textarea" data-length="4096">{{requestBody}}</textarea>
-                            <a id="caserequestbody_a" class="beautify-textarea-a">
-                                <strong>Pretty</strong>
-                            </a>
-                            <label for="caserequestbody" class="active">请求内容(JSON或URL串)</label>
+                            <div id="tab-4-caserequestbody" class="tab-div" >
+                               <div class="col s8" style="padding:0">
+                                   <textarea id="caserequestbody" for="caserequestbody_a" class="beautify-textarea" style="width:70%" data-length="4096">{{requestBody}}</textarea>
+                                   <a id="caserequestbody_a" class="beautify-textarea-a">
+                                       <strong>Pretty</strong>
+                                   </a>
+                               </div>
+                                <div class="col s4" style="padding:0;font-size:12px;padding:25px;transform: scale(0.9);">
+
+                                    <div>代码片段 （JSON 或 URL encode） </div>
+                                    <br>
+                                    <a href="javascript:;setBeautyTextareaValue('caserequestbody','{prameter1:1,prameter2:2}');">Set json</a>
+                                    <br>
+                                    <a href="javascript:setBeautyTextareaValue('caserequestbody','prameter1=1&prameter2=2');">Set URL encode</a>
+
+                                </div>
+                            </div>
+                            <div id="tab-4-caseresultscript" class="tab-div tab-hide">
+                                <div class="col s8" style="padding:0">
+                                    <textarea id="caseresultscript" for="caseresultscript_a" class="beautify-textarea" data-length="4096">{{resultScript}}</textarea>
+                                    <a id="caseresultscript_a" class="beautify-textarea-a">
+                                        <strong>Pretty</strong>
+                                    </a>
+                                </div>
+                                <div class="col s4" style="padding:0;font-size:12px;padding:25px;transform: scale(0.9);">
+                                    <div>表达式片段（Ognl）</div>
+                                    <br>
+                                    <a href="javascript:setBeautyTextareaValue('caseresultscript','#Code==200');">Set variable Code</a>
+                                    <br>
+                                    <a href="javascript:setBeautyTextareaValue('caseresultscript','#ResponseBody=={}');">Set variable ResponseBody</a>
+                                    <br>
+                                    <a href="javascript:setBeautyTextareaValue('caseresultscript','#ResponseObject.variable==1');">Set variable ResponseObject</a>
+                                    <br>
+                                    <a href="javascript:setBeautyTextareaValue('caseresultscript','#Collection.list(#ResponseBody)==[] || #Collection.map(#ResponseBody)=={} ');">Set variable Collection tool</a>
+                                    <br>
+                                    <a href="javascript:setBeautyTextareaValue('caseresultscript','#String.contains(abc, ab)');">Set variable String tool</a>
+
+                                </div>
+                            </div>
+                            <label for="caserequestbody"
+                                   tab-for="tab-4-caserequestbody" class="active tab tab-active"
+                                   onclick="tabCheck($('#label-tab'), $(this))">请求参数</label>
+
+                            <label for="caseresultscript"
+                                   tab-for="tab-4-caseresultscript" class="active tab" style="margin-left:100px"
+                                   onclick="tabCheck($('#label-tab'), $(this))">预期结果(表达式)</label>
+
                         </div>
 
 
                     </div>
 
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <textarea id="caseresultscript" for="caseresultscript_a" class="beautify-textarea" data-length="4096">{{resultScript}}</textarea>
-                            <a id="caseresultscript_a" class="beautify-textarea-a">
-                                <strong>Pretty</strong>
-                            </a>
-                            <label for="caseresultscript" class="active">预期结果(表达式)</label>
-                        </div>
-                    </div>
+##                    <div class="row">
+##                        <div class="input-field col s12">
+##                            <textarea id="caseresultscript" for="caseresultscript_a" class="beautify-textarea" data-length="4096">{{resultScript}}</textarea>
+##                            <a id="caseresultscript_a" class="beautify-textarea-a">
+##                                <strong>Pretty</strong>
+##                            </a>
+##                            <label for="caseresultscript" class="active">预期结果(表达式)</label>
+##                        </div>
+##                    </div>
                 </div>
             </div>
         </form>

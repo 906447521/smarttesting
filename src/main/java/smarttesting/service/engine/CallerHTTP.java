@@ -88,7 +88,7 @@ public class CallerHTTP {
         try {
             result.setResponseResult(
                     String.valueOf(
-                            ScriptTool.doScript(
+                            ScriptOgnl.doScript(
                                     result.getResponseCode(),
                                     result.getResponseBody(),
                                     request.getResultScript()

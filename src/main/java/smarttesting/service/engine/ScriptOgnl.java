@@ -12,19 +12,7 @@ import java.util.Map;
 /**
  * @author
  */
-public class ScriptTool {
-
-    public Map xml(String str) {
-        return new HashMap();
-    }
-
-    public Map map(String str) {
-        return JSON.read(str, Map.class);
-    }
-
-    public List list(String str) {
-        return JSON.read(str, List.class);
-    }
+public class ScriptOgnl {
 
     public static Object doScript(String respCode, String respBody, String script) {
         if (script == null || "".equals(script.trim())) {
@@ -34,10 +22,11 @@ public class ScriptTool {
         respObj = respObj == null ? JSON.read(respBody, List.class) : respObj;
         OgnlContext context = new OgnlContext();
         Map map = new HashMap();
-        map.put("code", respCode);
-        map.put("string", respBody);
-        map.put("object", respObj == null ? respBody : respObj);
-        map.put("tool", new ScriptTool());
+        map.put("Code", respCode);
+        map.put("ResponseBody", respBody);
+        map.put("ResponseObject", respObj == null ? respBody : respObj);
+        map.put("Collection", new ToolScriptCollection());
+        map.put("String", new ToolScriptString());
         context.setValues(map);
         try {
             return Ognl.getValue(script, context, context.getRoot());
@@ -53,7 +42,7 @@ public class ScriptTool {
                 doScript(
                         "200",
                         "{\"code\":0,\"message\":null,\"data\":{\"a\":\"2\",\"b\":\"3\",\"c\":{}}}",
-                        "#code==200 && #object.data.a==\"2\" && #string==\"{\"code\":0,\"message\":null,\"data\":{\"a\":\"2\",\"b\":\"3\",\"c\":{}}}\"")
+                        "#String.contains('abc', 'ac') && #Code==200 && #ResponseObject.data.a==\"2\" && #ResponseBody==\"{\\\"code\\\":0,\\\"message\\\":null,\\\"data\\\":{\\\"a\\\":\\\"2\\\",\\\"b\\\":\\\"3\\\",\\\"c\\\":{}}}\"")
         );
 
     }

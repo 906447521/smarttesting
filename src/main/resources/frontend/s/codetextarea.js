@@ -3,6 +3,33 @@ function looks_like_html(source) {
     var comment_mark = '<' + '!-' + '-';
     return (trimmed && (trimmed.substring(0, 1) === '<' && trimmed.substring(0, 4) !== comment_mark));
 }
+function looks_like_ognl(source) {
+    if(source ==null)
+        return false
+    source =  source.trim()
+    if(source.indexOf("#String")==0 || source.indexOf("#Response")==0 || source.indexOf("#Collection")==0) {
+        return true
+    }
+    return false
+}
+function looks_like_urlencode(source) {
+    if(source ==null)
+        return false
+    try {
+        var pair = source.split("&")
+        var a = 0;
+        for(var i in pair) {
+            s = pair[i].split("=")
+            if(s.length > 1)
+                a++;
+        }
+    } catch (e) {
+        return false
+    }
+    if(a == 0)
+        return false
+    return true
+}
 
 function any(a, b) {
     return a || b;
@@ -33,6 +60,10 @@ function beautify(the) {
 
     if (looks_like_html(source)) {
         output = html_beautify(source, opts);
+    } else if (looks_like_urlencode(source)) {
+        output = source
+    } else if (looks_like_ognl(source)) {
+        output = source
     } else {
         output = js_beautify(source, opts);
     }
@@ -95,8 +126,19 @@ function newThe($textarea) {
         beautify(the)
     });
 
+    var id = "___" + $textarea.attr('id')
+    TheTextArea[id] = the
 
     return the;
+}
+
+
+var TheTextArea = new Object()
+
+
+function setBeautyTextareaValue(id, value) {
+    var oldValue = TheTextArea["___" + id].editor.getValue()
+    TheTextArea["___" + id].editor.setValue(oldValue + value + "\r\n")
 }
 
 function beautytextarea() {
@@ -108,6 +150,9 @@ function beautytextarea() {
         }
 
     })
+
+
+    $(".tab-hide").hide()
 }
 
 $(function () {
