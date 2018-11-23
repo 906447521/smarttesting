@@ -390,6 +390,17 @@
     }
 
     Case.add = function () {
+
+        if(!window.addCaseCount) {
+            window.addCaseCount = 1
+            window.addCaseName = $('#casename').val()
+        }
+
+
+        if($('#casename').val().indexOf(window.addCaseName) != 0) {
+            window.addCaseName = $('#casename').val()
+        }
+
         X.HTTP({
             url: CONTEXT + "/data/case/add.json",
             data: {
@@ -405,14 +416,29 @@
             },
             dataType: 'json',
             success: function (result) {
-                Project.loadCase(1, 25)
-                var instance = M.Modal.getInstance($('#modal1'));
-                instance.close()
+
+                if(result.code == 0) {
+                    M.toast({html: $('#casename').val() + '，创建成功'})
+
+                    Project.loadCase(1, 25)
+                    // var instance = M.Modal.getInstance($('#modal1'));
+                    // instance.close()
+
+                    $("#casename").val(window.addCaseName + " - " + window.addCaseCount++);
+                    $('#caseurlsuffix').val("")
+                    setBeautyTextareaValueAndClearOld("caserequestbody","");
+                    setBeautyTextareaValueAndClearOld("caseresultscript","");
+
+                } else {
+                    M.toast({html: $('#casename').val() + '，创建失败！！！！！'})
+                }
+
             }
         });
     }
 
     Case.edit = function (caseId) {
+
       if(!caseId) {
           var checkBox = $('.check-item:checked');
           if (checkBox.length > 1) {

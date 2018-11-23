@@ -141,6 +141,10 @@ function setBeautyTextareaValue(id, value) {
     TheTextArea["___" + id].editor.setValue(oldValue + value + "\r\n")
 }
 
+function setBeautyTextareaValueAndClearOld(id, value) {
+    TheTextArea["___" + id].editor.setValue(value)
+}
+
 function beautytextarea() {
     $(".beautify-textarea").each(function () {
         var the = $(this);

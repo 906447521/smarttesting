@@ -1,15 +1,34 @@
 #set($layout="layout/blank.vm")
 
-
-
 <style>
     table {
         width: 100%;
-        border-collapse:collapse;border:none;
+        table-layout: fixed;
     }
-    table td{
+    table td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .table-a, .table-b {
+        border-collapse:collapse;
+        border:none;
+    }
+    .table-a td{
         padding: 3px 10px;
         border:solid #000 1px;
+    }
+    .table-b td{
+        padding: 3px 10px;
+        border: none;
+        border:solid #F26B3A 1px;
+    }
+    .table-b td pre{
+        font-size:12px;
+        transform: scale(0.9);
+    }
+    .hide {
+        display: none;
     }
 </style>
 
@@ -23,6 +42,26 @@
 
         <div style="font-size:18px;color:#777;padding-bottom:30px">测试报告</div>
 
+
+
+
+        <div style="font-size:13px;padding-bottom:30px;font-family:Arial">
+            <div style="margin-right:10px;padding:3px;border:3px solid #28B57F;border-radius:50%;color:#28B57F;text-align:center;height:50px;line-height:50px;width:50px;display:inline-block">
+                <div style="font-weight:bold;font-size:16px;height:20px;margin-top:-5px;">{{passC}}</div>
+                <div style="font-size:12px;height:30px;transform: scale(0.7);">PASSED</div>
+            </div>
+
+            <div style="margin-right:10px;padding:3px;border:3px solid #E7916F;border-radius:50%;color:#E7916F;text-align:center;height:50px;line-height:50px;width:50px;display:inline-block">
+                <div style="font-weight:bold;font-size:16px;height:20px;margin-top:-5px;">{{failC}}</div>
+                <div style="font-size:12px;height:30px;transform: scale(0.7);">FAILED</div>
+            </div>
+
+            <div style="margin-right:10px;padding:3px;border:3px solid #EC4B48;border-radius:50%;color:#EC4B48;text-align:center;height:50px;line-height:50px;width:50px;display:inline-block">
+                <div style="font-weight:bold;font-size:16px;height:20px;margin-top:-5px;">{{errorC}}</div>
+                <div style="font-size:12px;height:30px;transform: scale(0.7);">ERROR</div>
+            </div>
+        </div>
+
         <div style="font-size:13px;padding-bottom:30px">
             <div style="padding:3px"><b style="font-weight:800">Start Time:</b> {{startT}}</div>
             <div style="padding:3px"><b style="font-weight:800">Duration:</b> {{duration}} ms</div>
@@ -34,14 +73,49 @@
         <div></div>
 
         <div>
-            <table style="font-size:12px">
+            <table style="font-size:12px" class="table-a">
                 <tr style="background-color:#777777;color:#fff;font-weight:500">
                     <td width="600">Test Group/Test case ：{{tName}}</td><td>Count</td><td>Pass</td><td>Fail</td><td>Error</td><td>View</td>
                 </tr>
                 {{if (groups)}}
                 {{each groups as elem i}}
                 <tr style="background-color:#80C972;color:#333;font-weight:500">
-                    <td>{{elem.sceneName}}</td><td>{{elem.groupCount}}</td><td>{{elem.groupPassC}}</td><td>{{elem.groupFailC}}</td><td>{{elem.groupErrorC}}</td><td>View</td>
+                    <td>{{elem.sceneName}}</td>
+                    <td>{{elem.groupCount}}</td>
+                    <td>{{elem.groupPassC}}</td>
+                    <td>{{elem.groupFailC}}</td>
+                    <td>{{elem.groupErrorC}}</td>
+                    <td onclick="var the = $('#__ID__{{elem.groupId}}'); if(the.hasClass('hide')) {the.show();the.removeClass('hide')} else {the.hide();the.addClass('hide')}">View</td>
+                </tr>
+                <tr style="padding:0;border-color:transparent" id="__ID__{{elem.groupId}}" class="hide">
+                    <td colspan="6" style="padding:0;border-color:#F26B3A;border-bottom:0;"">
+                        <table class="table-b">
+                            <tr style="font-size:12px">
+                                <th width="50px">Code</pre></th>
+                                <th width="70px">Result</pre></th>
+                                <th>Request</th>
+                                <th>Response</pre></th>
+                            </tr>
+                            {{if (elem.rowBody) }}
+                            {{each elem.rowBody as rb j}}
+
+                            {{if (rb.responseResult != 'true')}}
+                            <tr>
+                                <td width="50px" style="border-left:0;"><pre>{{ rb.responseCode }}</pre></td>
+                                <td width="70px" ><pre>{{ rb.responseResult }}</pre></td>
+                                <td ><pre>{{ jsonStringify(rb.request,null,4)}}</pre></td>
+                                <td ><pre>{{rb.responseBody}}</pre></td>
+                            </tr>
+                            {{/if}}
+
+                            {{/each}}
+                            {{else}}
+
+                            {{/if}}
+
+                        </table>
+
+                    </td>
                 </tr>
                 {{/each}}
                 {{else}}

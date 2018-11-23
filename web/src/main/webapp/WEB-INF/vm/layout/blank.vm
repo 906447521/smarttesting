@@ -1,7 +1,8 @@
 <script src="//$!{ServerPath}/s/jquery.js"></script>
+<script src="//$!{ServerPath}/s/common.js"></script>
 <script src="//$!{ServerPath}/s/template.js"></script>
 <script src="//$!{ServerPath}/s/templateutil.js"></script>
-<script src="//$!{ServerPath}/s/common.js"></script>
+
 <script>
     var CONTEXT = '//$!{ServerPath}';
 </script>

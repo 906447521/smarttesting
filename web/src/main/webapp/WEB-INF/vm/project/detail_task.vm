@@ -180,7 +180,7 @@
                 {{if elem.lastrun != null && elem.lastrun != '' }}
                 <a target="_blank" href="//$!{ServerPath}/task_result/detail.html?resultId={{elem.lastrun}}">
 
-                    {{ dateFormat(elem.lastruntime,'yyyy/MM/dd HH:mm:ss') }}
+                    <i class="icon iconfont icon-success"></i> 查看结果 ({{ dateFormat(elem.lastruntime,'yyyy/MM/dd HH:mm:ss') }})
 ##                    {{ elem.lastrunstatus }}
                 </a>
                 {{/if}}

@@ -4837,7 +4837,7 @@ small {
 #toast-container {
     display: block;
     position: fixed;
-    z-index: 10000
+    z-index: 999999;
 }
 
 @media only screen and (max-width: 600px) {
@@ -4875,8 +4875,8 @@ small {
     line-height: 1.5em;
     background-color: #323232;
     padding: 10px 25px;
-    font-size: 1.1rem;
-    font-weight: 300;
+    font-size: 13px;
+    /*font-weight: 300;*/
     color: #fff;
     display: -webkit-box;
     display: -webkit-flex;
