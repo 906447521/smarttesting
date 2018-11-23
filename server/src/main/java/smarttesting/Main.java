@@ -3,24 +3,24 @@ package smarttesting;
 import org.apache.catalina.core.AprLifecycleListener;
 import org.apache.catalina.core.StandardServer;
 import org.apache.catalina.startup.Tomcat;
-import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;
 
-import java.io.IOException;
+import java.io.File;
 
 /**
  * @author
  */
 public class Main {
 
-    static Logger  log       = LoggerFactory.getLogger(Main.class);
+    static Logger log;
     static Tomcat  container = new Tomcat();
-    static Integer port      = 6060;
-    static String home;
+    static Integer port      = 8080;
+
 
     public static void main(String[] args) {
+
 
         if (args != null && args.length > 0) {
             if (args[0].equals("start")) {
@@ -31,11 +31,6 @@ public class Main {
                 stop();
             }
         } else {
-            try {
-                PropertyConfigurator.configure(new ClassPathResource("log4j_debug.xml").getFile().getPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             start();
         }
 
@@ -62,9 +57,34 @@ public class Main {
 
     private static void start() {
         try {
-
+            // 打包后的路径下面的home目录，classpath目录
+            String home;
+            // webapp的路径
+            String webapp = "";
+            // 打包后的路径
             String basedir = System.getProperty("basedir");
             String injectPort = System.getProperty("port");
+
+            // 本地启动的
+            if (basedir == null) {
+                home = new ClassPathResource("version.prop").getFile().getParent();
+                basedir = home;
+                webapp = basedir + "/../../../web/src/main/webapp";
+                try {
+                    ResourceClasspath.add(new File(basedir + "/../../../web/src/main/resources"));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            // 打包后启动
+            else {
+                basedir = basedir + "";
+                home = basedir + "/home";
+                webapp = home + "/frontend";
+            }
+
+
+            log = LoggerFactory.getLogger(Main.class);
             log.info("==================================");
             log.info("DIR: " + basedir);
             if (injectPort != null) {
@@ -76,13 +96,6 @@ public class Main {
             }
 
 
-            if (basedir == null) {
-                ClassPathResource resource = new ClassPathResource("log4j.xml");
-                home = resource.getFile().getParent();
-                basedir = home;
-            } else {
-                home = basedir + "/home";
-            }
             log.info("home: " + home);
             String contextPath = "";
 
@@ -93,8 +106,8 @@ public class Main {
             StandardServer server = (StandardServer) container.getServer();
             AprLifecycleListener listener = new AprLifecycleListener();
             server.addLifecycleListener(listener);
-
-            container.addWebapp(contextPath, home + "/frontend");
+            server.setParentClassLoader(Thread.currentThread().getContextClassLoader());
+            container.addWebapp(contextPath, webapp);
             container.start();
 
 
