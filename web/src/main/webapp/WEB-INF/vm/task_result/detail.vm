@@ -76,18 +76,22 @@
 
         <div>
             <table style="font-size:12px" class="table-a">
-                <tr style="background-color:#777777;color:#fff;font-weight:500">
+                <tr style="background-color:#F26B3A;color:#fff;font-weight:500">
                     <td width="600">Test Group/Test case ：{{tName}}</td><td>Count</td><td>Pass</td><td>Fail</td><td>Error</td><td>View</td>
                 </tr>
                 {{if (groups)}}
                 {{each groups as elem i}}
-                <tr style="background-color:#80C972;color:#333;font-weight:500">
+                <tr style="
+                /*background-color:#80C972;*/
+                color:#333;font-weight:500">
                     <td>{{elem.sceneName}}</td>
                     <td>{{elem.groupCount}}</td>
                     <td>{{elem.groupPassC}}</td>
                     <td>{{elem.groupFailC}}</td>
                     <td>{{elem.groupErrorC}}</td>
-                    <td onclick="var the = $('#__ID__{{elem.groupId}}'); if(the.hasClass('hide')) {the.show();the.removeClass('hide')} else {the.hide();the.addClass('hide')}">View</td>
+                    <td style="cursor:pointer;color:rgb(0, 113, 235);" onclick="var the = $('#__ID__{{elem.groupId}}'); if(the.hasClass('hide')) {the.show();the.removeClass('hide')} else {the.hide();the.addClass('hide')}">
+                        View
+                    </td>
                 </tr>
                 <tr style="padding:0;border-color:transparent" id="__ID__{{elem.groupId}}" class="hide">
                     <td colspan="6" style="padding:0;border-color:#F26B3A;border-bottom:0;"">
