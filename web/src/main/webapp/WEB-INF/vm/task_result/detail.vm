@@ -47,25 +47,27 @@
 
         <div style="font-size:13px;padding-bottom:30px;font-family:Arial">
             <div style="margin-right:10px;padding:3px;border:3px solid #28B57F;border-radius:50%;color:#28B57F;text-align:center;height:50px;line-height:50px;width:50px;display:inline-block">
-                <div style="font-weight:bold;font-size:16px;height:20px;margin-top:-5px;">{{passC}}</div>
+                <div style="font-weight:normal;font-size:16px;height:20px;margin-top:-5px;">{{passC}}</div>
                 <div style="font-size:12px;height:30px;transform: scale(0.7);">PASSED</div>
             </div>
 
             <div style="margin-right:10px;padding:3px;border:3px solid #E7916F;border-radius:50%;color:#E7916F;text-align:center;height:50px;line-height:50px;width:50px;display:inline-block">
-                <div style="font-weight:bold;font-size:16px;height:20px;margin-top:-5px;">{{failC}}</div>
+                <div style="font-weight:normal;font-size:16px;height:20px;margin-top:-5px;">{{failC}}</div>
                 <div style="font-size:12px;height:30px;transform: scale(0.7);">FAILED</div>
             </div>
 
             <div style="margin-right:10px;padding:3px;border:3px solid #EC4B48;border-radius:50%;color:#EC4B48;text-align:center;height:50px;line-height:50px;width:50px;display:inline-block">
-                <div style="font-weight:bold;font-size:16px;height:20px;margin-top:-5px;">{{errorC}}</div>
+                <div style="font-weight:normal;font-size:16px;height:20px;margin-top:-5px;">{{errorC}}</div>
                 <div style="font-size:12px;height:30px;transform: scale(0.7);">ERROR</div>
             </div>
-        </div>
-
-        <div style="font-size:13px;padding-bottom:30px">
-            <div style="padding:3px"><b style="font-weight:800">Start Time:</b> {{startT}}</div>
-            <div style="padding:3px"><b style="font-weight:800">Duration:</b> {{duration}} ms</div>
-            <div style="padding:3px"><b style="font-weight:800">Status:</b> Pass {{passC}}</div>
+            <div style="margin-right:10px;padding:3px;border:3px solid transparent;border-radius:50%;color:#333;text-align:center;height:50px;line-height:50px;display:inline-block">
+                <div style="font-weight:normal;font-size:16px;height:20px;margin-top:-5px;">{{duration}}</div>
+                <div style="font-size:12px;height:30px;color:bbb">DURATION</div>
+            </div>
+            <div style="margin-right:10px;padding:3px;border:3px solid transparent;border-radius:50%;color:#333;text-align:center;height:50px;line-height:50px;display:inline-block">
+                <div style="font-weight:normal;font-size:16px;height:20px;margin-top:-5px;">{{startT}}</div>
+                <div style="font-size:12px;height:30px;color:#bbb">START TIME</div>
+            </div>
         </div>
 
         <div style="font-size:13px;padding:3px;padding-bottom:20px;">用例执行情况：</div>
