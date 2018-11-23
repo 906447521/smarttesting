@@ -1,6 +1,10 @@
  说明
 =============
-
+# 结构
+    server   编译直接运行
+    web      放到tomcat下运行
+    services 代码
+    
 # 框架
 
     https://materializecss.com/about.html

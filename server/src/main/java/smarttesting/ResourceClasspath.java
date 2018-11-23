@@ -30,9 +30,7 @@ public class ResourceClasspath {
      * @param s The directory to add to the classpath (or a file, which
      *          will relegate to its directory).
      */
-    public static void add(String s)
-            throws IOException, NoSuchMethodException, IllegalAccessException,
-            InvocationTargetException {
+    public static void add(String s) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         add(new File(s));
     }
 
@@ -45,9 +43,7 @@ public class ResourceClasspath {
      * @param f The directory (or enclosing directory if a file) to add to the
      *          classpath.
      */
-    public static void add(File f)
-            throws IOException, NoSuchMethodException, IllegalAccessException,
-            InvocationTargetException {
+    public static void add(File f) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         f = f.isDirectory() ? f : f.getParentFile();
         add(f.toURI().toURL());
     }
@@ -58,9 +54,7 @@ public class ResourceClasspath {
      *
      * @param url The path to include when searching the classpath.
      */
-    public static void add(URL url)
-            throws IOException, NoSuchMethodException, IllegalAccessException,
-            InvocationTargetException {
+    public static void add(URL url) throws IOException, NoSuchMethodException, IllegalAccessException, InvocationTargetException {
         Method method = CLASS_LOADER.getDeclaredMethod("addURL", PARAMETERS);
         method.setAccessible(true);
         method.invoke(getClassLoader(), new Object[]{url});
