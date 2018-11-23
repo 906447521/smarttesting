@@ -40,16 +40,16 @@
     停止     ./smarttesting stop                      smarttesting.bat stop
               
               
-             installservice（linux+macx）       installservice.bat（window）
+             installservice（linux+macx）             installservice.bat（window）
               
               
-    调试     ./installservice                   installservice.bat install
-    删除                                        installservice.bat remove
+    调试     ./installservice                         installservice.bat install
+    删除                                              installservice.bat remove
     
 # 测试
     http://gc.ditu.aliyun.com/geocoding?a=成都
     http://qzone-music.qq.com/fcg-bin/cgi_playlist_xml.fcg?uin=QQ号码&json=1&g_tk=1916754934
     https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?tel=13888888888
     
-    
+# 插件    
     ./jmeter -n -t baidu_requests_results.jmx -r -l baidu_requests_results.jtl -e -o /home/tester/apache-jmeter-3.0/resultReport

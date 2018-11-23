@@ -86,10 +86,18 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <textarea id="interfacerequestheader" for="interfacerequestheader_a" class="beautify-textarea" data-length="4096">{{requestHeader}}</textarea>
-                            <a id="caseresultscript_a" class="beautify-textarea-a">
-                                <strong>Pretty</strong>
-                            </a>
+                            <div class="col s8" style="padding:0">
+                                <textarea id="interfacerequestheader" for="interfacerequestheader_a" class="beautify-textarea" data-length="4096">{{requestHeader}}</textarea>
+                                <a id="interfacerequestheader_a" class="beautify-textarea-a">
+                                    <strong>Pretty</strong>
+                                </a>
+                            </div>
+                            <div class="col s4" style="padding:0;font-size:12px;padding:25px;transform: scale(0.9);">
+                                <div>代码片段 （JSON）</div>
+                                <br>
+                                <a href='javascript:setBeautyTextareaValue("interfacerequestheader","{\"Cookie\":\"\"}");'>Set header Cookie</a>
+
+                            </div>
                             <label for="interfacerequestheader" class="active">请求头（HTTPHeader JSON）</label>
                         </div>
                     </div>

@@ -132,7 +132,7 @@
 
                                     <div>代码片段 （JSON 或 URL encode） </div>
                                     <br>
-                                    <a href="javascript:;setBeautyTextareaValue('caserequestbody','{prameter1:1,prameter2:2}');">Set json</a>
+                                    <a href='javascript:;setBeautyTextareaValue("caserequestbody","{\"prameter1\":\"1\",\"prameter2\":2}");'>Set json</a>
                                     <br>
                                     <a href="javascript:setBeautyTextareaValue('caserequestbody','prameter1=1&prameter2=2');">Set URL encode</a>
 
@@ -156,7 +156,7 @@
                                     <br>
                                     <a href="javascript:setBeautyTextareaValue('caseresultscript','#Collection.list(#ResponseBody)==[] || #Collection.map(#ResponseBody)=={} ');">Set variable Collection tool</a>
                                     <br>
-                                    <a href="javascript:setBeautyTextareaValue('caseresultscript','#String.contains(abc, ab)');">Set variable String tool</a>
+                                    <a href='javascript:setBeautyTextareaValue("caseresultscript","#String.contains(\"abc\", \"ab\")");'>Set variable String tool</a>
 
                                 </div>
                             </div>
