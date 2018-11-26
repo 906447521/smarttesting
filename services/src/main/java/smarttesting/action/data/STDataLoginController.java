@@ -74,7 +74,7 @@ public class STDataLoginController {
         query.put("name", zdUser.getName());
         STUser zdUser1 = zdUserService.find(query).singleResult();
         if (zdUser1 == null) {
-            throw new ServiceResultFail("用户不存在");
+            throw new ServiceResultFail("账号密码不匹配！");
         }
 
         try {

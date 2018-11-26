@@ -168,7 +168,7 @@
         {{/if}}
         </tbody>
     </table>
-    {{include 'tmpl-pagin' }}
+    {{include 'tmpl-pagin' elem}}
 </script>
 
 

@@ -150,7 +150,7 @@
                 <i>Log In </i> or <span> Sign Up</span>
             </div>
             <div class="am-u-sm-10 login-am-center">
-                <form class="am-form" autocomplete="off">
+                <div class="am-form">
                         <div class="am-form-group">
                             <input type="text" id="username" placeholder="登陆账号" autocomplete="off">
                         </div>
@@ -159,9 +159,9 @@
                             <input type="password" id="userpwd" placeholder="登陆密码" autocomplete="new-password">
                         </div>
                         <p>
-                            <button type="submit" class="am-btn am-btn-default" onclick="login()">Log In</button>
+                            <button type="" class="am-btn am-btn-default" onclick="loginPass()">Log In</button>
                         </p>
-                </form>
+                </div>
             </div>
         </div>
     </div>
@@ -190,7 +190,8 @@
 
 <script>
 
-    function login() {
+    function loginPass() {
+
         X.HTTP({
             url: "/data/login.json",
             data: {
