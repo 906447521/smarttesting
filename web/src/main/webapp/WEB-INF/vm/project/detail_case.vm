@@ -424,7 +424,7 @@
                     // var instance = M.Modal.getInstance($('#modal1'));
                     // instance.close()
 
-                    $("#casename").val(window.addCaseName + " - " + window.addCaseCount++);
+                    // $("#casename").val(window.addCaseName + " - " + window.addCaseCount++);
                     $('#caseurlsuffix').val("")
                     setBeautyTextareaValueAndClearOld("caserequestbody","");
                     setBeautyTextareaValueAndClearOld("caseresultscript","");
