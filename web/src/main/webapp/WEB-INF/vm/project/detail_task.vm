@@ -596,7 +596,7 @@
     }
 
     $(function () {
-        if(checkURL()) {
+        if(checkURL() && $!{checkURL}) {
             Project.load();
             Project.loadTask(1, 10)
         } else {

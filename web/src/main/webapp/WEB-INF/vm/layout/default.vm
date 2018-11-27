@@ -391,21 +391,22 @@
         }
 
         function checkURL() {
-            var wPair = location.href.split("?")
-            var wID = wPair.length>0 ? wPair[1]:"wPair";
-            var hasID = false;
-            $("#menu-project-list").find(".sidenav").find(".waves-effect").each(function() {
-                var aHref = $(this).attr("href")
-                var aPair = aHref.split("?")
-                var aID = aPair.length>0 ? aPair[1]:"aPair";
-                console.log(aID + " " + wID)
-                if(aID == wID) {
-                    hasID = true
-                    return;
-                }
-
-            })
-            return hasID
+            // var wPair = location.href.split("?")
+            // var wID = wPair.length>0 ? wPair[1]:"wPair";
+            // var hasID = false;
+            // $("#menu-project-list").find(".sidenav").find(".waves-effect").each(function() {
+            //     var aHref = $(this).attr("href")
+            //     var aPair = aHref.split("?")
+            //     var aID = aPair.length>0 ? aPair[1]:"aPair";
+            //     console.log(aID + " " + wID)
+            //     if(aID == wID) {
+            //         hasID = true
+            //         return;
+            //     }
+            //
+            // })
+            // return hasID
+            return true
         }
 
         function listElemDragstart(e,id,fn) {

@@ -620,7 +620,7 @@
 
 
    $(function() {
-       if(checkURL()) {
+       if(checkURL() && $!{checkURL}) {
            Project.load();
            Project.loadCase(1, 25);
        } else {

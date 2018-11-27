@@ -553,7 +553,7 @@
 
 
     $(function () {
-        if(checkURL()) {
+        if(checkURL() && $!{checkURL}) {
             Project.load();
             Project.loadScene(1, 10)
         } else {

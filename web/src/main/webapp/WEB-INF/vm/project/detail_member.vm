@@ -227,7 +227,7 @@
     }
 
     $(function () {
-        if(checkURL()) {
+        if(checkURL() && $!{checkURL}) {
             Project.load();
             Project.loadMember()
         } else {
