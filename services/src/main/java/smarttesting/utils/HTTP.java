@@ -90,7 +90,7 @@ public class HTTP implements Closeable {
             URL wsUrl = new URL(this.URL);
             conn = (HttpURLConnection) wsUrl.openConnection();
             conn.setDoInput(true);
-            conn.setDoOutput(false);
+            conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", this.RequestContentType);
             conn.setRequestMethod(this.RequestMethod);
 
@@ -109,13 +109,18 @@ public class HTTP implements Closeable {
                     query = request.getJsonString();
                 }
 
-                System.out.println("Query: [" + this.RequestContentType + "]  " + query);
-                byte[] writeBytes = query.getBytes();
 
-                conn.setDoOutput(true);
-                out = conn.getOutputStream();
-                out.write(writeBytes);
-                out.flush();
+                if (!"".equals(query.trim())) {
+
+                    System.out.println("Query: [" + this.RequestContentType + "]  " + query);
+                    byte[] writeBytes = query.getBytes();
+
+                    conn.setDoOutput(true);
+                    out = conn.getOutputStream();
+                    out.write(writeBytes);
+                    out.flush();
+                }
+
             }
 
             response.status = conn.getResponseCode();
@@ -131,6 +136,18 @@ public class HTTP implements Closeable {
                 response.value = buffer.toString();
             } catch (Exception e) {
                 response.value = e.getMessage();
+                try {
+                    in = conn.getErrorStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in, this.ResponseCharset));
+                    StringBuilder buffer = new StringBuilder();
+                    String s;
+                    while ((s = reader.readLine()) != null) {
+                        buffer.append(s);
+                    }
+                    response.value = buffer.toString();
+                } catch (Exception e2) {
+
+                }
             }
 
 
@@ -147,7 +164,6 @@ public class HTTP implements Closeable {
 
     }
 
-    @Override
     public void close() throws IOException {
         release();
     }
@@ -169,6 +185,11 @@ public class HTTP implements Closeable {
         }
 
         public String getJsonString() {
+            if (formData instanceof String) {
+                if ("".equals(((String) formData).trim())) {
+                    return "";
+                }
+            }
             String body = JSON.write(formData);
             return body;
         }
