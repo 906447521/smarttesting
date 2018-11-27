@@ -17,15 +17,15 @@ public interface STUserMapper {
     String column    =
             "NULL,#{name},#{group},#{pwd}";
     String condition = "" +
-            "<if test='id!=null'> and id=#{id}</if>" +
-            "<if test='name!= null'> and name=#{name}</if>" +
-            "<if test='group!= null'> and group=#{group}</if>" +
-            "<if test='pwd!= null'> and pwd=#{pwd}</if>" +
+            "<if test='id!=null'> and `id`=#{id}</if>" +
+            "<if test='name!= null'> and `name`=#{name}</if>" +
+            "<if test='group!= null'> and `group`=#{group}</if>" +
+            "<if test='pwd!= null'> and `pwd`=#{pwd}</if>" +
             "";
     String updateset = "" +
-            "<if test='name!= null'> name=#{name},</if>" +
-            "<if test='group!= null'>  group=#{group},</if>" +
-            "<if test='pwd!= null'>  pwd=#{pwd},</if>";
+            "<if test='name!= null'> `name`=#{name},</if>" +
+            "<if test='group!= null'>  `group`=#{group},</if>" +
+            "<if test='pwd!= null'>  `pwd`=#{pwd},</if>";
 
     String pager = "" +
             "<if test='pageCriteria != null'> limit #{pageCriteria.start},#{pageCriteria.pageSize}</if>";

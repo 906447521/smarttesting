@@ -67,7 +67,7 @@
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_scene.html?id=$!{id}'">测试集</a></li>
     <li class="tab"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_task.html?id=$!{id}'">任务</a></li>
     {{if creator=='$!{zdPIN}' || '$!{zdGROUP}'=='admin' }}
-    <li class="tab" s="{{creator}}"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_member.html?id={{id}}'">成员</a></li>
+    <li class="tab" s="{{creator}}"><a href="javascript:;" onclick="window.location.href='//$!{ServerPath}/project/detail_member.html?id=$!{id}'">成员</a></li>
     {{/if}}
 </script>
 
@@ -415,8 +415,15 @@
     // }
 
     $(function () {
-        Project.load();
-        Project.loadInterface(1, 10)
+        if(checkURL()) {
+            Project.load();
+            Project.loadInterface(1, 10)
+        } else {
+            $("#op-add").css("color", "#ccc").attr("href", "javascript:;")
+            $("#project-interface-list").html("\"<div style='margin-top:10%;margin-left:45%;color:#bbb;font-size:14px'>没有权限</div>\"")
+        }
     })
+
+
 
 </script>
