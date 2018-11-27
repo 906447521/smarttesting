@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import smarttesting.service.model.DataResult;
 import smarttesting.service.model.STTest;
+import smarttesting.utils.HTTP;
 import smarttesting.utils.JSON;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,19 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "data")
 public class STTestController {
+
+
+    @ResponseBody
+    @RequestMapping(value = "/test/url.json")
+    public DataResult test_url(@RequestParam String url) {
+        try {
+         HTTP.Response
+            response = HTTP.open(url).send(null);
+            return DataResult.successResult(response.getStatus());
+        } catch (Exception e) {
+            return DataResult.errorResult("0");
+        }
+    }
 
     @ResponseBody
     @RequestMapping(value = "/test/map.json")

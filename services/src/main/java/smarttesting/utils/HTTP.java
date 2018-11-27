@@ -10,7 +10,7 @@ import java.util.*;
  */
 public class HTTP implements Closeable {
 
-    public static HTTP open(String url) throws IOException {
+    public static HTTP open(String url) {
         return new HTTP(url);
     }
 
@@ -22,7 +22,7 @@ public class HTTP implements Closeable {
     Map<String, String> RequestHeaderProperties;
     String              ResponseCharset;
 
-    private HTTP(String url) throws IOException {
+    private HTTP(String url) {
         this.URL = url;
         withRequestContentType("application/x-www-form-urlencoded");
         withRequestMethod("POST");

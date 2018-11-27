@@ -3,36 +3,80 @@ function looks_like_html(source) {
     var comment_mark = '<' + '!-' + '-';
     return (trimmed && (trimmed.substring(0, 1) === '<' && trimmed.substring(0, 4) !== comment_mark));
 }
+
 function looks_like_ognl(source) {
-    if(source ==null)
+    if (source == null)
         return false
-    source =  source.trim()
-    if(source.indexOf("#String")==0 || source.indexOf("#Response")==0 || source.indexOf("#Collection")==0) {
+    source = source.trim()
+    if (source.indexOf("#String") == 0 || source.indexOf("#Response") == 0 || source.indexOf("#Collection") == 0) {
         return true
     }
     return false
 }
+
+function looks_like_browser_copy(source) {
+    if (source == null)
+        return false
+    source = source.trim()
+    if (source.indexOf("Accept:") >= 0 || source.indexOf("Cookie:") >= 0 || source.indexOf("Host:") >= 0 || source.indexOf("User-Agent:") >= 0) {
+        return true
+    }
+    return false
+}
+
 function looks_like_urlencode(source) {
-    if(source ==null)
+    if (source == null)
         return false
     try {
         var pair = source.split("&")
         var a = 0;
-        for(var i in pair) {
+        for (var i in pair) {
             s = pair[i].split("=")
-            if(s.length > 1)
+            if (s[0].indexOf("\n") < 0 && s.length > 1)
                 a++;
         }
     } catch (e) {
         return false
     }
-    if(a == 0)
+    if (a == 0)
         return false
     return true
 }
 
 function any(a, b) {
     return a || b;
+}
+
+function browser_beautify(source, opts) {
+
+    var lines = source.split("\n");
+
+    try {
+        var s = "{" + "\r\n"
+
+        for (i in lines) {
+            var line = lines[i]
+            var firstColon = line.indexOf(":")
+            var key = line.substr(0, firstColon)
+            var value = line.substr(firstColon + 1, line.length)
+            if (key == "") {
+                continue
+            }
+            value = value.replace(/"/g,"\\\"")
+            s += "    \"" + key + "\": \"" + value + "\""
+            if (i != lines.length - 1) {
+                s += ","
+            }
+            s += "\r\n"
+        }
+        s += "}" + "\r\n"
+        return s
+    } catch (e) {
+        console.log(e)
+    }
+
+
+    return source
 }
 
 function beautify(the) {
@@ -59,12 +103,19 @@ function beautify(the) {
     opts.space_after_anon_function = true;
 
     if (looks_like_html(source)) {
+        console.log("html")
         output = html_beautify(source, opts);
-    } else if (looks_like_urlencode(source)) {
-        output = source
     } else if (looks_like_ognl(source)) {
+        console.log("ognl")
+        output = source
+    } else if (looks_like_browser_copy(source)) {
+        console.log("browser_copy")
+        output = browser_beautify(source, opts);
+    } else if (looks_like_urlencode(source)) {
+        console.log("url_encode")
         output = source
     } else {
+        console.log("js")
         output = js_beautify(source, opts);
     }
 

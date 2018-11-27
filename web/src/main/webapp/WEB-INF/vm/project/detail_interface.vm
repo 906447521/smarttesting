@@ -85,7 +85,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="input-field col s3">
+                        <div class="input-field col s2">
                             <select id="interfacemethod">
                                 <option value="GET" {{if method=='GET'|| method==null}} selected {{/if}}>GET</option>
                                 <option value="POST" {{if method=='POST'}} selected {{/if}}>POST</option>
@@ -96,8 +96,8 @@
                             </select>
                             <label>请求方法</label>
                         </div>
-                        <div class="input-field col s9">
-                            <input type="text" id="interfaceurl" class="autocomplete" value="{{if url==null}}http://{{else}}{{url}}{{/if}}">
+                        <div class="input-field col s10">
+                            <input type="text" id="interfaceurl" onblur="Interface.checkURL(this)" class="autocomplete" value="{{if url==null}}http://{{else}}{{url}}{{/if}}">
                             <label for="interfaceurl" class="active">接口地址（HTTP URL）</label>
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                             <div class="col s4" style="padding:0;font-size:12px;padding:25px;transform: scale(0.9);">
                                 <div>代码片段 （JSON）</div>
                                 <br>
-                                <a href='javascript:setBeautyTextareaValue("interfacerequestheader","{\"Cookie\":\"\"}");'>Set header Cookie</a>
+                                <a href='javascript:setBeautyTextareaValue("interfacerequestheader","{\"Cookie\":\"pin=demo;nick=德莫\"}");'>Set header Cookie</a>
 
                             </div>
 
@@ -386,6 +386,27 @@
 
                 var instance = M.Modal.getInstance($('#modal1'));
                 instance.open();
+            }
+        });
+    }
+
+    Interface.checkURL = function(the) {
+        $("#____ok_class").remove()
+        the = $(the)
+        var url = the.val()
+        $.ajax({
+            url: CONTEXT + "/data/test/url.json?url="+url,
+            type: 'GET',
+            complete: function(response) {
+                if(response.status == 200) {
+                    if(response.responseJSON.data != null) {
+                        $("#interfaceurl").after("<i title='链接可用' id='____ok_class' style='float:right;margin-top:-45px;margin-right:10px;color:green' class='icon iconfont icon-success'></i>")
+                    } else {
+                        $("#interfaceurl").after("<i title='链接不可用！' id='____ok_class' style='float:right;margin-top:-45px;margin-right:10px;color:red' class='icon iconfont icon-wrong'></i>")
+                    }
+                } else {
+
+                }
             }
         });
     }
