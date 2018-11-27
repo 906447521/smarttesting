@@ -76,7 +76,6 @@ public class STInterceptor extends HandlerInterceptorAdapter implements Initiali
 
     }
 
-    @Override
     public void afterPropertiesSet() throws Exception {
 
     }
