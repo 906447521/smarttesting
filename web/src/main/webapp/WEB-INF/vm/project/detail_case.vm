@@ -625,7 +625,7 @@
            Project.loadCase(1, 25);
        } else {
            $("#op-add").css("color", "#ccc").attr("href", "javascript:;")
-           $("#interface-case-list").html("<div style='margin-top:10%;margin-left:45%;color:#bbb;font-size:14px'>没有权限</div>")
+           $("#interface-case-list").html("<div style='margin-top:6%;margin-left:45%;color:#bbb;font-size:14px'>没有权限</div>")
        }
    })
 
