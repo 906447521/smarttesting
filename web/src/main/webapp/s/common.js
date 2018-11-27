@@ -4,6 +4,7 @@ X.HTTP = function (options) {
         timeout: 30000,
         loading: true,
         async: true,
+        type: 'POST',
         cache: false
     };
     //$.ajaxSetup({ cache: false });
