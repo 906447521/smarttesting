@@ -121,7 +121,6 @@ public class STController {
             return true;
         }
         int count = zdProjectUserMapper.count(new Query().with("userName", pin).with("projectId", projectId));
-        System.out.println(count);
         return count > 0;
     }
 

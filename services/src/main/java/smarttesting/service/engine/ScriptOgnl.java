@@ -26,7 +26,7 @@ public class ScriptOgnl {
         map.put("ResponseBody", respBody);
         map.put("ResponseObject", respObj == null ? respBody : respObj);
         map.put("Collection", new ToolScriptCollection());
-        map.put("String", new ToolScriptString());
+        map.put("String", new ToolScriptString(respBody));
         context.setValues(map);
         try {
             return Ognl.getValue(script, context, context.getRoot());

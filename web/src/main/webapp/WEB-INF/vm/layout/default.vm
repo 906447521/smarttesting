@@ -379,6 +379,36 @@
         .tab-hide {
 
         }
+        .qisiwole .select-wrapper input.select-dropdown {
+            height: 2.5rem;
+            line-height: 2.5rem;
+        }
+        .qisiwole input:not([type]),
+        .qisiwole input[type=text]:not(.browser-default),
+        .qisiwole input[type=password]:not(.browser-default),
+        .qisiwole input[type=email]:not(.browser-default),
+        .qisiwole input[type=url]:not(.browser-default),
+        .qisiwole input[type=time]:not(.browser-default),
+        .qisiwole input[type=date]:not(.browser-default),
+        .qisiwole input[type=datetime]:not(.browser-default),
+        .qisiwole input[type=datetime-local]:not(.browser-default),
+        .qisiwole input[type=tel]:not(.browser-default),
+        .qisiwole input[type=number]:not(.browser-default),
+        .qisiwole input[type=search]:not(.browser-default),
+        .qisiwole textarea.materialize-textarea {
+            height: 2.5rem;
+        }
+        .qisiwole .input-field {
+            margin-top:0;
+            margin-bottom:0;
+        }
+        .qisiwole select.browser-default {
+            height: 2rem;
+            font-size:13px;
+        }
+        .qisiwole {
+            border-top: 1px solid #F26B3A;
+        }
     </style>
     <script>
         function tabCheck(container, that) {

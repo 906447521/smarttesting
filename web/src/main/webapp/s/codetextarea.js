@@ -8,7 +8,7 @@ function looks_like_ognl(source) {
     if (source == null)
         return false
     source = source.trim()
-    if (source.indexOf("#String") == 0 || source.indexOf("#Response") == 0 || source.indexOf("#Collection") == 0) {
+    if (source.indexOf("#Code") == 0 ||source.indexOf("#String") == 0 || source.indexOf("#Response") == 0 || source.indexOf("#Collection") == 0) {
         return true
     }
     return false

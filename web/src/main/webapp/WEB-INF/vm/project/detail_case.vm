@@ -122,6 +122,8 @@
 
                         <div class="input-field col s12">
                             <div id="tab-4-caserequestbody" class="tab-div" >
+
+                                <div id="qisiwole2" class="col s12 qisiwole" style="padding:0; margin-top: 16px;"></div>
                                <div class="col s8" style="padding:0">
                                    <textarea id="caserequestbody" for="caserequestbody_a" class="beautify-textarea" style="width:70%" data-length="4096">{{requestBody}}</textarea>
                                    <a id="caserequestbody_a" class="beautify-textarea-a">
@@ -139,6 +141,49 @@
                                 </div>
                             </div>
                             <div id="tab-4-caseresultscript" class="tab-div tab-hide">
+
+                                <div id="qisiwole" class="col s12 qisiwole" style="padding:0; margin-top: 16px;">
+
+                                    <div  class="row" style="padding:20px">
+                                        <div class="input-field col s12 m2" style="">
+                                            <select class="browser-default">
+                                                <option value="">无</option>
+                                                <option value="&&">并且</option>
+                                                <option value="||">或</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field col s12 m2 " style="">
+                                            <select class="browser-default">
+                                                <option value="Code">返回码</option>
+                                                <option value="ResponseBody">返回字符串</option>
+                                            </select>
+                                        </div>
+                                        <div class="input-field col s12 m2" style="">
+                                            <select class="browser-default">
+                                                <option value="==">等于</option>
+                                                <option value="!=">不等于</option>
+                                                <option value="contains">包含</option>
+                                                <option value="notContains">不包含</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="input-field col s12 m2" style="">
+                                            <a href="javascript:;" class="waves-effect waves-green" onclick="addscript()">
+                                                <i class="icon iconfont icon-add" style="font-size:20px"></i>
+                                            </a>
+                                        </div>
+
+                                        <div class="input-field col s12 m12" style="">
+                                            <input class="browser-default" />
+                                        </div>
+
+
+
+                                    </div>
+
+                                </div>
+
+
                                 <div class="col s8" style="padding:0">
                                     <textarea id="caseresultscript" for="caseresultscript_a" class="beautify-textarea" data-length="4096">{{resultScript}}</textarea>
                                     <a id="caseresultscript_a" class="beautify-textarea-a">
@@ -616,6 +661,34 @@
                 container.find('select').not('.disabled').formSelect();
             }
         });
+    }
+
+    function addscript() {
+        var container=$('#qisiwole');
+
+        var select = container.find("select.browser-default")
+        var input = container.find("input.browser-default")
+        var value = select.eq(0).val()
+
+        var value1 = select.eq(1).val()
+        var value2 = select.eq(2).val()
+
+        var str = input.val();
+        str = str.replace(/"/g, "\\\"");
+
+        if(value1 == "Code")
+            if(value2 == "!=" || value2 == "==")
+                value += " #Code "+value2+" \""+str+"\""
+            else
+                value += " #String."+value2+"(#Code, \""+str+"\") "
+        else {
+            if(value2 == "!=" || value2 == "==")
+                value += " #ResponseBody "+value2+" \""+str+"\""
+            else
+                value += " #String."+value2+"(\""+str+"\") "
+        }
+
+        setBeautyTextareaValue('caseresultscript',value )
     }
 
 
