@@ -558,7 +558,7 @@
             Project.loadScene(1, 10)
         } else {
             $("#op-add").css("color", "#ccc").attr("href", "javascript:;")
-            $("#project-scene-list").html("\"<div style='margin-top:10%;margin-left:45%;color:#bbb;font-size:14px'>没有权限</div>\"")
+            $("#project-scene-list").html("<div style='margin-top:10%;margin-left:45%;color:#bbb;font-size:14px'>没有权限</div>")
         }
     })
 
