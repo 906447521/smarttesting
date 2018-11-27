@@ -32,7 +32,17 @@ function looks_like_urlencode(source) {
         var a = 0;
         for (var i in pair) {
             s = pair[i].split("=")
-            if (s[0].indexOf("\n") < 0 && s.length > 1)
+            key = s[0];
+            if (
+                (
+                    key.indexOf("\n") < 0 &&
+                    key.indexOf(":") < 0 &&
+                    key.indexOf("\"") < 0 &&
+                    key.indexOf("var") < 0 &&
+                    source.indexOf("function") < 0
+
+                )
+                && s.length > 1)
                 a++;
         }
     } catch (e) {
@@ -62,7 +72,7 @@ function browser_beautify(source, opts) {
             if (key == "") {
                 continue
             }
-            value = value.replace(/"/g,"\\\"")
+            value = value.replace(/"/g, "\\\"")
             s += "    \"" + key + "\": \"" + value + "\""
             if (i != lines.length - 1) {
                 s += ","
@@ -77,6 +87,39 @@ function browser_beautify(source, opts) {
 
 
     return source
+}
+
+
+function url_beautify(source, opts) {
+    if (source == null)
+        return ""
+
+    var result = ""
+
+    try {
+
+        var pair = source.split("&")
+        for (var i in pair) {
+            s = pair[i].split("=")
+
+            key = s[0];
+            value = s[1];
+
+            if (!key || !value)
+                continue
+
+            result += key.trim() + "=" + value.trim();
+
+            if (i != pair.length - 1) {
+                result += "&"
+            }
+
+        }
+    } catch (e) {
+         console.log(e)
+    }
+
+    return result
 }
 
 function beautify(the) {
@@ -113,7 +156,7 @@ function beautify(the) {
         output = browser_beautify(source, opts);
     } else if (looks_like_urlencode(source)) {
         console.log("url_encode")
-        output = source
+        output = url_beautify(source, opts)
     } else {
         console.log("js")
         output = js_beautify(source, opts);
