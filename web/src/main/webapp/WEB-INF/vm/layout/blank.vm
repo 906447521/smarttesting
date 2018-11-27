@@ -2,7 +2,7 @@
 <script src="//$!{ServerPath}/s/common.js"></script>
 <script src="//$!{ServerPath}/s/template.js"></script>
 <script src="//$!{ServerPath}/s/templateutil.js"></script>
-
+<link rel="stylesheet" href="//$!{ServerPath}/s/mono/iconfont.css">
 <script>
     var CONTEXT = '//$!{ServerPath}';
 </script>
