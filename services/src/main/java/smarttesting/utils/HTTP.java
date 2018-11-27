@@ -21,6 +21,8 @@ public class HTTP implements Closeable {
     String              RequestCharset;
     Map<String, String> RequestHeaderProperties;
     String              ResponseCharset;
+    Integer connectTimeout = 5000;
+    Integer readTimeout    = 5000;
 
     private HTTP(String url) {
         this.URL = url;
@@ -30,6 +32,15 @@ public class HTTP implements Closeable {
         withResponseCharset("UTF8");
     }
 
+    public HTTP withConnectTimeout(Integer connectTimeout) {
+        this.connectTimeout = connectTimeout;
+        return this;
+    }
+
+    public HTTP withReadTimeout(Integer readTimeout) {
+        this.readTimeout = readTimeout;
+        return this;
+    }
 
     // application/json
     // application/x-www-form-urlencoded
@@ -89,6 +100,8 @@ public class HTTP implements Closeable {
 
             URL wsUrl = new URL(this.URL);
             conn = (HttpURLConnection) wsUrl.openConnection();
+            conn.setConnectTimeout(connectTimeout);
+            conn.setReadTimeout(readTimeout);
             conn.setDoInput(true);
             conn.setDoOutput(true);
             conn.setRequestProperty("Content-Type", this.RequestContentType);
