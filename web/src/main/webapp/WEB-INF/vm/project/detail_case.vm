@@ -235,7 +235,7 @@
                 {{else if elem.responseResult=='true' }}
                 <span style="font-weight:800;color:#28B57F">成功</span>
                 {{else}}
-                <span style="font-weight:800;color:#f5a623">{{elem.responseResult}}</span>
+                <span style="font-weight:800;color:#f5a623">脚本异常 <i style="font-size:15px" class="icon iconfont icon-help" title="{{elem.responseResult}}"></i></span>
                 {{/if}}
                 &nbsp;&nbsp;&nbsp;
                 返回码：<span style="font-weight:800;color:{{if elem.responseCode=='200'}}#28B57F{{else}}#f5a623{{/if}}">{{elem.responseCode}}</span>
