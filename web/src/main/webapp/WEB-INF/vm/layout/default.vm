@@ -379,10 +379,7 @@
         .tab-hide {
 
         }
-        .qisiwole .select-wrapper input.select-dropdown {
-            height: 2.5rem;
-            line-height: 2.5rem;
-        }
+
         .qisiwole input:not([type]),
         .qisiwole input[type=text]:not(.browser-default),
         .qisiwole input[type=password]:not(.browser-default),
@@ -396,7 +393,7 @@
         .qisiwole input[type=number]:not(.browser-default),
         .qisiwole input[type=search]:not(.browser-default),
         .qisiwole textarea.materialize-textarea {
-            height: 2.5rem;
+            height: 2rem;
         }
         .qisiwole .input-field {
             margin-top:0;
@@ -404,10 +401,10 @@
         }
         .qisiwole select.browser-default {
             height: 2rem;
-            font-size:13px;
+            font-size:12px;
         }
         .qisiwole {
-            border-top: 1px solid #F26B3A;
+            border-top: 1px solid #ccc;
         }
     </style>
     <script>

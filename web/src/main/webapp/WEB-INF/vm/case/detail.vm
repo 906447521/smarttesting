@@ -129,7 +129,10 @@
                             <div id="tab-4-caseresultscript" class="tab-div tab-hide">
                                 <div id="qisiwole" class="col s12 qisiwole" style="padding:0; margin-top: 16px;">
 
-                                    <div  class="row" style="padding:20px">
+                                    <div  class="row" style="padding:20px;padding-left:0;padding-right:0;padding-bottom:0">
+                                        <div class="input-field col s12 m12" style="font-size:13px;margin-bottom:10px;color:#9e9e9e">
+                                            生成表达式：
+                                        </div>
                                         <div class="input-field col s12 m2" style="">
                                             <select class="browser-default">
                                                 <option value="">无</option>
