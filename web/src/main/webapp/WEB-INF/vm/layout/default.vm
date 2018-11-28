@@ -669,9 +669,10 @@
             },
             dataType: 'json',
             success: function (result) {
-                Project.loadProject(1, 10)
-                var instance = M.Modal.getInstance($('#menu-modal'));
-                instance.close()
+                // Project.loadProject(1, 10)
+                // var instance = M.Modal.getInstance($('#menu-modal'));
+                // instance.close()
+                window.location.href = CONTEXT + "/project/detail_interface.html?id=" + result.data.id
             }
         });
     }

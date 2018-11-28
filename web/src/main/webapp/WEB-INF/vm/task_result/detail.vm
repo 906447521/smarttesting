@@ -129,7 +129,7 @@
                         <tr style="font-size:12px">
                             <th width="20%">Name</pre></th>
                         ##                                <th width="50px">Code</pre></th>
-                            <th width="10%">Result</pre></th>
+                            <th width="10%">Response Code</pre></th>
                             <th>Request</th>
                             <th>Response</pre></th>
                         </tr>
@@ -142,9 +142,24 @@
                                 <pre>{{ rb.request.requestCaseName }}</pre>
                             </td>
                             <td>
-                                返回码： {{ rb.responseCode }}
-                                <br>
-                                表达式： {{ rb.responseResult }}
+                                {{if rb.responseResult=='true'}}
+                                    成功
+                                {{else}}
+##                                    <div style="font-size:16px;font-weight:;color:#EC4B48">失败</div>
+                                    <div style="font-size:13px;font-weight:;
+                                          {{if rb.responseCode=='200'}}
+                                            color:#28B57F
+                                          {{else if rb.responseCode=='500' || rb.responseCode=='0'}}
+                                            color:#EC4B48
+                                          {{else}}
+                                            color:#F26B3A
+                                          {{/if}}
+
+                                        ">
+                                        {{ rb.responseCode }}
+                                    </div>
+                                {{/if}}
+
                             </td>
                             <td>
 ##                                <i style="cursor:pointer;color:rgb(0, 113, 235);" class="icon iconfont icon-search"

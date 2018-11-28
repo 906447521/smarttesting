@@ -80,7 +80,7 @@
                     <div class="row">
                         <div class="input-field col s7">
                             <div id="task-scene-list-selected" style="margin-top:33px;padding-left:5px"></div>
-                            <label class="active">勾选执行的接口</label>
+                            <label class="active">勾选执行的测试集</label>
                         </div>
                         <div class="input-field col s5" style="padding-left:50px">
                             <div id="task-scene-list"></div>
