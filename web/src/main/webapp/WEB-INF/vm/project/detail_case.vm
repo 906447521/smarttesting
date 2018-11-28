@@ -677,6 +677,7 @@
         var value2 = select.eq(2).val()
 
         var str = input.val();
+        str = str.replace(/\\/g,"\\\\");
         str = str.replace(/"/g, "\\\"");
 
         if(value1 == "Code")

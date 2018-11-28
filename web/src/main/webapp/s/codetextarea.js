@@ -20,6 +20,28 @@ function looks_like_browser_copy(source) {
     source = source.trim()
     if (source.indexOf("Accept:") >= 0 || source.indexOf("Cookie:") >= 0 || source.indexOf("Host:") >= 0 || source.indexOf("User-Agent:") >= 0) {
         return true
+    } else {
+        var lines = source.split("\n");
+        try {
+            for (i in lines) {
+                var line = lines[i]
+                var firstColon = line.indexOf(":")
+                var key = line.substr(0, firstColon)
+                if ( key && key.length > 0 &&
+                    (
+                        key.indexOf("\n") < 0 &&
+                        key.indexOf(":") < 0 &&
+                        key.indexOf("\"") < 0 &&
+                        key.indexOf("var") < 0 &&
+                        source.indexOf("function") < 0
+
+                    )
+                    )
+                    return true
+            }
+        } catch (e) {
+            console.log(e)
+        }
     }
     return false
 }
@@ -73,7 +95,7 @@ function browser_beautify(source, opts) {
                 continue
             }
             value = value.replace(/"/g, "\\\"")
-            s += "    \"" + key + "\": \"" + value + "\""
+            s += "    \"" + key + "\": " + (value=="null" ? value : ("\"" + value + "\""))
             if (i != lines.length - 1) {
                 s += ","
             }
