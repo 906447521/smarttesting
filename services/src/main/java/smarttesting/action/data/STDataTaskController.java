@@ -2,12 +2,14 @@ package smarttesting.action.data;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import smarttesting.data.model.STTask;
 import smarttesting.service.*;
 import smarttesting.service.model.DataResult;
+import smarttesting.service.model.ServiceResultFail;
 import smarttesting.utils.Query;
 
 import javax.annotation.Resource;
@@ -69,6 +71,9 @@ public class STDataTaskController {
     @ResponseBody
     @RequestMapping(value = "/task/add.json")
     public DataResult data_task_add(STTask zdTask) {
+        if(StringUtils.isEmpty(zdTask.getName())) {
+            throw new ServiceResultFail("名称不能为空！");
+        }
         return DataResult.successResult(zdTaskService.add(zdTask));
     }
 

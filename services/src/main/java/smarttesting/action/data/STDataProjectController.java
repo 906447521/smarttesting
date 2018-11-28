@@ -2,6 +2,7 @@ package smarttesting.action.data;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -79,6 +80,9 @@ public class STDataProjectController {
     public DataResult data_project_add(STProject zdProject) {
         if (RequestContext.getUserPin() == null) {
             throw new ServiceResultFail("创建者异常！请确认是否登录！");
+        }
+        if(StringUtils.isEmpty(zdProject.getName())) {
+            throw new ServiceResultFail("名称不能为空！");
         }
         zdProject.setCreator(RequestContext.getUserPin());
         return DataResult.successResult(zdProjectService.add(zdProject));

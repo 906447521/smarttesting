@@ -2,6 +2,7 @@ package smarttesting.action.data;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -11,6 +12,7 @@ import smarttesting.service.STProjectService;
 import smarttesting.service.STSceneService;
 import smarttesting.service.STUserService;
 import smarttesting.service.model.DataResult;
+import smarttesting.service.model.ServiceResultFail;
 import smarttesting.utils.Query;
 
 import javax.annotation.Resource;
@@ -62,6 +64,9 @@ public class STDataSceneController {
     @ResponseBody
     @RequestMapping(value = "/scene/add.json")
     public DataResult data_scene_add(STScene zdScene) {
+        if(StringUtils.isEmpty(zdScene.getName())) {
+            throw new ServiceResultFail("名称不能为空！");
+        }
         return DataResult.successResult(zdSceneService.add(zdScene));
     }
 
