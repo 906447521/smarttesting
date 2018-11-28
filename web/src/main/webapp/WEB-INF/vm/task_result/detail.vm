@@ -34,7 +34,7 @@
         border: solid #F26B3A 1px;
     }
 
-    .table-b td pre {
+    .table-b td pre, .table-b td {
         font-size: 11px;
         max-height:150px;
         overflow:auto;
@@ -142,7 +142,9 @@
                                 <pre>{{ rb.request.requestCaseName }}</pre>
                             </td>
                             <td>
-                                <pre>{{ rb.responseResult }}</pre>
+                                返回码： {{ rb.responseCode }}
+                                <br>
+                                表达式： {{ rb.responseResult }}
                             </td>
                             <td>
 ##                                <i style="cursor:pointer;color:rgb(0, 113, 235);" class="icon iconfont icon-search"
