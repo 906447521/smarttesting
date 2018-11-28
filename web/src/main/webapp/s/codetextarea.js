@@ -94,6 +94,7 @@ function browser_beautify(source, opts) {
             if (key == "") {
                 continue
             }
+            value = value.replace(/\\/g,"\\\\");
             value = value.replace(/"/g, "\\\"")
             s += "    \"" + key + "\": " + (value=="null" ? value : ("\"" + value + "\""))
             if (i != lines.length - 1) {
