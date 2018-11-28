@@ -5,30 +5,63 @@
         width: 100%;
         table-layout: fixed;
     }
+
     table td {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
     }
+
+    .div-fixed pre {
+        width: 200px;
+        word-wrap: break-word;
+        word-break: break-all;
+    }
+
     .table-a, .table-b {
-        border-collapse:collapse;
-        border:none;
+        border-collapse: collapse;
+        border: none;
     }
-    .table-a td{
+
+    .table-a td {
         padding: 3px 10px;
-        border:solid #000 1px;
+        border: solid #000 1px;
     }
-    .table-b td{
+
+    .table-b td {
         padding: 3px 10px;
         border: none;
-        border:solid #F26B3A 1px;
+        border: solid #F26B3A 1px;
     }
-    .table-b td pre{
-        font-size:12px;
-        transform: scale(0.9);
+
+    .table-b td pre {
+        font-size: 11px;
+        max-height:150px;
+        overflow:auto;
+        /*transform: scale(0.9);*/
     }
+
     .hide {
         display: none;
+    }
+
+    .div-fixed {
+        position: fixed;
+        width: 600px;
+        height: 500px;
+        top: 10%;
+        background-color: #fff;
+        left: 50%;
+        margin-left: -300px;
+        z-index: 999;
+        border-radius: 5px;
+        padding: 20px;
+        box-shadow: 0 24px 38px 3px rgba(0, 0, 0, 0.14), 0 9px 46px 8px rgba(0, 0, 0, 0.12), 0 11px 15px -7px rgba(0, 0, 0, 0.2);;
+    }
+
+    table pre {
+        /*max-height:200px;*/
+        /*overflow: auto;*/
     }
 </style>
 
@@ -41,8 +74,6 @@
     <div style="padding: 50px;font-family:微软雅黑, Roboto, system-ui, 'PingFang SC', STHeiti, sans-serif;">
 
         <div style="font-size:18px;color:#777;padding-bottom:30px">测试报告</div>
-
-
 
 
         <div style="font-size:13px;padding-bottom:30px;font-family:Arial">
@@ -71,8 +102,12 @@
 
         <div>
             <table style="font-size:12px" class="table-a">
-                <tr style="background-color:#F26B3A;color:#fff;font-weight:500">
-                    <td width="600">{{tName}}</td><td>Count</td><td>Pass</td><td>Fail</td><td>错误查看</td>
+                <tr style="background-color:#28B57F;color:#fff;font-weight:500">
+                    <td width="40%">{{tName}}</td>
+                    <td>Count</td>
+                    <td>Pass</td>
+                    <td>Fail</td>
+                    <td>错误查看</td>
                 </tr>
                 {{if (groups)}}
                 {{each groups as elem i}}
@@ -83,38 +118,61 @@
                     <td>{{elem.groupCount}}</td>
                     <td>{{elem.groupPassC}}</td>
                     <td>{{elem.groupFailC + elem.groupErrorC}}</td>
-                    <td style="cursor:pointer;color:rgb(0, 113, 235);" onclick="var the = $('#__ID__{{elem.groupId}}'); if(the.hasClass('hide')) {the.show();the.removeClass('hide')} else {the.hide();the.addClass('hide')}">
+                    <td style="cursor:pointer;color:rgb(0, 113, 235);"
+                        onclick="var the = $('#__ID__{{elem.groupId}}'); if(the.hasClass('hide')) {the.show();the.removeClass('hide')} else {the.hide();the.addClass('hide')}">
                         <i class="icon iconfont icon-search"></i>
                     </td>
                 </tr>
                 <tr style="padding:0;border-color:transparent" id="__ID__{{elem.groupId}}" class="hide">
-                    <td colspan="5" style="padding:0;border-color:#F26B3A;border-bottom:0;"">
-                        <table class="table-b">
-                            <tr style="font-size:12px">
-                                <th width="160px">Name</pre></th>
-##                                <th width="50px">Code</pre></th>
-                                <th width="70px">Result</pre></th>
-                                <th>Request</th>
-                                <th>Response</pre></th>
-                            </tr>
-                            {{if (elem.rowBody) }}
-                            {{each elem.rowBody as rb j}}
+                    <td colspan="5" style="padding:0;border-color:#F26B3A;border-bottom:0;">
+                    <table class="table-b">
+                        <tr style="font-size:12px">
+                            <th width="20%">Name</pre></th>
+                        ##                                <th width="50px">Code</pre></th>
+                            <th width="10%">Result</pre></th>
+                            <th>Request</th>
+                            <th>Response</pre></th>
+                        </tr>
+                        {{if (elem.rowBody) }}
+                        {{each elem.rowBody as rb j}}
 
-                            {{if (rb.responseResult != 'true')}}
-                            <tr>
-                                <td style="border-left:0;"><pre>{{ rb.request.requestCaseName }}</pre></td>
-                                <td ><pre>{{ rb.responseResult }}</pre></td>
-                                <td ><pre>{{ jsonStringify(rb.request,null,4)}}</pre></td>
-                                <td ><pre>{{rb.responseBody}}</pre></td>
-                            </tr>
-                            {{/if}}
+                        {{if (rb.responseResult != 'true')}}
+                        <tr>
+                            <td style="border-left:0;">
+                                <pre>{{ rb.request.requestCaseName }}</pre>
+                            </td>
+                            <td>
+                                <pre>{{ rb.responseResult }}</pre>
+                            </td>
+                            <td>
+##                                <i style="cursor:pointer;color:rgb(0, 113, 235);" class="icon iconfont icon-search"
+##                                   onclick="var o=$('#_rq_{{elem.groupId}}_{{rb.caseId}}');var a=o.hasClass('nd');if(a){o.hide();o.removeClass('nd')}else{o.show();o.addClass('nd')}"></i>
+##                                <div class="div-" id="_rq_{{elem.groupId}}_{{rb.caseId}}" style="display:none">
+##                                    <div style="float:right">
+##                                        <span onclick="var o=$('#_rq_{{elem.groupId}}_{{rb.caseId}}');o.hide();o.removeClass('nd')">关闭</span>
+##                                    </div>
+                                    <pre>{{ jsonStringify(rb.request,null,4)}}</pre>
+##                                </div>
+                            </td>
+                            <td>
+##                                <i style="cursor:pointer;color:rgb(0, 113, 235);" class="icon iconfont icon-search"
+##                                   onclick="var o=$('#_r_{{elem.groupId}}_{{rb.caseId}}');var a=o.hasClass('nd');if(a){o.hide();o.removeClass('nd')}else{o.show();o.addClass('nd')}"></i>
+##                                <div class="div-fixed" id="_r_{{elem.groupId}}_{{rb.caseId}}" style="display:none">
+##                                    <div style="float:right">
+##                                        <span onclick="var o=$('#_r_{{elem.groupId}}_{{rb.caseId}}');o.hide();o.removeClass('nd')">关闭</span>
+##                                    </div>
+                                    <pre  style="word-break:break-all;word-wrap: break-word;white-space: pre-wrap;" >{{rb.responseBody}}</pre>
+##                                </div>
+                            </td>
+                        </tr>
+                        {{/if}}
 
-                            {{/each}}
-                            {{else}}
+                        {{/each}}
+                        {{else}}
 
-                            {{/if}}
+                        {{/if}}
 
-                        </table>
+                    </table>
 
                     </td>
                 </tr>

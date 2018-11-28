@@ -236,7 +236,10 @@ public class STTaskService {
                                     errorC++;
                                     groupErrorC++;
                                 }
-                                rowBody.put(callId, JSON.read(JSON.write(callerResult), Map.class));
+                                Map map  = JSON.read(JSON.write(callerResult), Map.class);
+                                map.put("caseId", callId);
+                                map.put("zdCaseId", caseId);
+                                rowBody.put(callId, map);
 
 
                             } catch (Exception e) {
