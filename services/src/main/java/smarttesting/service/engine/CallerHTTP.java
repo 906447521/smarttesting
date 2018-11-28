@@ -77,7 +77,7 @@ public class CallerHTTP {
 
 
         } catch (Exception e) {
-            result.setResponseCode("-1");
+            result.setResponseCode("0");
             result.setResponseBody(e.getMessage());
             e.printStackTrace();
         } finally {
