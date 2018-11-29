@@ -42,7 +42,7 @@ public class STDataCaseController {
     @ResponseBody
     @RequestMapping(value = "/case/runTemp.json")
     public DataResult data_case_runTemp(STCase zdCase) {
-        return DataResult.successResult(zdCaseService.run(zdCase));
+        return DataResult.successResult(zdCaseService.runCaseNotStored(zdCase));
     }
 
     @ResponseBody

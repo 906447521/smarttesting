@@ -221,8 +221,7 @@ public class STTaskService {
                                     continue;
                                 }
 
-                                List<CallerResult> callerResults = zdCaseService.run(zdCase);
-                                CallerResult callerResult = callerResults.get(0);
+                                CallerResult callerResult = zdCaseService.runCase(zdCase);
                                 callerResultsF.add(callerResult);
                                 count++;
                                 groupCount++;

@@ -81,10 +81,4 @@ public class STDataInterfaceController {
         return DataResult.successResult(zdInterfaceService.delete(zdInterfaceIds));
     }
 
-    @Deprecated
-    @ResponseBody
-    @RequestMapping(value = "/interface/run.json")
-    public DataResult data_interface_run(@RequestParam(value = "zdInterfaceIds[]") Long[] zdInterfaceIds) {
-        return DataResult.successResult(zdInterfaceService.run(zdInterfaceIds));
-    }
 }

@@ -13,9 +13,9 @@ import java.util.Map;
 /**
  * @author
  */
-public class CallerHTTP {
+public class CallerHTTP implements Caller {
 
-
+    @Override
     public CallerResult run(CallerRequest request) {
 
         CallerResult result = new CallerResult(request);

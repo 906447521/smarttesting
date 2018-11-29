@@ -71,42 +71,4 @@ public class STInterfaceService {
         return zdInterfaceIds;
     }
 
-    @Deprecated
-    public List<CallerResult> run(Long[] zdInterfaceIds) {
-
-        List<CallerResult> callerResults = Lists.newArrayList();
-
-        for (Long interfaceId : zdInterfaceIds) {
-
-            STInterface zdInterface = this.find(new Query().with("id", interfaceId)).singleResult();
-            if (zdInterface != null) {
-                List<STCase> zdCases = zdCaseService.find(new Query().with("interfaceId", interfaceId)).getData();
-                for (STCase zdCase : zdCases) {
-                    if ("http".equals(zdInterface.getType())) {
-
-                        CallerRequest request = new CallerRequest();
-                        request.setRequestCaseName(zdCase.getName());
-                        request.setResponseCharset("utf8");
-                        request.setRequestMethod(zdInterface.getMethod());
-                        request.setRequestURL(zdInterface.getUrl() + (zdCase.getUrlSuffix() == null ? "" : zdCase.getUrlSuffix()));
-                        request.setRequestHeaderProperties(zdInterface.getRequestHeader());
-                        request.setRequestBody(zdCase.getRequestBody());
-                        request.setRequestContentType(zdCase.getContentType());
-                        request.setResponseCharset(zdInterface.getResponseCharset());
-                        request.setResultScript(zdCase.getResultScript());
-
-                        CallerResult result = new CallerHTTP().run(request);
-
-
-                        callerResults.add(result);
-                    }
-
-                }
-            }
-        }
-
-
-        return callerResults;
-    }
-
 }

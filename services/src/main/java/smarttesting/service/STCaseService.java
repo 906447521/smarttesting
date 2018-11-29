@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import smarttesting.data.STCaseMapper;
 import smarttesting.data.model.STCase;
 import smarttesting.data.model.STInterface;
-import smarttesting.service.engine.CallerHTTP;
+import smarttesting.service.engine.CallerBuilder;
 import smarttesting.service.model.CallerRequest;
 import smarttesting.service.model.CallerResult;
 import smarttesting.service.model.ServiceResultFail;
@@ -78,62 +78,50 @@ public class STCaseService {
         for (Long caseId : zdCaseIds) {
             STCase zdCase = this.find(new Query().with("id", caseId)).singleResult();
             if (zdCase != null) {
-                STInterface zdInterface = zdInterfaceService.find(new Query().with("id", zdCase.getInterfaceId())).singleResult();
-                if (zdInterface != null) {
-                    if ("http".equals(zdInterface.getType())) {
-                        CallerRequest request = new CallerRequest();
-                        request.setRequestCaseName(zdCase.getName());
-                        request.setResponseCharset("utf8");
-                        request.setRequestMethod(zdInterface.getMethod());
-                        request.setRequestURL(zdInterface.getUrl() + (zdCase.getUrlSuffix() == null ? "" : zdCase.getUrlSuffix()));
-                        request.setRequestHeaderProperties(zdInterface.getRequestHeader());
-                        request.setRequestBody(zdCase.getRequestBody());
-                        request.setRequestContentType(zdCase.getContentType());
-                        request.setResponseCharset(zdInterface.getResponseCharset());
-                        request.setResultScript(zdCase.getResultScript());
-
-                        CallerResult result = new CallerHTTP().run(request);
-
-                        callerResults.add(result);
-                    }
-                }
-
+                callerResults.add(runCase(zdCase));
             }
 
         }
 
-
         return callerResults;
     }
 
-    public List<CallerResult> run(STCase zdCase) {
-
+    public List<CallerResult> runCaseNotStored(STCase zdCase) {
         List<CallerResult> callerResults = Lists.newArrayList();
+        callerResults.add(runCase(zdCase));
+        return callerResults;
+    }
+
+    // 执行用例的代码在这个地方添加
+
+    public CallerResult runCase(STCase zdCase) {
+
+
         if (zdCase == null || zdCase.getInterfaceId() == null) {
             throw new ServiceResultFail("参数不全");
         }
 
-        if (zdCase != null) {
-            STInterface zdInterface = zdInterfaceService.find(new Query().with("id", zdCase.getInterfaceId())).singleResult();
-            if (zdInterface != null) {
-                if ("http".equals(zdInterface.getType())) {
-                    CallerRequest request = new CallerRequest();
-                    request.setRequestCaseName(zdCase.getName());
-                    request.setResponseCharset("utf8");
-                    request.setRequestMethod(zdInterface.getMethod());
-                    request.setRequestURL(zdInterface.getUrl() + (zdCase.getUrlSuffix() == null ? "" : zdCase.getUrlSuffix()));
-                    request.setRequestHeaderProperties(zdInterface.getRequestHeader());
-                    request.setRequestBody(zdCase.getRequestBody());
-                    request.setRequestContentType(zdCase.getContentType());
-                    request.setResponseCharset(zdInterface.getResponseCharset());
-                    request.setResultScript(zdCase.getResultScript());
+        STInterface zdInterface = zdInterfaceService.find(new Query().with("id", zdCase.getInterfaceId())).singleResult();
 
-                    CallerResult result = new CallerHTTP().run(request);
-
-                    callerResults.add(result);
-                }
-            }
+        if (zdInterface == null) {
+            throw new ServiceResultFail("参数不全[接口为空]");
         }
-        return callerResults;
+
+        CallerRequest request = new CallerRequest();
+        request.setRequestCaseName(zdCase.getName());
+        request.setRequestCharset("utf8");
+        request.setRequestMethod(zdInterface.getMethod());
+        request.setRequestURL(zdInterface.getUrl() + (zdCase.getUrlSuffix() == null ? "" : zdCase.getUrlSuffix()));
+        request.setRequestHeaderProperties(zdInterface.getRequestHeader());
+        request.setRequestBody(zdCase.getRequestBody());
+        request.setRequestContentType(zdCase.getContentType());
+        request.setResponseCharset(zdInterface.getResponseCharset());
+        request.setResultScript(zdCase.getResultScript());
+
+        return
+                new CallerBuilder(zdInterface.getType())
+                        .build()
+                        .run(request);
     }
+
 }

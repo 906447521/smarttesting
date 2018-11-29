@@ -10,7 +10,8 @@ import java.io.InputStreamReader;
 /**
  * @author
  */
-public class CallerPython {
+public class CallerPython implements Caller {
+
     String pythonHome;
 
     public CallerPython(String pythonHome) {
@@ -18,6 +19,7 @@ public class CallerPython {
     }
 
 
+    @Override
     public CallerResult run(CallerRequest request) {
         CallerResult result = new CallerResult(request);
         InputStream in = null;
@@ -25,9 +27,9 @@ public class CallerPython {
         String shell = "";
         try {
             Runtime.getRuntime().exec("cmd cd");
-            shell = "cmd ./jmeter.bat " + request.getRequestURL();
+            shell = "cmd ./python.bat " + request.getRequestURL();
         } catch (Exception e) {
-            shell = "sh  ./jmeter     " + request.getRequestURL();
+            shell = "sh  ./python     " + request.getRequestURL();
         }
 
         System.out.println(shell);

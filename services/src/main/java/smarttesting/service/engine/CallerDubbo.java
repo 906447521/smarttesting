@@ -6,7 +6,8 @@ import smarttesting.service.model.CallerResult;
 /**
  * @author
  */
-public class CallerShell implements Caller {
+public class CallerDubbo implements Caller {
+
     @Override
     public CallerResult run(CallerRequest request) {
         return null;

@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 /**
  * @author
  */
-public class CallerJMeter {
+public class CallerJMeter implements Caller {
 
     String jmeterHome;
 
@@ -19,6 +19,7 @@ public class CallerJMeter {
     }
 
 
+    @Override
     public CallerResult run(CallerRequest request) {
         CallerResult result = new CallerResult(request);
         InputStream in = null;
