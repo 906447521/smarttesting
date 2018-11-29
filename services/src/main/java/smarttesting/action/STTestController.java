@@ -5,12 +5,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import smarttesting.service.STTestService;
 import smarttesting.service.model.DataResult;
 import smarttesting.service.model.STTest;
 import smarttesting.utils.HTTP;
 import smarttesting.utils.JSON;
 
-import java.io.IOException;
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
@@ -21,13 +22,15 @@ import java.util.Map;
 @RequestMapping(value = "data")
 public class STTestController {
 
+    @Resource
+    STTestService stTestService;
 
     @ResponseBody
     @RequestMapping(value = "/test/url.json")
     public DataResult test_url(@RequestParam String url) {
         try {
-         HTTP.Response
-            response = HTTP.open(url).send(null);
+            HTTP.Response
+                    response = HTTP.open(url).send(null);
             return DataResult.successResult(response.getStatus());
         } catch (Exception e) {
             return DataResult.errorResult("0");
@@ -69,4 +72,13 @@ public class STTestController {
     public DataResult test_vector(@RequestParam(value = "ids[]") Long[] ids) {
         return DataResult.successResult(JSON.write(ids));
     }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/test/transaction.json")
+    public DataResult test_transaction() {
+        stTestService.test();
+        return null;
+    }
+
 }
