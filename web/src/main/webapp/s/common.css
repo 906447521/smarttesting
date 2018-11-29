@@ -25,6 +25,14 @@ table.table-fixed td {
     text-overflow: ellipsis;
 }
 
+.modal .modal-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 200px;
+    padding-right:200px;
+}
+
 .pagin * {
     font-size: 13px !important;
     font-size: 81.25%;
