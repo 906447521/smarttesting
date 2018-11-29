@@ -111,6 +111,7 @@
     </div>
     <div class="modal-footer">
         <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">确认</a>
+        <div class="modal-title">{{title}}</div>
         <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
     </div>
 </script>
@@ -380,7 +381,7 @@
 
     Task.openAdd = function () {
         var container = $("#task")
-        container.html(template("tmpl-task", {"fn": "Task.add()"}));
+        container.html(template("tmpl-task", {"fn": "Task.add()","title":"新增任务"}));
         container.find('select').not('.disabled').formSelect();
         Task.loadSelectedScenes()
         var instance = M.Modal.getInstance($('#modal1'));
@@ -406,6 +407,7 @@
             success: function (result) {
                 var container = $("#task")
                 result.data.fn = "Task.edit("+taskId+")"
+                result.data.title = "编辑-"+ result.data.name
                 container.html(template("tmpl-task", result.data));
                 container.find('select').not('.disabled').formSelect();
                 Task.loadSelectedScenes(result.data.scenes)

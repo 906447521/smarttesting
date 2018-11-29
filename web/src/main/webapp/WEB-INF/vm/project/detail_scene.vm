@@ -92,6 +92,7 @@
     </div>
     <div class="modal-footer">
         <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">确认</a>
+        <div class="modal-title">{{title}}</div>
         <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
     </div>
 </script>
@@ -335,7 +336,7 @@
 
     Scene.openAdd = function () {
         var container = $("#scene")
-        container.html(template("tmpl-scene", {"fn": "Scene.add()"}));
+        container.html(template("tmpl-scene", {"fn": "Scene.add()","title":"新增测试集"}));
         container.find('select').not('.disabled').formSelect();
         Scene.loadSelectedCases()
         var instance = M.Modal.getInstance($('#modal1'));
@@ -361,6 +362,7 @@
             success: function (result) {
                 var container = $("#scene")
                 result.data.fn = "Scene.edit("+sceneId+")"
+                result.data.title = "编辑-"+ result.data.name
                 container.html(template("tmpl-scene", result.data));
                 container.find('select').not('.disabled').formSelect();
                 Scene.loadSelectedCases(result.data.cases)

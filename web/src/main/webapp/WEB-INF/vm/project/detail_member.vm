@@ -69,6 +69,7 @@
     </div>
     <div class="modal-footer">
         <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">确认</a>
+        <div class="modal-title">{{title}}</div>
         <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
     </div>
 </script>
@@ -220,7 +221,7 @@
 
     Member.openAdd = function () {
         var container = $("#member")
-        container.html(template("tmpl-member", {"fn": "Member.add()"}));
+        container.html(template("tmpl-member", {"fn": "Member.add()","title":"新增成员"}));
         container.find('select').not('.disabled').formSelect();
         var instance = M.Modal.getInstance($('#modal1'));
         instance.open();

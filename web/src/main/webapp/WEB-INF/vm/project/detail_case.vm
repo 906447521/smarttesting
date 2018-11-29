@@ -240,6 +240,7 @@
     <div class="modal-footer">
         <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="Case.runSelectTemp()">发送请求</a>
         <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">确认</a>
+        <div class="modal-title">{{title}}</div>
         <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
     </div>
 </script>
@@ -549,7 +550,7 @@
         $('#modal1').attr("style", "")
         $('#modal1').css("display", "block")
         var container = $("#case")
-        container.html(template("tmpl-case", {"fn": "Case.add()"}));
+        container.html(template("tmpl-case", {"fn": "Case.add()","title":"创建用例"}));
         container.find('select').not('.disabled').formSelect();
         Case.selectInterface();
         beautytextarea()
@@ -584,6 +585,7 @@
                 $('#modal1').css("display", "block")
                 var container = $("#case")
                 result.data.fn = "Case.edit("+caseId+")"
+                result.data.title = "编辑-"+ result.data.name
                 container.html(template("tmpl-case", result.data));
                 container.find('select').not('.disabled').formSelect();
                 beautytextarea()

@@ -134,6 +134,7 @@
     </div>
     <div class="modal-footer">
         <a href="javascript:;" class="waves-effect waves-green btn-flat" onclick="{{fn}}">确认</a>
+        <div class="modal-title">{{title}}</div>
         <a href="javascript:;" class="modal-close waves-effect waves-green btn-flat">关闭</a>
     </div>
 </script>
@@ -348,7 +349,7 @@
         $('#modal1').attr("style", "")
         $('#modal1').css("display", "block")
         var container = $("#interface")
-        container.html(template("tmpl-interface", {"fn": "Interface.add()"}));
+        container.html(template("tmpl-interface", {"fn": "Interface.add()","title":"新增接口"}));
         container.find('select').not('.disabled').formSelect();
 
         beautytextarea()
@@ -380,6 +381,7 @@
                 $('#modal1').css("display", "block")
                 var container = $("#interface")
                 result.data.fn = "Interface.edit("+interfaceId+")"
+                result.data.title = "编辑-"+ result.data.name
                 container.html(template("tmpl-interface", result.data));
                 container.find('select').not('.disabled').formSelect();
                 beautytextarea()
