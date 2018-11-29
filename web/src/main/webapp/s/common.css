@@ -227,21 +227,27 @@ td {
     padding: 5px;
     text-align: center;
     font-size: 15px;
-    margin-left: -100px;
+    /*margin-left: -100px;*/
     position: relative;
 }
 
 .row.name .a {
-    position: absolute;
-    left: -80px;
+    /*position: absolute;*/
+    /*left: -80px;*/
     color: #7f7f7f;
     /*font-weight: 300;*/
     cursor: pointer;
     font-size: 13px;
+    float:left;
+    margin-left: 20px;
 }
-
+.section.name .container{
+    width: 100% !important;
+    margin:0;
+}
 .row.name .b {
     font-weight: bold;
+    margin-left: -50px;
 }
 
 .row .col.offset-xl1 .header {

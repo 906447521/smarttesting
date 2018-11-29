@@ -89,8 +89,8 @@ function browser_beautify(source, opts) {
         for (i in lines) {
             var line = lines[i]
             var firstColon = line.indexOf(":")
-            var key = line.substr(0, firstColon)
-            var value = line.substr(firstColon + 1, line.length)
+            var key = line.substr(0, firstColon).trim()
+            var value = line.substr(firstColon + 1, line.length).trim()
             if (key == "") {
                 continue
             }
