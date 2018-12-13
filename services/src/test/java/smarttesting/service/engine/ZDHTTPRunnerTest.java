@@ -39,8 +39,9 @@ public class ZDHTTPRunnerTest {
 
         CallerHTTP runner = new CallerHTTP();
         CallerRequest request = new CallerRequest();
-        request.setRequestURL("https://tcc.taobao.com/cc/json/mobile_tel_segment.htm");
+        request.setRequestURL("https://tcc.taobao.com/cc/json/mobile_tel_segment.htm?a=2&b=3");
         request.setRequestHeaderProperties("{}");
+//        request.setRequestContentType("query/string");
         request.setRequestBody("{\"tel\":\"13888888888\"}");
         request.setResponseCharset("GBK");
 

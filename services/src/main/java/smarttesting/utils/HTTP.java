@@ -21,8 +21,8 @@ public class HTTP implements Closeable {
     String              RequestCharset;
     Map<String, String> RequestHeaderProperties;
     String              ResponseCharset;
-    Integer connectTimeout = 5000;
-    Integer readTimeout    = 5000;
+    Integer connectTimeout = 20000;
+    Integer readTimeout    = 20000;
 
     private HTTP(String url) {
         this.URL = url;
@@ -98,7 +98,32 @@ public class HTTP implements Closeable {
         InputStream in = null;
         try {
 
-            URL wsUrl = new URL(this.URL);
+
+            String query = null;
+            if (request != null) {
+                if (!"application/json".equals(this.RequestContentType)) {
+                    query = request.getQueryString();
+                } else {
+                    query = request.getJsonString();
+                }
+            }
+
+            String url = this.URL;
+            if ("query/string".equals(this.RequestContentType)) {
+                URL checkUrl = new URL(url);
+                String checkQuery = checkUrl.getQuery();
+                if (checkQuery == null || checkQuery.isEmpty()) {
+                    url += "?" + query;
+                } else {
+                    url += "&" + query;
+                }
+                // not write query
+                query = null;
+            }
+
+            URL wsUrl = new URL(url);
+            System.out.println(this.RequestMethod + " [" + this.RequestContentType + "] * URL: " + url + ", Query: " + query);
+
             conn = (HttpURLConnection) wsUrl.openConnection();
             conn.setConnectTimeout(connectTimeout);
             conn.setReadTimeout(readTimeout);
@@ -113,28 +138,17 @@ public class HTTP implements Closeable {
                 }
             }
 
-            if (request != null) {
 
-                String query;
-                if (!"application/json".equals(this.RequestContentType)) {
-                    query = request.getQueryString();
-                } else {
-                    query = request.getJsonString();
-                }
+            if (query != null && !"".equals(query.trim())) {
 
+                byte[] writeBytes = query.getBytes();
 
-                if (!"".equals(query.trim())) {
-
-                    System.out.println("Query: [" + this.RequestContentType + "]  " + query);
-                    byte[] writeBytes = query.getBytes();
-
-                    conn.setDoOutput(true);
-                    out = conn.getOutputStream();
-                    out.write(writeBytes);
-                    out.flush();
-                }
-
+                conn.setDoOutput(true);
+                out = conn.getOutputStream();
+                out.write(writeBytes);
+                out.flush();
             }
+
 
             response.status = conn.getResponseCode();
 

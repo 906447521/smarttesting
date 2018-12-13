@@ -111,6 +111,7 @@
                         <div class="input-field col s6">
                             <select id="casecontenttype">
                                 <option value="application/x-www-form-urlencoded" {{if contentType==null || contentType=='application/x-www-form-urlencoded'}} selected {{/if}}>application/x-www-form-urlencoded</option>
+                                <option value="query/string" {{if contentType=='query/string'}} selected {{/if}}>query/string</option>
                                 <option value="application/json" {{if contentType=='application/json'}} selected {{/if}}>application/json</option>
                                 <option value="multipart/form-data" {{if contentType=='multipart/form-data'}} selected {{/if}}>multipart/form-data</option>
                             </select>
