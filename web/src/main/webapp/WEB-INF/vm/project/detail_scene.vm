@@ -516,8 +516,10 @@
 
 
         return "<div onmousedown='domsortMouseDown(event,this,resetSceneCases);' class=\"nextRow row \" id=case_" + id + " cid=" + id + ">" +
-                "<div class=\"rowname input-field col s9\">" + methodSpan +
-                " <a style='color:rgb(117, 117, 117)' target=\"_blank\"  ondragstart=\"return false\"  href=\"//$!{ServerPath}/case/detail.html?id="+id+"&&projectId="+parseInt(X.GetUrlParam("id"))+"\">"
+                "<div class=\"rowname input-field col s12\">"
+                + " <span style='float:left'>" + methodSpan + "</span>"
+                + " <span style='float:left;display:inline-block;width:50%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;'><i>"+url+"</i></span>"
+                + " <a style='float:right;display:inline-block;width:20%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;text-align:right' target=\"_blank\"  ondragstart=\"return false\"  href=\"//$!{ServerPath}/case/detail.html?id="+id+"&&projectId="+parseInt(X.GetUrlParam("id"))+"\">"
                 + name +
                 "</a>"+
                 "</div>" +

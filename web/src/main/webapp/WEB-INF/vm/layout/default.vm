@@ -237,7 +237,7 @@
         }
         .nextRow {
             font-size:13px;
-            background-color:#f6f6f6;
+            background-color:#E9F0F6;
             cursor: move;
             -moz-user-select: none;
             -webkit-user-select: none;
@@ -245,11 +245,12 @@
             -khtml-user-select: none;
             user-select: none;
             margin-bottom:2px !important;
-            border-radius: 10px;
+            /*border-radius: 10px;*/
         }
         .nextRow .rowname {
             padding-bottom:3px;padding-top:3px;margin:0;
             margin-top: 1px;
+            font-size:12px;
         }
         .nextRow .rowarrow{
             font-size:16px;padding-bottom:0px;padding-top:3px;margin:0;
