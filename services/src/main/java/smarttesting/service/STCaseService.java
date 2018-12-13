@@ -111,7 +111,7 @@ public class STCaseService {
         request.setRequestCaseName(zdCase.getName());
         request.setRequestCharset("utf8");
         request.setRequestMethod(zdInterface.getMethod());
-        request.setRequestURL(zdInterface.getUrl() + (zdCase.getUrlSuffix() == null ? "" : zdCase.getUrlSuffix()));
+        request.setRequestURL((zdInterface.getUrl() == null ? "" : zdInterface.getUrl().trim()) + (zdCase.getUrlSuffix() == null ? "" : zdCase.getUrlSuffix().trim()));
         request.setRequestHeaderProperties(zdInterface.getRequestHeader());
         request.setRequestBody(zdCase.getRequestBody());
         request.setRequestContentType(zdCase.getContentType());
