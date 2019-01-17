@@ -1,5 +1,8 @@
 package smarttesting.action.data;
 
+import com.google.common.collect.Lists;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -7,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import smarttesting.data.model.STCase;
+import smarttesting.data.model.STInterface;
+import smarttesting.data.model.STProject;
 import smarttesting.service.STCaseService;
 import smarttesting.service.STInterfaceService;
 import smarttesting.service.STProjectService;
@@ -16,6 +21,12 @@ import smarttesting.service.model.ServiceResultFail;
 import smarttesting.utils.Query;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author
@@ -75,7 +86,7 @@ public class STDataCaseController {
     @ResponseBody
     @RequestMapping(value = "/case/add.json")
     public DataResult data_case_add(STCase zdCase) {
-        if(StringUtils.isEmpty(zdCase.getName())) {
+        if (StringUtils.isEmpty(zdCase.getName())) {
             throw new ServiceResultFail("名称不能为空！");
         }
         return DataResult.successResult(zdCaseService.add(zdCase));
@@ -95,4 +106,76 @@ public class STDataCaseController {
         return DataResult.successResult(zdCaseService.delete(zdCaseIds));
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/case/export_all.json")
+    public void data_case_export_all(HttpServletResponse response, Integer projectId) {
+
+        try {
+
+            List<STCase> cases = zdCaseService.findAll(
+                    new Query()
+                            .with("projectId", projectId));
+
+            HashMap interfaceCacheHashMap = new HashMap();
+
+            STProject stProject = zdProjectService.find(
+                    new Query()
+                            .with("id", projectId)).singleResult();
+
+
+            List<Object[]> listArray = Lists.newArrayList();
+            int i = 1;
+            for (STCase stCase : cases) {
+
+                STInterface stInterface = null;
+                Long stCaseInterfaceId = stCase.getInterfaceId();
+                if (stCaseInterfaceId != null) {
+                    stInterface = (STInterface) interfaceCacheHashMap.get(stCaseInterfaceId);
+                    if (stInterface == null) {
+                        stInterface = zdInterfaceService.find(
+                                new Query()
+                                        .with("id", stCaseInterfaceId)).singleResult();
+                    }
+                }
+
+                if (stInterface == null) {
+                    stInterface = new STInterface();
+                }
+
+                Object[] fields = {
+                        i,
+                        stCase.getName(),
+                        (stInterface.getUrl() == null ? "" : stInterface.getUrl().trim()) + (stCase.getUrlSuffix() == null ? "" : stCase.getUrlSuffix().trim()),
+                        stInterface.getMethod(),
+                        "UTF-8",
+                        stInterface.getResponseCharset(),
+                        stCase.getContentType(),
+                        stInterface.getRequestHeader(),
+                        stCase.getRequestBody(),
+                        stCase.getResultScript(),
+                };
+                listArray.add(fields);
+                i++;
+
+            }
+
+            String fileName = stProject.getName() + "-测试用例-" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            fileName = new String(fileName.getBytes("utf-8"), "ISO8859-1");
+            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName + ".csv");
+            response.setContentType("application/csv;charset=GBK");
+
+            final String[] headers = {
+                    "ID", "Name", "URL", "Method", "Request Charset", "Response Charset", "ContentType", "RequestHeader", "RequestBody", "ResultScript"};
+            CSVPrinter printer =
+                    CSVFormat.DEFAULT
+                            .withHeader(headers).print(
+                            new OutputStreamWriter(response.getOutputStream(), "GBK"));
+            printer.printRecords(listArray);
+            printer.flush();
+
+        } catch (Exception e) {
+
+        }
+
+    }
 }
