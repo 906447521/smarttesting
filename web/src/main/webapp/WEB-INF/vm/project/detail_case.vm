@@ -35,7 +35,7 @@
                 <a class="ripple" href="javascript:;" id="op-delete" style="color:#ccc">
                     <i class="icon iconfont icon-delete"></i>
                 </a>
-                <a class="ripple" target="_blank" href="//$!{ServerPath}/data/case/export_all.json?project=$!{id}" id="op-export">
+                <a class="ripple" target="_blank" href="//$!{ServerPath}/data/case/export_all.json?projectId=$!{id}" id="op-export">
                     <i class="icon iconfont icon-icondownload"></i>
                 </a>
             </div>

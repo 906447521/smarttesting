@@ -3,9 +3,7 @@ package smarttesting.action;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import smarttesting.data.STProjectUserMapper;
-import smarttesting.utils.Query;
-import smarttesting.utils.RequestContext;
+import smarttesting.service.STProjectService;
 
 import javax.annotation.Resource;
 
@@ -15,7 +13,7 @@ import javax.annotation.Resource;
 @Controller
 public class STController {
     @Resource
-    private STProjectUserMapper zdProjectUserMapper;
+    private STProjectService stProjectService;
 
     @RequestMapping(value = {"", "home.html"})
     public ModelAndView home() {
@@ -45,7 +43,7 @@ public class STController {
     public ModelAndView project_detail_task(Long id) {
         ModelAndView model = new ModelAndView("/project/detail_task");
         model.addObject("id", id);
-        model.addObject("checkURL", checkURL(id));
+        model.addObject("checkURL", stProjectService.isProjectMember(id));
         return model;
     }
 
@@ -53,7 +51,7 @@ public class STController {
     public ModelAndView project_detail_interface(Long id) {
         ModelAndView model = new ModelAndView("/project/detail_interface");
         model.addObject("id", id);
-        model.addObject("checkURL", checkURL(id));
+        model.addObject("checkURL", stProjectService.isProjectMember(id));
         return model;
     }
 
@@ -61,7 +59,7 @@ public class STController {
     public ModelAndView project_detail_case(Long id) {
         ModelAndView model = new ModelAndView("/project/detail_case");
         model.addObject("id", id);
-        model.addObject("checkURL", checkURL(id));
+        model.addObject("checkURL", stProjectService.isProjectMember(id));
         return model;
     }
 
@@ -69,7 +67,7 @@ public class STController {
     public ModelAndView project_detail_member(Long id) {
         ModelAndView model = new ModelAndView("/project/detail_member");
         model.addObject("id", id);
-        model.addObject("checkURL", checkURL(id));
+        model.addObject("checkURL", stProjectService.isProjectMember(id));
         return model;
     }
 
@@ -77,7 +75,7 @@ public class STController {
     public ModelAndView project_detail_scene(Long id) {
         ModelAndView model = new ModelAndView("/project/detail_scene");
         model.addObject("id", id);
-        model.addObject("checkURL", checkURL(id));
+        model.addObject("checkURL", stProjectService.isProjectMember(id));
         return model;
     }
 
@@ -111,17 +109,5 @@ public class STController {
         return model;
     }
 
-    public boolean checkURL(Long projectId) {
-        String pin = RequestContext.getUserPin();
-        String group = RequestContext.getUserGroup();
-        if (projectId == null || pin == null || group == null) {
-            return false;
-        }
-        if ("admin".equals(group)) {
-            return true;
-        }
-        int count = zdProjectUserMapper.count(new Query().with("userName", pin).with("projectId", projectId));
-        return count > 0;
-    }
 
 }

@@ -6,6 +6,7 @@ import smarttesting.data.model.*;
 import smarttesting.service.model.ServiceResultFail;
 import smarttesting.utils.Pagination;
 import smarttesting.utils.Query;
+import smarttesting.utils.RequestContext;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -34,6 +35,20 @@ public class STProjectService {
     private STSceneService      zdSceneService;
     @Resource
     private STSceneMapper       zdSceneMapper;
+
+    public boolean isProjectMember(Long projectId) {
+        String pin = RequestContext.getUserPin();
+        String group = RequestContext.getUserGroup();
+        if (projectId == null || pin == null || group == null) {
+            return false;
+        }
+        if ("admin".equals(group)) {
+            return true;
+        }
+        int count = zdProjectUserMapper.count(new Query().with("userName", pin).with("projectId", projectId));
+        return count > 0;
+    }
+
 
     public List<STProject> findAll(Query query) {
         List<STProject> zdProjectList = zdProjectMapper.select(query);

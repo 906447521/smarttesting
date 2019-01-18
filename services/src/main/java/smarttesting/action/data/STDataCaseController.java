@@ -23,6 +23,8 @@ import smarttesting.utils.Query;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -109,8 +111,12 @@ public class STDataCaseController {
     @ResponseBody
     @RequestMapping(value = "/case/export_all.json")
     public void data_case_export_all(HttpServletResponse response, Integer projectId) {
-
+        String fileName = "Export Failed File";
         try {
+
+            if(projectId == null || !zdProjectService.isProjectMember(projectId.longValue())) {
+                throw  new ServiceResultFail("No permissions");
+            }
 
             List<STCase> cases = zdCaseService.findAll(
                     new Query()
@@ -159,22 +165,32 @@ public class STDataCaseController {
 
             }
 
-            String fileName = stProject.getName() + "-测试用例-" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
+            fileName = stProject.getName() + "-测试用例-" + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
             fileName = new String(fileName.getBytes("utf-8"), "ISO8859-1");
             response.addHeader("Content-Disposition", "attachment;fileName=" + fileName + ".csv");
             response.setContentType("application/csv;charset=GBK");
 
             final String[] headers = {
-                    "ID", "Name", "URL", "Method", "Request Charset", "Response Charset", "ContentType", "RequestHeader", "RequestBody", "ResultScript"};
+                    "ID", "Name", "URL", "Method", "Request Charset", "Response Charset", "Content Type", "Request Header", "Request Body", "Result Script"};
             CSVPrinter printer =
                     CSVFormat.DEFAULT
                             .withHeader(headers).print(
                             new OutputStreamWriter(response.getOutputStream(), "GBK"));
             printer.printRecords(listArray);
             printer.flush();
-
+            printer.close();
         } catch (Exception e) {
+            try {
+                fileName = new String(fileName.getBytes("utf-8"), "ISO8859-1");
+                response.addHeader("Content-Disposition", "attachment;fileName=" + fileName + ".csv");
+                response.setContentType("application/csv;charset=GBK");
+                PrintWriter writer = new PrintWriter(response.getOutputStream());
+                writer.print(e.getMessage());
+                writer.flush();
+                writer.close();
+            } catch (Exception e1) {
 
+            }
         }
 
     }
