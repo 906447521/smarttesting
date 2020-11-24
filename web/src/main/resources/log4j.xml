@@ -13,7 +13,7 @@
 
     <appender name="Errors" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="Append" value="true"/>
-        <param name="file" value="../logs/error.log"/>
+        <param name="file" value="/export/logs/smarttesting/error.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c:%LL - %m%n"/>
         </layout>
@@ -23,7 +23,7 @@
     </appender>
 
     <appender name="All" class="org.apache.log4j.DailyRollingFileAppender">
-        <param name="file" value="../logs/all.log"/>
+        <param name="file" value="/export/logs/smarttesting/all.log"/>
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c:%LL - %m%n"/>
         </layout>
